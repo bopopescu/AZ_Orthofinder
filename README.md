@@ -11,5 +11,8 @@ If you call it the second time, it will just return the paths without fetching
 the sequencing once more.
 
 The `fetch_proteomes.py` script utilizes `efetch_multiple` to retrieve genomes,
-then iterates CDS annotations and writes translations into
+then iterates CDS annotations and writes OrthoMCL-compliant translations into
 the `../data/<species name>_proteomes` directory.
+
+The `fetch_proteomes.py` script performs filters fasta with orthomclFilterFasta,
+and performs blastp all versus all, produsing blasted.xml file for OrthoMCL.

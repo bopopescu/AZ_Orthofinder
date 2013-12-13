@@ -1,10 +1,12 @@
+from itertools import izip, count
 from sys import stderr
-from os import makedirs
+from os import makedirs, chdir
 from os.path import join, isdir
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.SeqRecord import SeqRecord
+from orthomcl import orthomcl_adjust_fasta
 from cached_entrez import efetch_multiple
 
 
@@ -12,18 +14,26 @@ proteomes_root_dirpath = '../data'
 
 
 def fetch_proteomes(species_name):
+    proteomes_dirpath = join(
+        proteomes_root_dirpath,
+        species_name.replace(' ', '_') + '_proteomes')
+
+    if isdir(proteomes_dirpath):
+        return proteomes_dirpath
+
     fasta_fpaths, gb_fpaths = efetch_multiple(species_name)
 
-    for fasta_fpath, gb_fpath in zip(fasta_fpaths, gb_fpaths):
+    i = 1
+    for fasta_fpath, gb_fpath in izip(fasta_fpaths, gb_fpaths):
         rec = SeqIO.read(gb_fpath, 'genbank')
         features = [f for f in rec.features if f.type == 'CDS']
         print '%s: translating %d features' % (rec.id, len(features))
 
         genome_seq = SeqIO.read(fasta_fpath, 'fasta')
-        proteomes_dirpath = join(proteomes_root_dirpath,
-                                 species_name.replace(' ', '_') + '_proteomes')
         if not isdir(proteomes_dirpath):
             makedirs(proteomes_dirpath)
+
+        orthomcl_taxoncode = ''.join([w[0].lower() for w in species_name.split()[:2]]) + str(i)
 
         proteins = []
         for f in features:
@@ -41,27 +51,31 @@ def fetch_proteomes(species_name):
                                  ' ' + 'Gene ' + gene_id + '. Protein ' + protein_id
             print protein_descripton
 
-            annotation_translation = Seq(qs.get('translation', [None])[0], generic_protein)
-            if not annotation_translation:
+            translation = Seq(qs.get('translation', [None])[0], generic_protein)
+            if not translation:
                 print >> stderr, '    Error: no translation for CDS'
-
-            print '   ', annotation_translation
+            print '   ', translation
 
             # Translate ourselves
             #trans_table = int(qs.get('transl_table', [11])[0])
-            #translation = f.extract(genome_seq).seq.translate(table=trans_table, to_stop=True, cds=True)
-            #print translation
-            #if annotation_translation:
-            #    assert str(translation) == str(annotation_translation)
+            #my_translation = f.extract(genome_seq).seq.translate(table=trans_table, to_stop=True, cds=True)
+            #print my_translation
+            #if translation:
+            #    assert str(my_translation) == str(translation)
 
-            proteins.append(SeqRecord(seq=annotation_translation, id=protein_id, description=protein_descripton))
+            proteins.append(SeqRecord(seq=translation, id=orthomcl_taxoncode + '|' + protein_id,
+                                      description=protein_descripton))
             print
 
         if proteins:
-            fpath = join(proteomes_dirpath, rec.id + '.faa')
+            fpath = join(proteomes_dirpath, orthomcl_taxoncode + '.fasta')
             SeqIO.write(proteins, fpath, 'fasta')
             print 'Whitten to ' + fpath
+            i += 1
         print
 
+    return proteomes_dirpath
+
+
 if __name__ == '__main__':
-    fetch_proteomes('Escherichia coli K-12')
+    proteomes_dirpath = fetch_proteomes('Escherichia coli K-12')

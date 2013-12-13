@@ -3,7 +3,7 @@ from Bio import Entrez, Blast, SeqIO
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from Bio.Graphics import GenomeDiagram
-from CachedEntrez import efetch, efetch_multiple
+from cached_entrez import efetch, efetch_multiple
 
 Entrez.email = 'vladislav.sav@gmail.com'
 

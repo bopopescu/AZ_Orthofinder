@@ -1,10 +1,12 @@
 from os import mkdir, listdir
-from os.path import join, isdir, isfile
+from os.path import join, isdir, isfile, splitext
 from Bio import Entrez, Blast, SeqIO
 Entrez.email = 'vladislav.sav@gmail.com'
 
 
 cache_dirpath = 'cache'
+fasta_ext = 'fasta'
+genbank_ext = 'gb'
 
 
 def efetch(db, id, rettype, **kwargs):
@@ -18,29 +20,43 @@ def efetch(db, id, rettype, **kwargs):
     return fpath
 
 
-def efetch_multiple(species_name, clip=5, **kwargs):
+def efetch_multiple(species_name, clip=None, **kwargs):
     dirpath = join(cache_dirpath, species_name.replace(' ', '_'))
-    if not isdir(dirpath) or not listdir(dirpath):
-        if not isdir(dirpath):
-            mkdir(dirpath)
 
-        search_handle = Entrez.esearch(db='nucleotide', term=species_name)
-        ids = Entrez.read(search_handle)['IdList'][:clip]
+    if isdir(dirpath):
+        return ([join(dirpath, f) for f in listdir(dirpath) if splitext(f)[1] == '.' + fasta_ext],
+                [join(dirpath, f) for f in listdir(dirpath) if splitext(f)[1] == '.' + genbank_ext])
 
-        fasta_fpaths = dict((id, join(dirpath, id + '.fasta')) for id in ids)
-        gb_fpaths = dict((id, join(dirpath, id + '.gb')) for id in ids)
+    else:
+        mkdir(dirpath)
+        fasta_fpaths, gb_fpaths = [], []
 
-        for id in ids:
-            print '  fetching ' + id
-            fetch_handle = Entrez.efetch(db='nuccore', id=id, retmode='text', rettype='gb', **kwargs)
-            with open(gb_fpaths[id], 'w') as file:
+        term = '%s[Organism] AND (complete genome[Title] OR complete sequence[Title])' % species_name
+        print 'Query: %s' % term
+        search_handle = Entrez.esearch(db='nuccore', retmax=clip, term=term)
+        ids = Entrez.read(search_handle)['IdList']
+        print 'Found %s' % ids
+
+        for i, id in enumerate(ids):
+            print 'fetching %s...' % id,
+
+            fetch_handle = Entrez.efetch(db='nuccore', id=id, retmode='text', rettype=genbank_ext, **kwargs)
+
+            gb_fpath = join(dirpath, str(i) + '_' + id + '.' + genbank_ext)
+            gb_fpaths.append(gb_fpath)
+            with open(gb_fpath, 'w') as file:
                 file.write(fetch_handle.read())
+                print 'saved %s' % gb_fpath,
 
-            fetch_handle = Entrez.efetch(db='nuccore', id=id, retmode='text', rettype='fasta', **kwargs)
-            with open(fasta_fpaths[id], 'w') as file:
+            fetch_handle = Entrez.efetch(db='nuccore', id=id, retmode='text', rettype=fasta_ext, **kwargs)
+
+            fasta_fpath = join(dirpath, str(i) + '_' + id + '.' + fasta_ext)
+            fasta_fpaths.append(fasta_fpath)
+            with open(fasta_fpath, 'w') as file:
                 file.write(fetch_handle.read())
+                print ', saved %s' % fasta_fpath,
 
-    return dirpath
+        return fasta_fpaths, gb_fpaths
 
 
 

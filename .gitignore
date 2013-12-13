@@ -35,6 +35,8 @@ nosetests.xml
 .project
 .pydevproject
 
-
-cache
+# OS X
 .DS_Store
+
+# Custom
+cache

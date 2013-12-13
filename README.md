@@ -1,14 +1,15 @@
 AZ scripts
 ==============
 
-The script cached_entrez.py contains funcion `efetch_multiple` that retrieves
+The `orthomcl.config` is a properly corrected configuration file for OrthoMCL.
+
+The script `cached_entrez.py` contains the function `efetch_multiple` that retrieves
 fasta and gb info from the nucleotide Genbank database.
-It accepts a query, saves matched sequences to files and returns the dirpath.
-If you call it the second time, it will just return the dirpath without fetching
+It accepts a species name, then saves matched sequences to files into the `cache`
+directory and returns the paths.
+If you call it the second time, it will just return the paths without fetching
 the sequencing once more.
-See fetch_proteomes.py for the usage.
 
-The folder othomcl_software contains all OrthoMCL stuff, including binaries which should work for all
-UNIX system.
-
-The orthomcl.config is properly corrected configuration file for OrthoMCL.
+The `fetch_proteomes.py` script utilizes `efetch_multiple` to retrieve genomes,
+then iterates CDS annotations and writes translations into
+the `../data/<species name>_proteomes` directory.

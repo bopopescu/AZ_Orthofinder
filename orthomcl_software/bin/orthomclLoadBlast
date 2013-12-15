@@ -9,6 +9,7 @@ use strict;
 usage() unless (@ARGV >= 2);
 my $configFile = $ARGV[0];
 my $blastFile = $ARGV[1];
+my $suffix = $ARGV[2];
 
 my $base = OrthoMCLEngine::Main::Base->new($configFile);
 my $dbh = $base->getDbh();
@@ -32,7 +33,7 @@ sub loadBlastMySQL {
   my $sql = "
  LOAD DATA
  LOCAL INFILE \"$blastFile\"
- REPLACE INTO TABLE $sst
+ REPLACE INTO TABLE $sst$suffix
  FIELDS TERMINATED BY '\\t'
 ";
   my $stmt = $dbh->prepare($sql) or die DBI::errstr;
@@ -58,7 +59,7 @@ sub loadBlastOracle {
   my $sqlHeader = "
 LOAD DATA
 INFILE '$blastFile' 
-INTO TABLE $sst
+INTO TABLE $sst$suffix
 FIELDS TERMINATED BY \"\\t\" OPTIONALLY ENCLOSED BY '\"'
 TRAILING NULLCOLS
 (  query_id,

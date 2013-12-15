@@ -67,7 +67,8 @@ my @steps = ( # Common
 	     ['ortholog2WayIndex'],
              ['inplgOrthoInplg'],
              ['inParalogOrtholog'],
-	     ['coOrthologCandidate', ["drop table Ortholog2Way$suffix", "drop table InParalog2Way$suffix", "drop table InplgOrthoInplg$suffix", "drop table InParalogOrtholog$suffix"]],
+	     ['coOrthologCandidate', ["drop table Ortholog2Way$suffix", "drop table InParalog2Way$suffix", 
+                                "drop table InplgOrthoInplg$suffix", "drop table InParalogOrtholog$suffix"]],
 	     ['coOrthologNotOrtholog', ["drop table CoOrthologCandidate$suffix"]],
 	     ['coOrthologNotOrthologIndex'],
 	     ['coOrtholog', ["drop table CoOrthNotOrtholog$suffix"]],
@@ -593,7 +594,8 @@ create index cno_ix$suffix on CoOrthNotOrtholog$suffix(sequence_id_a,sequence_id
 
   my $tf;
   if ($taxonFilterTaxon) {
-    $tf = "and ab.query_taxon_id != '$taxonFilterTaxon' and ab.subject_taxon_id != '$taxonFilterTaxon' and ba.query_taxon_id != '$taxonFilterTaxon' and ba.subject_taxon_id != '$taxonFilterTaxon'";
+    $tf = "and ab.query_taxon_id != '$taxonFilterTaxon' and ab.subject_taxon_id != '$taxonFilterTaxon' and 
+           ba.query_taxon_id != '$taxonFilterTaxon' and ba.subject_taxon_id != '$taxonFilterTaxon'";
   }
 
   $sql = "
@@ -801,9 +803,9 @@ sub tableAlreadyDropped {
   my $sql;
   if ($base->getConfig("dbVendor") eq 'oracle') {
     $table = uc($table);
-    $sql = "select table_name from all_tables where table_name = '$table'";
+    $sql = "select table_name from all_tables where table_name = '$table$suffix'";
   } else {
-    $sql = "show tables like '$table'";
+    $sql = "show tables like '$table$suffix'";
   }
   my $stmt = $dbh->prepare($sql);
   $stmt->execute();

@@ -6,7 +6,6 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.SeqRecord import SeqRecord
-from orthomcl import orthomcl_adjust_fasta
 from cached_entrez import efetch_multiple
 
 
@@ -14,9 +13,10 @@ proteomes_root_dirpath = '../data'
 
 
 def fetch_proteomes(species_name):
-    proteomes_dirpath = join(
+    species_dirpath = join(
         proteomes_root_dirpath,
-        species_name.replace(' ', '_') + '_proteomes')
+        species_name.replace(' ', '_'))
+    proteomes_dirpath = join(species_dirpath, 'proteomes')
 
     if isdir(proteomes_dirpath):
         return proteomes_dirpath
@@ -74,8 +74,8 @@ def fetch_proteomes(species_name):
             i += 1
         print
 
-    return proteomes_dirpath
+    return species_dirpath
 
 
 if __name__ == '__main__':
-    proteomes_dirpath = fetch_proteomes('Escherichia coli K-12')
+    species_dirpath = fetch_proteomes('Escherichia coli K-12')

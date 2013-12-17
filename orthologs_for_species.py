@@ -1,5 +1,6 @@
 from random import randint
 from shutil import rmtree, copyfile, copy
+from subprocess import call
 from sys import stderr, argv, stdout
 from os import chdir, system, getcwd, listdir, mkdir, remove
 from os.path import join, realpath, isfile, exists, dirname, basename, normpath, isdir
@@ -87,6 +88,10 @@ def parse_args(args):
 
     op.add_argument('-t', dest='threads', default=1,
                     help='Number of threads to run Blast.')
+
+    op.add_argument('--blast-dbsize', dest='blast_dbsize', default=100000,
+                    help='Maximum intended number of proteins to blast '
+                         'after all incremental reruns.')
 
     op.add_argument('--debug', dest='debug', action='store_true', default=False)
 
@@ -200,12 +205,16 @@ class Step:
             return self.command(*self.parameters)
         else:
             log.info('   ' + ' '.join([self.program()] + map(str, self.parameters)))
-            return system(' '.join([self.command] + map(str, self.parameters)))
+            try:
+                return call([self.command] + map(str, self.parameters))
+            except KeyboardInterrupt:
+                return 1
 
 
 def run_workflow(working_dir,
                  species_names,
                  overwrite,
+                 blast_dbsize,
                  ask_before=False,
                  start_after=None,
                  start_from=None,
@@ -303,8 +312,10 @@ def run_workflow(working_dir,
                 '-outfmt', 6,  # tabular
                 '-evalue', 1e-5,
                 '-num_descriptions', 10000,  # don't care value
+                '-max_target_seqs', 10000,
                 '-num_alignments', 10000,  # don't care value,
                 '-num_threads', threads,
+                '-dbsize', blast_dbsize,
                 ]),
 
         Step('Parsing blast results',
@@ -405,6 +416,8 @@ def run_workflow(working_dir,
 
         log.info(str(i) + '. ' + step.name)
         if step.run(overwrite, ask_before) == 1:
+            log.warning('\n   Process was not complete. You can restart from this point '
+                        'using --start-with "' + step.name + '"')
             return 1
         log.info('Done ' + step.name.lower())
         log.info('')
@@ -438,6 +451,7 @@ if __name__ == '__main__':
     run_workflow(params.out_dir,
                  species_names,
                  params.overwrite or start_after != 0 or start_from != 0,
+                 params.blast_dbsize,
                  params.ask_each_step,
                  start_after,
                  start_from,

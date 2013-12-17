@@ -312,7 +312,6 @@ def run_workflow(working_dir,
                 '-outfmt', 6,  # tabular
                 '-evalue', 1e-5,
                 '-num_descriptions', 10000,  # don't care value
-                '-max_target_seqs', 10000,
                 '-num_alignments', 10000,  # don't care value,
                 '-num_threads', threads,
                 '-dbsize', blast_dbsize,

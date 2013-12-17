@@ -85,6 +85,9 @@ def parse_args(args):
                     help='Start from this step. Either name or "uselog".'
                          'If "uselog", find the last "Done" record in log.txt file.')
 
+    op.add_argument('-t', dest='threads', default=1,
+                    help='Number of threads to run Blast.')
+
     op.add_argument('--debug', dest='debug', action='store_true', default=False)
 
     op.add_argument('--ask-each-step',
@@ -206,6 +209,7 @@ def run_workflow(working_dir,
                  ask_before=False,
                  start_after=None,
                  start_from=None,
+                 threads=1,
                  inflation=1.5,
                  first_id=1000):
 
@@ -320,6 +324,7 @@ def run_workflow(working_dir,
                 orthomcl_config,
                 similar_sequences,
                 ('_' + workflow_id) if workflow_id else '',
+                '-num_threads', threads,
                 ]),
 
         Step('Finding pairs',
@@ -435,4 +440,5 @@ if __name__ == '__main__':
                  params.overwrite or start_after != 0 or start_from != 0,
                  params.ask_each_step,
                  start_after,
-                 start_from)
+                 start_from,
+                 params.threads)

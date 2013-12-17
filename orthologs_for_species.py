@@ -303,7 +303,8 @@ def run_workflow(working_dir,
                 '-outfmt', 6,  # tabular
                 '-evalue', 1e-5,
                 '-num_descriptions', 10000,  # don't care value
-                '-num_alignments', 10000,  # don't care value
+                '-num_alignments', 10000,  # don't care value,
+                '-num_threads', threads,
                 ]),
 
         Step('Parsing blast results',
@@ -323,8 +324,7 @@ def run_workflow(working_dir,
              parameters=[
                 orthomcl_config,
                 similar_sequences,
-                ('_' + workflow_id) if workflow_id else '',
-                '-num_threads', threads,
+                ('_' + workflow_id) if workflow_id else ''
                 ]),
 
         Step('Finding pairs',

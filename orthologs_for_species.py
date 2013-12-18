@@ -1,3 +1,4 @@
+from fileinput import filename
 from random import randint
 from shutil import rmtree, copyfile, copy
 from subprocess import call
@@ -45,7 +46,7 @@ def set_up_logging(debug, working_dir):
     err.setFormatter(console_formatter)
     logger.addHandler(err)
 
-    fh = logging.FileHandler(join(working_dir, log_file), 'w')
+    fh = logging.FileHandler(join(working_dir, log_file), 'a')
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(logging.Formatter(
         '%(asctime)-15s  %(levelname)-8s  %(message)s',
@@ -431,7 +432,7 @@ if __name__ == '__main__':
 
     with open(params.species_file) as sf:
         species_names = [l.strip() for l in sf.readlines()]
-    copy(params.species_file, params.out_dir)
+    copyfile(params.species_file, join(params.out_dir, basename(params.species_file)))
 
     start_after = None
     start_from = params.start_from

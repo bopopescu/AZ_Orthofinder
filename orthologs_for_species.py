@@ -1,4 +1,3 @@
-from fileinput import filename
 from random import randint
 from shutil import rmtree, copyfile, copy
 from subprocess import call
@@ -432,7 +431,9 @@ if __name__ == '__main__':
 
     with open(params.species_file) as sf:
         species_names = [l.strip() for l in sf.readlines()]
-    copyfile(params.species_file, join(params.out_dir, basename(params.species_file)))
+    if isfile(join(params.out_dir, basename(params.species_file))):
+        remove(join(params.out_dir, basename(params.species_file)))
+    copy(params.species_file, params.out_dir)
 
     start_after = None
     start_from = params.start_from

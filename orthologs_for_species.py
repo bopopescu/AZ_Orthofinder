@@ -1,12 +1,12 @@
 from random import randint
 from shutil import rmtree, copyfile, copy
 from subprocess import call
-from sys import stderr, argv, stdout
-from os import chdir, system, getcwd, listdir, mkdir, remove
+from os import chdir, getcwd, listdir, mkdir, remove
 from os.path import join, realpath, isfile, exists, dirname, basename, normpath, isdir
 from itertools import ifilterfalse, ifilter, izip, count
 from mysql.connector import errorcode
 import mysql.connector
+import sys
 
 from src.fetch_annotations import fetch_annotations
 from src.make_proteomes import make_proteomes
@@ -34,13 +34,13 @@ def set_up_logging(debug, working_dir):
         '%(asctime)-15s  %(message)s' if debug else '%(message)s',
         datefmt='%c')
 
-    std = logging.StreamHandler(stdout)
+    std = logging.StreamHandler(sys.stdout)
     std.setLevel(logging.DEBUG if debug else logging.INFO)
     std.addFilter(InfoFilter())
     std.setFormatter(console_formatter)
     logger.addHandler(std)
 
-    err = logging.StreamHandler(stderr)
+    err = logging.StreamHandler(sys.stderr)
     err.setLevel(logging.WARN)
     err.setFormatter(console_formatter)
     logger.addHandler(err)
@@ -98,23 +98,21 @@ def parse_args(args):
     op.add_argument('--ask-each-step',
                     dest='ask_each_step', action='store_true', default=False,
                     help='Ask user every time before proceed to next step.')
-    params = op.parse_args(argv[1:])
+    params = op.parse_args(args)
 
     if params.start_from == 'uselog':
         if not isfile(join(params.out_dir, log_file)):
-            print >> stderr, 'No %s in %s. Either check your path, or ' \
-                             'change the --start-from=uselog option' % (log_file, params.out_dir)
+            print >> sys.stderr, 'No %s in %s. Either check your path, or ' \
+                                 'change the --start-from=uselog option' % (log_file, params.out_dir)
             exit(1)
     return params
 
 
 class Step:
     def __init__(self, name, cmd,
-                 req_files=None,
-                 req_tables=None,
-                 prod_files=None,
-                 prod_tables=None,
-                 parameters=None):
+                 req_files=None, prod_files=None,
+                 req_tables=None, prod_tables=None,
+                 parameters=None, stdin=None, stdout=None):
         self.name = name
         self.command = cmd
         self.req_files = req_files or []
@@ -122,6 +120,8 @@ class Step:
         self.prod_files = prod_files or []
         self.prod_tables = prod_tables or []
         self.parameters = parameters or []
+        self.stdin = stdin
+        self.stdout = stdout
 
     def program(self):
         return basename(self.command)
@@ -133,7 +133,7 @@ class Step:
         missing_prod_files = list(ifilterfalse(exists, self.prod_files))
 
         missing_prod_tables = []
-        existing_prod_tabes = []
+        existing_prod_tables = []
         if self.prod_tables:
             with DbCursor() as cursor:
                 for table in self.prod_tables:
@@ -146,7 +146,7 @@ class Step:
                         log.debug(err.msg)
                         missing_prod_tables.append(table)
                     else:
-                        existing_prod_tabes.append(table)
+                        existing_prod_tables.append(table)
 
         if not overwrite:
             if self.prod_files and not missing_prod_files:
@@ -189,7 +189,7 @@ class Step:
                 if isdir(file):
                     rmtree(file)
 
-        if overwrite and existing_prod_files:
+        if overwrite and existing_prod_tables:
             with DbCursor() as cursor:
                 for table in existing_prod_files:
                     try:
@@ -204,9 +204,18 @@ class Step:
         if hasattr(self.command, '__call__'):
             return self.command(*self.parameters)
         else:
-            log.info('   ' + ' '.join([self.program()] + map(str, self.parameters)))
+            commandline = ' '.join([self.command] + map(str, self.parameters))
+            stdin_f, stdout_f = None, None
+            if self.stdin:
+                commandline += ' < ' + self.stdin
+                stdin_f = open(self.stdin)
+            if self.stdout:
+                stdout_f = open(self.stdout, 'w')
+                commandline += ' > ' + self.stdout
+            log.info('   ' + commandline)
             try:
-                return call([self.command] + map(str, self.parameters))
+                return call([self.command] + map(str, self.parameters),
+                            stdin=stdin_f, stdout=stdout_f)
             except KeyboardInterrupt:
                 return 1
 
@@ -306,9 +315,8 @@ def run_workflow(working_dir,
              prod_files=[similar_sequences],
              parameters=[
                 blast_out,
-                proteomes_dir,
-                '>>', similar_sequences,
-                ]),
+                proteomes_dir],
+             stdout=similar_sequences),
 
         Step('Installing schema',
              cmd=join(orthomcl_bin_dir, 'orthomclInstallSchema.pl'),
@@ -345,7 +353,7 @@ def run_workflow(working_dir,
                 orthomcl_config,
                 pairs_log,
                 'cleanup=no',
-                'startAfter=useLog' if not overwrite else '',
+                #'startAfter=useLog' if not overwrite else '',
                 ('suffix=_' + workflow_id) if workflow_id else '',
                 ]),
 
@@ -380,9 +388,9 @@ def run_workflow(working_dir,
              prod_files=[groups_file],
              parameters=[
                 workflow_id + '_',
-                str(first_id),
-                '<', 'mclOutput',
-                '>', groups_file]),
+                str(first_id)],
+             stdin='mclOutput',
+             stdout=groups_file),
 
         Step('MCL singletones to files',
              cmd=join(orthomcl_bin_dir, 'orthomclSingletons.pl'),
@@ -390,8 +398,8 @@ def run_workflow(working_dir,
              prod_files=[singletons_file],
              parameters=[
                 good_proteins,
-                groups_file,
-                '>>', singletons_file]),
+                groups_file],
+             stdout=singletons_file),
     ]
     for i, step in izip(count(1), steps):
         if start_after is not None \
@@ -424,7 +432,7 @@ def run_workflow(working_dir,
 
 
 if __name__ == '__main__':
-    params = parse_args(argv[1:])
+    params = parse_args(sys.argv[1:])
 
     if not isdir(params.out_dir):
         mkdir(params.out_dir)

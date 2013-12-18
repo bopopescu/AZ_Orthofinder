@@ -1,6 +1,7 @@
 from os.path import join, dirname, realpath
 from mysql.connector import errorcode
 import mysql.connector
+import sys
 
 from src.db_connection import DbCursor
 
@@ -56,6 +57,10 @@ def clean_db(workflow_id):
         except mysql.connector.Error, err:
             print err.msg
             pass
+
+
+if __name__ == '__main__':
+    clean_db(sys.argv[1])
 
 
 #    #cmd = ' '.join([

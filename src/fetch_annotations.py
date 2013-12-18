@@ -1,6 +1,7 @@
 from os import mkdir, listdir, remove
-from os.path import join, isdir, isfile, splitext
+from os.path import join, isdir, isfile, splitext, basename
 from shutil import rmtree
+from ftplib import FTP
 from Bio import Entrez, Blast, SeqIO
 Entrez.email = 'vladislav.sav@gmail.com'
 
@@ -22,6 +23,41 @@ genbank_ext = 'gb'
 
 
 def fetch_annotations(save_dir, species_names, clip=None):
+    if not species_names:
+        log.error('No species names')
+        return 1
+
+    if not isdir(save_dir):
+        mkdir(save_dir)
+
+    ftp = FTP('ftp.ncbi.nih.gov')
+    log.debug('   Logging in ' + ftp.login())
+    ftp.cwd('genomes/Bacteria')
+    for i, dirname in enumerate(ftp.nlst()):
+        for sp_i, sp in enumerate(species_names):
+            sp = sp.replace(' ', '_').strip()
+            if sp == '' or sp[0] == '#':
+                continue
+
+            if dirname.startswith(sp):
+                log.debug('   Scanning ' + dirname)
+                for remote_fpath in ftp.nlst(dirname):
+                    if remote_fpath.endswith('.gbk'):
+                        dest_fname = str(i) + '_' + str(sp_i) + '_' + basename(remote_fpath)
+                        dest_fpath = join(save_dir, dest_fname)
+                        ftp.retrbinary('RETR ' + remote_fpath, open(dest_fpath, 'wb').write)
+
+                        rec = SeqIO.read(dest_fpath, 'gb')
+                        #print '       Definition: ' + rec.description
+                        if 'plasmid' in rec.description:
+                            remove(dest_fpath)
+                        else:
+                            log.info('       saved ' + dest_fpath)
+                            log.info('')
+    return 0
+
+
+def fetch_annotations_entrez(save_dir, species_names, clip=None):
     if not species_names:
         log.error('No species names')
         return 1
@@ -57,11 +93,9 @@ def fetch_annotations(save_dir, species_names, clip=None):
                 file.write(fetch_handle.read())
 
             rec = SeqIO.read(gb_fpath, genbank_ext)
-            org_name = rec.annotations['organism']
-            definition = rec.description
-            log.info('       Organism: ' + org_name)
-            log.info('       Definition: ' + definition)
-            if 'plasmid' in definition.split():
+            log.info('       Organism: ' + rec.annotations['organism'])
+            log.info('       Definition: ' + rec.description)
+            if 'plasmid' in rec.description:
                 remove(gb_fpath)
             else:
                 log.info('       saved %s' % gb_fpath)

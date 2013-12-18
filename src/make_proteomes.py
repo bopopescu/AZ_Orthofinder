@@ -28,7 +28,12 @@ def make_proteomes(gbk_dir, species_names, out_dir):
     speciescode = ''.join(w[0].lower() for w in words[:3 - int(math.log10(ref_num))])
 
     for i, gb_fpath in izip(count(1), gbk_files):
-        rec = SeqIO.read(gb_fpath, 'genbank')
+        try:
+            rec = SeqIO.read(gb_fpath, 'genbank')
+        except:
+            log.warning('   Cannpt read proteome ' + gb_fpath)
+            continue
+
         features = [f for f in rec.features if f.type == 'CDS']
         log.info('    %s: translating %d features' % (rec.id, len(features)))
 

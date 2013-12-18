@@ -98,8 +98,10 @@ def parse_args(args):
     op.add_argument('--ask-each-step',
                     dest='ask_each_step', action='store_true', default=False,
                     help='Ask user every time before proceed to next step.')
-    params = op.parse_args(args)
 
+    op.add_argument('--proxy', dest='proxy', default=None, help='Set up proxy for FTP.')
+
+    params = op.parse_args(args)
     if params.start_from == 'uselog':
         if not isfile(join(params.out_dir, log_file)):
             print >> sys.stderr, 'No %s in %s. Either check your path, or ' \
@@ -228,6 +230,7 @@ def run_workflow(working_dir,
                  start_after=None,
                  start_from=None,
                  threads=1,
+                 proxy=None,
                  inflation=1.5,
                  first_id=1000):
 
@@ -269,6 +272,7 @@ def run_workflow(working_dir,
              parameters=[
                 annotations_dir,
                 species_names,
+                proxy,
                 ]),
 
         Step('Making proteins',
@@ -464,4 +468,5 @@ if __name__ == '__main__':
                  params.ask_each_step,
                  start_after,
                  start_from,
-                 params.threads)
+                 params.threads,
+                 params.proxy)

@@ -3,6 +3,7 @@ from os.path import join, isdir, isfile, splitext, basename
 from shutil import rmtree
 from ftplib import FTP
 from Bio import Entrez, Blast, SeqIO
+from src.ftp_proxy import setup_http_proxy
 Entrez.email = 'vladislav.sav@gmail.com'
 
 import logging
@@ -22,10 +23,13 @@ genbank_ext = 'gb'
 #    return fpath
 
 
-def fetch_annotations(save_dir, species_names, clip=None):
+def fetch_annotations(save_dir, species_names, proxy=None, clip=None):
     if not species_names:
         log.error('No species names')
         return 1
+
+    if proxy:
+        setup_http_proxy(*proxy.split(':'))
 
     if not isdir(save_dir):
         mkdir(save_dir)
@@ -57,7 +61,7 @@ def fetch_annotations(save_dir, species_names, clip=None):
     return 0
 
 
-def fetch_annotations_entrez(save_dir, species_names, clip=None):
+def fetch_annotations_entrez(save_dir, species_names, proxy=None, clip=None):
     if not species_names:
         log.error('No species names')
         return 1

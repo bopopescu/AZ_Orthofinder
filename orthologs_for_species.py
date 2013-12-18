@@ -247,7 +247,7 @@ def run_workflow(working_dir,
     similar_sequences   = 'intermediate/similar_sequences.txt'
     pairs_log           = 'intermediate/orthomclpairs.log'
     mcl_input           = 'mclInput'
-    mcl_output          = 'intermediate/mclOutput'
+    mcl_output          = 'mclOutput'
     gene_pairs_dir      = 'gene_pairs'
     groups_file         = 'groups.txt'
     singletons_file     = 'singletons.txt'

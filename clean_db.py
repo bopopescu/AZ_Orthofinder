@@ -10,7 +10,7 @@ orthomcl_bin_dir = join(dirname(realpath(__file__)), 'src/orthomcl_software/bin'
 
 def clean_db(workflow_id):
     with open(orthomcl_config) as f:
-        conf = dict(l.split('=') for l in f.readlines() if l[0] != '#')
+        conf = dict(l.split('=', 1) for l in f.readlines() if l[0] != '#')
 
     tables = [t.strip() + '_' + workflow_id for t in [
         conf['orthologTable'],

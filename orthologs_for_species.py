@@ -244,7 +244,7 @@ def run_workflow(working_dir,
     singletons_file     = 'singletons.txt'
 
     with open(orthomcl_config) as f:
-        conf = dict(l.split('=') for l in f.readlines() if l[0] != '#')
+        conf = dict(l.split('=', 1) for l in f.readlines() if l[0] != '#')
         ortholog_table = conf['orthologTable'].strip() + '_' + workflow_id
         in_paralog_table = conf['inParalogTable'].strip() + '_' + workflow_id
         coortholog_table = conf['coOrthologTable'].strip() + '_' + workflow_id

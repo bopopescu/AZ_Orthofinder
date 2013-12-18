@@ -12,7 +12,7 @@ log = logging.getLogger('orthofinder')
 class DbCursor:
     def __init__(self):
         with open(orthomcl_config) as f:
-            conf = dict(l.split('=') for l in f.readlines() if l[0] != '#')
+            conf = dict(l.split('=', 1) for l in f.readlines() if l[0] != '#')
         self.db_login = conf['dbLogin']
         self.db_passw = conf['dbPassword']
         self.cnx = None

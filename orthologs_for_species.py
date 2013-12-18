@@ -361,7 +361,7 @@ def run_workflow(working_dir,
              cmd=join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
              req_files=[orthomcl_config],  # and populated InParalog, Ortholog, CoOrtholog tables
              prod_files=[
-                'mclInput',
+                mcl_input,
                 'pairs',
                 'pairs/potentialOrthologs.txt',
                 'pairs/potentialInparalogs.txt',
@@ -373,18 +373,18 @@ def run_workflow(working_dir,
 
         Step('MCL',
              cmd='mcl',
-             req_files=['mclInput'],
-             prod_files=['mclOutput'],
+             req_files=[mcl_input],
+             prod_files=[mcl_output],
              parameters=[
-                'mclInput',
+                mcl_input,
                 '--abc',
                 '-I', str(inflation),
-                '-o', 'mclOutput',
+                '-o', mcl_output,
                 ]),
 
         Step('MCL groups to files',
              cmd=join(orthomcl_bin_dir, 'orthomclMclToGroups.pl'),
-             req_files=['mclOutput'],
+             req_files=[mcl_output],
              prod_files=[groups_file],
              parameters=[
                 workflow_id + '_',

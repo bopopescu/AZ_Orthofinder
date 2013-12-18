@@ -23,7 +23,7 @@ genbank_ext = 'gb'
 #    return fpath
 
 
-def fetch_annotations(save_dir, species_names, proxy=None, clip=None):
+def fetch_annotations_ftp(save_dir, species_names, ref_ids, proxy=None, clip=None):
     if not species_names:
         log.error('No species names')
         return 1
@@ -61,7 +61,42 @@ def fetch_annotations(save_dir, species_names, proxy=None, clip=None):
     return 0
 
 
-def fetch_annotations_entrez(save_dir, species_names, proxy=None, clip=None):
+def fetch_annotations(save_dir, species_names, ref_ids, proxy=None):
+    ids = ref_ids
+
+    if not isdir(save_dir):
+        mkdir(save_dir)
+
+    if ids == []:
+        log.info('No references were found.')
+        ids = raw_input('Put reference ids manually:').split()
+        if ids == []:
+            log.error('No references :(')
+            return 1
+
+    log.info('   Found %s' % ids)
+
+    for i, id in enumerate(ids):
+        log.info('   Fetching %s...' % id)
+
+        fetch_handle = Entrez.efetch(db='nucleotide', id=id,
+                                     retmode='text', rettype='gbwithparts')
+        gb_fpath = join(save_dir, id + '.' + genbank_ext)
+        with open(gb_fpath, 'w') as file:
+            file.write(fetch_handle.read())
+
+        rec = SeqIO.read(gb_fpath, genbank_ext)
+        log.info('       Definition: ' + rec.description)
+        if 'plasmid' in rec.description:
+            remove(gb_fpath)
+        else:
+            log.info('       saved %s' % gb_fpath)
+        log.info('')
+
+    print 0
+
+
+def fetch_annotations_entrez(save_dir, species_names, ref_ids, proxy=None, clip=None):
     if not species_names:
         log.error('No species names')
         return 1
@@ -91,7 +126,8 @@ def fetch_annotations_entrez(save_dir, species_names, proxy=None, clip=None):
         for i, id in enumerate(ids):
             log.info('   Fetching %s...' % id)
 
-            fetch_handle = Entrez.efetch(db='nuccore', id=id, retmode='text', rettype=genbank_ext)
+            fetch_handle = Entrez.efetch(db='nuccore', id=id, retmode='text',
+                                         rettype='gbwithparts')
             gb_fpath = join(save_dir, str(species_i) + '_' + str(i) + '_' + id + '.' + genbank_ext)
             with open(gb_fpath, 'w') as file:
                 file.write(fetch_handle.read())

@@ -53,15 +53,22 @@ def set_up_logging(debug, working_dir):
     logger.addHandler(fh)
 
 
-def make_workflow_id(species_names=None):
+def make_workflow_id__from_species_names(species_names=None):
     if not species_names:
-        return randint(1000, 9999)
+        return str(randint(1000, 9999))
 
     sn_words = ' '.join(species_names).split()
     if len(sn_words) == 1:
-        return sn_words[0].replace('-', '')[:11]
+        return sn_words[0].replace('-', '')[:4]
     if len(sn_words) >= 2:
         return ''.join(w[0] for w in sn_words)
+
+
+def make_workflow_id(working_dir=None):
+    if not working_dir:
+        return str(randint(1000, 9999))
+
+    return basename(working_dir)[:4]
 
 
 def parse_args(args):
@@ -71,6 +78,10 @@ def parse_args(args):
                     help='File with a list of full organism names as in Genbank. '
                          'For example, "Salmonella enterica subsp. enterica '
                          'serovar Typhi str. P-stx-12".')
+
+    op.add_argument('--ref-ids', dest='ref_ids',
+                    help='File with reference ids to fetch from Genbank.'
+                         'Either this or species-file should be specified.')
 
     op.add_argument('--ids', dest='ids', help='Comma-separated list of reference ids.')
 
@@ -107,7 +118,13 @@ def parse_args(args):
             print >> sys.stderr, 'No %s in %s. Either check your path, or ' \
                                  'change the --start-from=uselog option' % (log_file, params.out_dir)
             exit(1)
+
+    if params.species_file is None and params.ref_ids is None:
+        print >> sys.stderr, 'Either --ref-ids or --species-file should be specified.'
+        exit(1)
+
     return params
+
 
 
 class Step:
@@ -224,6 +241,7 @@ class Step:
 
 def run_workflow(working_dir,
                  species_names,
+                 ref_ids,
                  overwrite,
                  blast_dbsize,
                  ask_before=False,
@@ -234,7 +252,7 @@ def run_workflow(working_dir,
                  inflation=1.5,
                  first_id=1000):
 
-    workflow_id = make_workflow_id(species_names)
+    workflow_id = make_workflow_id(working_dir)
     log.info('Workflow id is ' + workflow_id)
     log.info('')
 
@@ -272,6 +290,7 @@ def run_workflow(working_dir,
              parameters=[
                 annotations_dir,
                 species_names,
+                ref_ids,
                 proxy,
                 ]),
 
@@ -281,7 +300,7 @@ def run_workflow(working_dir,
              prod_files=[proteomes_dir],
              parameters=[
                 annotations_dir,
-                species_names,
+                workflow_id,
                 proteomes_dir,
                 ]),
 
@@ -441,11 +460,21 @@ if __name__ == '__main__':
     if not isdir(params.out_dir):
         mkdir(params.out_dir)
 
-    with open(params.species_file) as sf:
-        species_names = [l.strip() for l in sf.readlines()]
-    if isfile(join(params.out_dir, basename(params.species_file))):
-        remove(join(params.out_dir, basename(params.species_file)))
-    copy(params.species_file, params.out_dir)
+    species_names = None
+    if params.species_file:
+        with open(params.species_file) as sf:
+            species_names = [l.strip() for l in sf.readlines() if l.strip()]
+        if isfile(join(params.out_dir, basename(params.species_file))):
+            remove(join(params.out_dir, basename(params.species_file)))
+        copy(params.species_file, params.out_dir)
+
+    ref_ids = None
+    if params.ref_ids:
+        with open(params.ref_ids) as rf:
+            ref_ids = [l.strip() for l in rf.readlines() if l.strip()]
+        if isfile(join(params.out_dir, basename(params.ref_ids))):
+            remove(join(params.out_dir, basename(params.ref_ids)))
+        copy(params.ref_ids, params.out_dir)
 
     start_after = None
     start_from = params.start_from
@@ -463,6 +492,7 @@ if __name__ == '__main__':
 
     run_workflow(params.out_dir,
                  species_names,
+                 ref_ids,
                  params.overwrite or start_after != 0 or start_from != 0,
                  params.blast_dbsize,
                  params.ask_each_step,

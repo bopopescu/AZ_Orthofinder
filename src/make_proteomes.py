@@ -3,7 +3,7 @@ from shutil import rmtree
 from sys import stderr
 from os import makedirs, chdir, mkdir, listdir
 from os.path import join, isdir
-from Bio import SeqIO
+from Bio import SeqIO, Entrez
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.SeqRecord import SeqRecord
@@ -13,7 +13,7 @@ import logging
 log = logging.getLogger('orthofinder')
 
 
-def make_proteomes(gbk_dir, species_names, out_dir):
+def make_proteomes(gbk_dir, workflow_id, out_dir):
     gbk_files = [join(gbk_dir, fname) for fname in listdir(gbk_dir)]
     ref_num = len(gbk_files)
     if ref_num == 0:
@@ -24,14 +24,14 @@ def make_proteomes(gbk_dir, species_names, out_dir):
     if not isdir(out_dir):
         makedirs(out_dir)
 
-    words = ' '.join(species_names).split()
-    speciescode = ''.join(w[0].lower() for w in words[:3 - int(math.log10(ref_num))])
+    #words = ' '.join(species_names).split()
+    speciescode = workflow_id[:4]  # ''.join(w[0].lower() for w in words[:3 - int(math.log10(ref_num))])
 
     for i, gb_fpath in izip(count(1), gbk_files):
         try:
             rec = SeqIO.read(gb_fpath, 'genbank')
         except:
-            log.warning('   Cannpt read proteome ' + gb_fpath)
+            log.warning('   Cannot read proteome ' + gb_fpath)
             continue
 
         features = [f for f in rec.features if f.type == 'CDS']
@@ -55,19 +55,25 @@ def make_proteomes(gbk_dir, species_names, out_dir):
                                  ' ' + 'Gene ' + (gene_id or '<unknown>') + \
                                  '. Protein ' + protein_id
             #log.debug(protein_descripton)
+            translation = None
+            if qs.get('translation', [None]) is not None:
+                translation = Seq(qs.get('translation', [None])[0], generic_protein)
 
-            translation = Seq(qs.get('translation', [None])[0], generic_protein)
             if not translation:
-                log.warn('    Error: no translation for CDS')
-                continue
-            #log.debug('   ' + translation)
+                # Translate ourselves
+                # TODO: Fetch reference
+                # read genome_seq
+                #trans_table = int(qs.get('transl_table', [11])[0])
+                #my_translation = f.extract(genome_seq).seq.translate(table=trans_table, to_stop=True, cds=True)
+                #print my_translation
+                #if translation:
+                #    assert str(my_translation) == str(translation)
 
-            # Translate ourselves
-            #trans_table = int(qs.get('transl_table', [11])[0])
-            #my_translation = f.extract(genome_seq).seq.translate(table=trans_table, to_stop=True, cds=True)
-            #print my_translation
-            #if translation:
-            #    assert str(my_translation) == str(translation)
+                # TODO: OR BETTER FETCH PROTEIN
+                fetch_handle = Entrez.efetch(db='protein', id=protein_id,
+                                             retmode='text', rettype='fasta')
+                rec = SeqIO.read(fetch_handle, 'fasta')
+                translation = rec.seq
 
             proteins.append(SeqRecord(seq=translation, id=taxoncode + '|' + protein_id,
                                       description=protein_descripton))

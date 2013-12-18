@@ -59,7 +59,7 @@ def fetch_annotations(save_dir, species_names, clip=None):
             rec = SeqIO.read(gb_fpath, genbank_ext)
             org_name = rec.annotations['organism']
             log.info('       ' + rec.annotations['organism'])
-            if 'plazmid' in org_name:
+            if 'plasmid' in org_name:
                 remove(gb_fpath)
             else:
                 log.info('       saved %s' % gb_fpath)

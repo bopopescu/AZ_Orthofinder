@@ -93,7 +93,7 @@ def parse_args(args):
                     help='Maximum intended number of proteins to blast '
                          'after all incremental reruns.')
 
-    op.add_argument('--debug', dest='debug', action='store_true', default=False)
+    op.add_argument('-d', '--debug', dest='debug', action='store_true', default=False)
 
     op.add_argument('--ask-each-step',
                     dest='ask_each_step', action='store_true', default=False,
@@ -284,23 +284,6 @@ def run_workflow(working_dir,
                 poor_proteins,
                 ]),
 
-        Step('Installing schema',
-             cmd=join(orthomcl_bin_dir, 'orthomclInstallSchema.pl'),
-             req_files=[orthomcl_config],
-             prod_files=[],  # drops and creates SimilarSequences, InParalog,
-                             # Ortholog, CoOrtholog, InterTaxonMatch view
-             prod_tables=[
-                ortholog_table,
-                in_paralog_table,
-                coortholog_table,
-                similar_sequeces_table,
-                inter_taxon_match_view],
-             parameters=[
-                orthomcl_config,
-                sql_log,
-                ('_' + workflow_id if workflow_id else ''),
-                ]),
-
         Step('Blasting all vs. all',
              cmd='blastp',
              req_files=[proteomes_dir, good_proteins],
@@ -325,6 +308,23 @@ def run_workflow(working_dir,
                 blast_out,
                 proteomes_dir,
                 '>>', similar_sequences,
+                ]),
+
+        Step('Installing schema',
+             cmd=join(orthomcl_bin_dir, 'orthomclInstallSchema.pl'),
+             req_files=[orthomcl_config],
+             prod_files=[],  # drops and creates SimilarSequences, InParalog,
+                             # Ortholog, CoOrtholog, InterTaxonMatch view
+             prod_tables=[
+                ortholog_table,
+                in_paralog_table,
+                coortholog_table,
+                similar_sequeces_table,
+                inter_taxon_match_view],
+             parameters=[
+                orthomcl_config,
+                sql_log,
+                ('_' + workflow_id if workflow_id else ''),
                 ]),
 
         Step('Loading blast results into the database',

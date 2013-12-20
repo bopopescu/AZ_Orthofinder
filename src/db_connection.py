@@ -7,9 +7,9 @@ from os.path import join, dirname, realpath
 orthomcl_config = join(dirname(realpath(__file__)), 'orthomcl.config')
 orthomcl_bin_dir = join(dirname(realpath(__file__)), 'orthomcl_software/bin')
 
-import utils
+import config
 import logging
-log = logging.getLogger(utils.log_fname)
+log = logging.getLogger(config.log_fname)
 
 
 class DbCursor:
@@ -39,7 +39,7 @@ class DbCursor:
                 connected = True
             except mysql.connector.errors.InterfaceError:
                 #log.info('   MySql server must not be running, trying to start.')
-                with open(utils.config) as cf:
+                with open(config.config) as cf:
                     conf = dict(l.strip().split('=', 1) for l
                                 in cf.readlines() if l.strip()[0] != '#')
 

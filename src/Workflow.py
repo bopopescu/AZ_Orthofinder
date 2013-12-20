@@ -7,12 +7,12 @@ from subprocess import call
 import subprocess
 from mysql.connector import errorcode
 from db_connection import DbCursor, mysql
-import utils
+import config
 import logging
 
-log = logging.getLogger(utils.log_fname)
-orthomcl_config = utils.orthomcl_config
-orthomcl_bin_dir = utils.orthomcl_bin_dir
+log = logging.getLogger(config.log_fname)
+orthomcl_config = config.orthomcl_config
+orthomcl_bin_dir = config.orthomcl_bin_dir
 
 
 class Workflow:
@@ -54,7 +54,8 @@ class Step:
     def __init__(self, name, cmd,
                  req_files=None, prod_files=None,
                  req_tables=None, prod_tables=None,
-                 parameters=None, stdin=None, stdout=None, stderr=None):
+                 parameters=None, stdin=None,
+                 stdout='pipe', stderr='pipe'):
         self.name = name
         self.command = cmd
         self.req_files = req_files or []
@@ -149,27 +150,35 @@ class Step:
         else:
             commandline = ' '.join([self.command] + map(str, self.parameters))
 
-            stdin_f, stdout_f = None, None
+            stdin_f = None
             if self.stdin:
                 commandline += ' < ' + self.stdin
                 stdin_f = open(self.stdin)
-            if self.stdout:
+
+            stdout_f = subprocess.PIPE
+            stderr_f = subprocess.PIPE
+            if self.stdout and self.stdout not in ['log', 'pipe']:
                 stdout_f = open(self.stdout, 'w')
                 commandline += ' > ' + self.stdout
-            log.info('   ' + commandline)
+            else:
+                stderr_f = subprocess.STDOUT
 
+            log.info('   ' + commandline)
             try:
-                if self.stderr == 'pipe' or self.stderr == 'log':
-                    p = subprocess.Popen([self.command] + map(str, self.parameters),
-                                         stdin=stdin_f, stdout=stdout_f,
-                                         stderr=subprocess.PIPE)
+                p = subprocess.Popen([self.command] + map(str, self.parameters),
+                                     stdin=stdin_f, stdout=stdout_f, stderr=stderr_f)
+                if stdout_f == subprocess.PIPE:
+                    for line in iter(p.stdout.readline, ''):
+                        if self.stdout == 'pipe':
+                            log.info('   ' + line.strip())
+                        if self.stdout == 'log':
+                            log.debug('   ' + line.strip())
+                if stderr_f == subprocess.PIPE:
                     for line in iter(p.stderr.readline, ''):
                         if self.stderr == 'pipe':
                             log.info('   ' + line.strip())
                         if self.stderr == 'log':
                             log.debug('   ' + line.strip())
-                else:
-                    return call([self.command] + map(str, self.parameters),
-                                stdin=stdin_f, stdout=stdout_f)
+
             except KeyboardInterrupt:
                 return 1

@@ -5,9 +5,9 @@ from Bio import Entrez, SeqIO
 from src.ftp_proxy import setup_http_proxy
 Entrez.email = 'vladislav.sav@gmail.com'
 
-import utils
+import config
 import logging
-log = logging.getLogger(utils.log_fname)
+log = logging.getLogger(config.log_fname)
 
 genbank_ext = 'gb'
 

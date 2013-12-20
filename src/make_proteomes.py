@@ -9,9 +9,9 @@ from Bio.Alphabet import generic_protein
 from Bio.SeqRecord import SeqRecord
 import math
 
-import utils
+import config
 import logging
-log = logging.getLogger(utils.log_fname)
+log = logging.getLogger(config.log_fname)
 
 
 def make_proteomes(gbk_dir, workflow_id, out_dir):

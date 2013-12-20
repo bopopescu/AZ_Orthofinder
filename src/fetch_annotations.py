@@ -14,7 +14,7 @@ genbank_ext = 'gb'
 
 def fetch_annotations_species_name_ftp(save_dir, species_names, proxy=None, clip=None):
     if not species_names:
-        log.error('No species names')
+        log.error('   No species names')
         return 1
 
     if proxy:
@@ -57,10 +57,10 @@ def fetch_annotations_ids(save_dir, ref_ids):
         mkdir(save_dir)
 
     if ids == []:
-        log.info('No references have been found.')
-        ids = raw_input('Put reference ids manually:').split()
+        log.info('   No references have been found.')
+        ids = raw_input('   Put reference ids manually:').split()
         if ids == []:
-            log.error('No references :(')
+            log.error('   No references :(')
             return 1
 
     log.info('   Found %s' % ids)
@@ -87,7 +87,7 @@ def fetch_annotations_ids(save_dir, ref_ids):
 
 def fetch_annotations_species_name_entrez(save_dir, species_names, clip=None):
     if not species_names:
-        log.error('No species names')
+        log.error('   No species names')
         return 1
 
     if not isdir(save_dir):
@@ -104,10 +104,10 @@ def fetch_annotations_species_name_entrez(save_dir, species_names, clip=None):
         ids = Entrez.read(search_handle)['IdList']
 
         if ids == []:
-            log.info('No references are found.')
-            ids = raw_input('Put reference ids manually:').split()
+            log.info('   No references are found.')
+            ids = raw_input('   Put reference ids manually:').split()
             if ids == []:
-                log.error('No references :(')
+                log.error('   No references :(')
                 return 1
 
         log.info('   Found %s' % ids)

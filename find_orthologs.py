@@ -4,8 +4,8 @@ import sys
 import logging
 from random import randint
 from shutil import copy
-from os import chdir, mkdir, remove
-from os.path import join, isfile, exists, basename, isdir, relpath
+from os import chdir, mkdir, remove, access, X_OK, environ
+from os.path import join, isfile, exists, basename, isdir, relpath, split, pathsep
 
 import src.config as config
 from src.fetch_annotations import fetch_annotations_species_name_ftp, fetch_annotations_ids
@@ -55,7 +55,7 @@ def parse_args(args):
                          'Either species-file, ids-file or annotations-dir'
                          'must be specified.')
 
-    op.add_argument('-o', dest='out_dir',
+    op.add_argument('-o', dest='out_dir', required=True,
                     help='The directory that will contain the resulting group.txt file, '
                          'as well as intermediate results.')
 
@@ -78,20 +78,20 @@ def parse_args(args):
 
     op.add_argument('--proxy', dest='proxy', default=None, help='Proxy for FTP, for example: '
                                                                 '--proxy 198.260.1.1:3333')
+    usage = 'find_orthologs [--species-file FILE] \n' \
+            '                      [--ids-file FILE] \n' \
+            '                      [--annotations-dir DIR] \n' \
+            '                       -o OUTPUT_DIRECTORY \n' \
+            '                      [--start-from STEP_NAME]'
+    op.usage = usage
 
     params = op.parse_args(args)
-    if params.start_from == 'uselog':
-        if not isfile(join(params.out_dir, config.log_fname)):
-            print >> sys.stderr, 'No %s in %s. Either check your path, or ' \
-                                 'change the --start-from option' % \
-                                 (config.log_fname, params.out_dir)
-            exit(1)
 
     if not params.species_file and not params.ids_file and not params.annotations_dir \
             and not params.start_from:
         print >> sys.stderr, 'Either --species-file, --ids-file, --annotations-dir, ' + \
                              'or --start-from has to be specified.'
-        exit(1)
+        op.exit(1)
 
     if params.species_file and not isfile(params.species_file):
         print >> sys.stderr, 'Species list file ' + params.species_file + ' does not exist or is directory.'
@@ -105,7 +105,31 @@ def parse_args(args):
         print >> sys.stderr, 'Annotations directory ' + params.annotations_dir + ' does not exist or is file.'
         exit(1)
 
+    if params.start_from == 'uselog':
+        if not isfile(join(params.out_dir, config.log_fname)):
+            print >> sys.stderr, 'No %s in %s. Either check your path, or ' \
+                                 'change the --start-from option' % \
+                                 (config.log_fname, params.out_dir)
+            exit(1)
+
     return params
+
+
+def which(program):
+    def is_exe(fpath):
+        return isfile(fpath) and access(fpath, X_OK)
+
+    fpath, fname = split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in environ["PATH"].split(pathsep):
+            path = path.strip('"')
+            exe_file = join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+    return None
 
 
 def run_workflow(working_dir, overwrite,
@@ -114,6 +138,13 @@ def run_workflow(working_dir, overwrite,
                  start_after=None, start_from=None, threads=1,
                  proxy=None,
                  inflation=1.5, first_id=1000):
+
+    if not which('blastp') or not which('mcl'):
+        if not which('blastp'):
+            log.error('blastp installation required.')
+        if not which('mcl'):
+            log.error('mcl installation required.')
+        return 3
 
     workflow_id = make_workflow_id(working_dir)
     log.info('Workflow id is "' + workflow_id + '"')
@@ -169,7 +200,7 @@ def run_workflow(working_dir, overwrite,
         exit(1)
 
     steps.extend([
-        Step('Making proteins',
+        Step('Preparing proteins',
              cmd=make_proteomes,
              req_files=[annotations_dir],
              prod_files=[proteomes_dir],

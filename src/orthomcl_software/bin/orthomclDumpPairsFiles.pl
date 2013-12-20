@@ -7,9 +7,10 @@ use OrthoMCLEngine::Main::Base;
 use strict;
 
 my $configFile = $ARGV[0];
+my $mclinput = $ARGV[1];
 
-my $parentDir = $ARGV[1];  # undocumented:  for workflow applications
-my $suffix = $ARGV[2];     # same
+my $parentDir = $ARGV[2];  # undocumented:  for workflow applications
+my $suffix = $ARGV[3];     # same
 
 chdir $parentDir
   if $parentDir;
@@ -36,7 +37,7 @@ printInparalogsFile($dbh, $inParalogTable, "$dir/inparalogs.txt");
 printOrthologsFile($dbh, $coOrthologTable, "$dir/coorthologs.txt");
 
 printMclAbcFile($dbh, $orthologTable, $inParalogTable, $coOrthologTable,
-	       "mclInput");
+	       $mclinput);
 
 
 ################# subroutines #########################

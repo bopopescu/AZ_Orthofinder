@@ -9,17 +9,18 @@ from Bio.Alphabet import generic_protein
 from Bio.SeqRecord import SeqRecord
 import math
 
+import utils
 import logging
-log = logging.getLogger('orthofinder')
+log = logging.getLogger(utils.log_fname)
 
 
 def make_proteomes(gbk_dir, workflow_id, out_dir):
     gbk_files = [join(gbk_dir, fname) for fname in listdir(gbk_dir)]
     ref_num = len(gbk_files)
     if ref_num == 0:
-        log.error('    No references in ' + gbk_dir)
+        log.error('   No references in ' + gbk_dir)
     if ref_num >= 1000:
-        log.error('    Maximum 999 references are supported by OrthoMCL')
+        log.error('   Maximum 999 references are supported by OrthoMCL')
 
     if not isdir(out_dir):
         makedirs(out_dir)
@@ -31,11 +32,11 @@ def make_proteomes(gbk_dir, workflow_id, out_dir):
         try:
             rec = SeqIO.read(gb_fpath, 'genbank')
         except:
-            log.warning('   Cannot read proteome ' + gb_fpath)
+            log.warning('   Cannot read proteins from ' + gb_fpath)
             continue
 
         features = [f for f in rec.features if f.type == 'CDS']
-        log.info('    %s: translating %d features' % (rec.id, len(features)))
+        log.info('   %s: translating %d features' % (rec.id, len(features)))
 
         taxoncode = speciescode + str(i)
 
@@ -45,16 +46,16 @@ def make_proteomes(gbk_dir, workflow_id, out_dir):
             protein_id = qs.get('protein_id', [None])[0]
             gene_id = qs.get('gene', [None])[0]
             if not protein_id:
-                log.warn('    Warning: no protein_id for CDS')
+                log.warn('   Warning: no protein_id for CDS')
                 continue
             #if not gene_id:
-            #    log.warn('    Warning: no gene_id for CDS')
+            #    log.warn('   Warning: no gene_id for CDS')
             #    continue
 
-            protein_descripton = '    ' + rec.id + ' ' + rec.description + \
+            protein_descripton = rec.id + ' ' + rec.description + \
                                  ' ' + 'Gene ' + (gene_id or '<unknown>') + \
                                  '. Protein ' + protein_id
-            #log.debug(protein_descripton)
+            #log.debug('   ' + protein_descripton)
             translation = None
             if qs.get('translation', [None]) is not None:
                 translation = Seq(qs.get('translation', [None])[0], generic_protein)
@@ -82,7 +83,7 @@ def make_proteomes(gbk_dir, workflow_id, out_dir):
         if proteins:
             fpath = join(out_dir, taxoncode + '.fasta')
             SeqIO.write(proteins, fpath, 'fasta')
-            log.info('    Whitten to ' + fpath)
+            log.info('   Written to ' + fpath)
         log.info('')
 
     return 0

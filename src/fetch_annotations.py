@@ -1,29 +1,18 @@
-from os import mkdir, listdir, remove
-from os.path import join, isdir, isfile, splitext, basename
-from shutil import rmtree
+from os import mkdir, remove
+from os.path import join, isdir, basename
 from ftplib import FTP
-from Bio import Entrez, Blast, SeqIO
+from Bio import Entrez, SeqIO
 from src.ftp_proxy import setup_http_proxy
 Entrez.email = 'vladislav.sav@gmail.com'
 
+import utils
 import logging
-log = logging.getLogger('orthofinder')
+log = logging.getLogger(utils.log_fname)
 
 genbank_ext = 'gb'
 
 
-#def efetch(db, id, rettype, **kwargs):
-#    fpath = join(ref_dir, id + '.' + rettype)
-#    if not isfile(fpath):
-#        fetch_handle = Entrez.efetch(db, id=id, retmode='text', **kwargs)
-#        record = Entrez.read(fetch_handle)
-#        print 'efetch', record.id
-#        with open(fpath, 'w') as f:
-#            f.write(Entrez.read(fetch_handle))
-#    return fpath
-
-
-def fetch_annotations_ftp(save_dir, species_names, ref_ids, proxy=None, clip=None):
+def fetch_annotations_species_name_ftp(save_dir, species_names, proxy=None, clip=None):
     if not species_names:
         log.error('No species names')
         return 1
@@ -61,14 +50,14 @@ def fetch_annotations_ftp(save_dir, species_names, ref_ids, proxy=None, clip=Non
     return 0
 
 
-def fetch_annotations(save_dir, species_names, ref_ids, proxy=None):
+def fetch_annotations_ids(save_dir, ref_ids):
     ids = ref_ids
 
     if not isdir(save_dir):
         mkdir(save_dir)
 
     if ids == []:
-        log.info('No references were found.')
+        log.info('No references have been found.')
         ids = raw_input('Put reference ids manually:').split()
         if ids == []:
             log.error('No references :(')
@@ -96,7 +85,7 @@ def fetch_annotations(save_dir, species_names, ref_ids, proxy=None):
     print 0
 
 
-def fetch_annotations_entrez(save_dir, species_names, ref_ids, proxy=None, clip=None):
+def fetch_annotations_species_name_entrez(save_dir, species_names, clip=None):
     if not species_names:
         log.error('No species names')
         return 1
@@ -149,6 +138,17 @@ def fetch_annotations_entrez(save_dir, species_names, ref_ids, proxy=None, clip=
             #    print 'and .fasta'
 
     return 0
+
+
+#def efetch(db, id, rettype, **kwargs):
+#    fpath = join(ref_dir, id + '.' + rettype)
+#    if not isfile(fpath):
+#        fetch_handle = Entrez.efetch(db, id=id, retmode='text', **kwargs)
+#        record = Entrez.read(fetch_handle)
+#        print 'efetch', record.id
+#        with open(fpath, 'w') as f:
+#            f.write(Entrez.read(fetch_handle))
+#    return fpath
 
 
 #def esearch(db, term, dirname, rettype):

@@ -13,7 +13,7 @@ log = logging.getLogger(config.log_fname)
 
 
 class DbCursor:
-    def __init__(self):
+    def __init__(self, step=''):
         with open(orthomcl_config) as f:
             conf = dict(l.strip().split('=', 1) for l in f.readlines() if l.strip()[0] != '#')
         self.db_login = conf['dbLogin']
@@ -21,6 +21,8 @@ class DbCursor:
 
         self.cnx = None
         self.cursor = None
+
+        self.step = step
 
     def __connect(self):
         self.cnx = mysql.connector.connect(
@@ -37,19 +39,21 @@ class DbCursor:
             try:
                 self.__connect()
                 connected = True
-            except mysql.connector.errors.InterfaceError:
+            except Exception:
                 #log.info('   MySql server must not be running, trying to start.')
                 with open(config.config) as cf:
                     conf = dict(l.strip().split('=', 1) for l
                                 in cf.readlines() if l.strip()[0] != '#')
 
                 cmd = 'mysqld_safe --port=%s &' % conf['db_port']
-                log.info('   WARNING: Could not connect to MySql server. If it is not running, '
-                         'please, start it with mysqld_safe --port=%s &' % conf['db_port'])
-                log.info('   Then press any key to proceed.')
+                log.info('   Could not connect to MySql server. If it is not running, '
+                         'please, start it at another terminal with "mysqld_safe --port=%s &"' % conf['db_port'])
                 try:
-                    raw_input('')
+                    raw_input('   After that, press any key to proceed to the next step, or type Ctrl-C to quit. '
+                              '(Notice that you can start from this step using --start-from%s): '
+                              % (' "' + self.step + '"' if self.step else ''))
                 except KeyboardInterrupt:
+                    print ''
                     exit(1)
                 #log.info('   ' + cmd)
                 #result = subprocess.call(cmd.split())

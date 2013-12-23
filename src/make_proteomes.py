@@ -15,7 +15,7 @@ log = logging.getLogger(config.log_fname)
 
 
 def make_proteomes(gbk_dir, workflow_id, out_dir):
-    gbk_files = [join(gbk_dir, fname) for fname in listdir(gbk_dir)]
+    gbk_files = [join(gbk_dir, fname) for fname in listdir(gbk_dir) if fname[0] != '.']
     ref_num = len(gbk_files)
     if ref_num == 0:
         log.error('   No references in ' + gbk_dir)

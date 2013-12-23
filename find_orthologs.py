@@ -4,7 +4,7 @@ import sys
 import logging
 from random import randint
 from shutil import copy
-from os import chdir, mkdir, remove, access, X_OK, environ
+from os import chdir, mkdir, remove, access, X_OK, environ, getcwd
 from os.path import join, isfile, exists, basename, isdir, relpath, split, pathsep
 
 import src.config as config
@@ -158,6 +158,7 @@ def run_workflow(working_dir, overwrite,
     sql_log             = 'intermediate/log.sql'
     good_proteins       = 'intermediate/good_proteins.fasta'
     poor_proteins       = 'intermediate/poor_proteins.fasta'
+    blast_db            = 'blastdb'
     blast_out           = 'intermediate/blasted.tsv'
     similar_sequences   = 'intermediate/similar_sequences.txt'
     pairs_log           = 'intermediate/orthomclpairs.log'
@@ -177,6 +178,7 @@ def run_workflow(working_dir, overwrite,
         best_hit_taxon_score_table = 'BestQueryTaxonScore' + '_' + workflow_id
 
     steps = []
+
     if specied_list:
         log.debug('Using species list: ' + str(specied_list))
         steps.append(
@@ -184,6 +186,7 @@ def run_workflow(working_dir, overwrite,
                  cmd=fetch_annotations_species_name_ftp,
                  prod_files=[annotations_dir],
                  parameters=[annotations_dir, specied_list, proxy]))
+
     elif ids_list:
         log.debug('Using ref ids: ' + str(ids_list))
         steps.append(
@@ -191,9 +194,11 @@ def run_workflow(working_dir, overwrite,
                  cmd=fetch_annotations_ids,
                  prod_files=[annotations_dir],
                  parameters=[annotations_dir, ids_list]))
+
     elif user_annotations_dir:
         log.debug('Using user_annotations_dir: ' + user_annotations_dir)
-        annotations_dir = relpath(user_annotations_dir, working_dir)
+        annotations_dir = user_annotations_dir
+
     elif start_from == 0:
         log.error('Either species names, reference ids, annotations directory, '
                   'or step to start from has to be be speciefied.')
@@ -220,13 +225,24 @@ def run_workflow(working_dir, overwrite,
                 good_proteins,
                 poor_proteins]),
 
+        Step('Making blast database',
+             cmd='makeblastdb',
+             req_files=[good_proteins],
+             prod_files=[blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']],
+             parameters=[
+                '-in', good_proteins,
+                '-input_type', 'fasta',
+                '-out', blast_db,
+                '-dbtype', 'prot',
+                '-title', basename(working_dir)]),
+
         Step('Blasting all vs. all',
              cmd='blastp',
-             req_files=[proteomes_dir, good_proteins],
+             req_files=[good_proteins],
              prod_files=[blast_out],
              parameters=[
                 '-query', good_proteins,
-                '-subject', good_proteins,
+                '-db', blast_db,
                 '-out', blast_out,
                 '-outfmt', 6,  # tabular
                 '-evalue', 1e-5,
@@ -377,6 +393,8 @@ def main(args):
 
     species_list = read_list(params.species_file, params.out_dir)
     ref_id_list = read_list(params.ids_file, params.out_dir)
+    if params.annotations_dir:
+        params.annotations_dir = join(getcwd(), params.annotations_dir)
 
     start_after = None
     start_from = params.start_from

@@ -63,7 +63,7 @@ def fetch_annotations_ids(save_dir, ref_ids):
             log.error('   No references :(')
             return 1
 
-    log.info('   Found %s' % ids)
+    log.info('   IDs: %s' % ', '.join(ids))
 
     for i, id in enumerate(ids):
         log.info('   Fetching %s...' % id)
@@ -82,7 +82,7 @@ def fetch_annotations_ids(save_dir, ref_ids):
             log.info('       saved %s' % gb_fpath)
         log.info('')
 
-    print 0
+    return 0
 
 
 def fetch_annotations_species_name_entrez(save_dir, species_names, clip=None):
@@ -110,7 +110,7 @@ def fetch_annotations_species_name_entrez(save_dir, species_names, clip=None):
                 log.error('   No references :(')
                 return 1
 
-        log.info('   Found %s' % ids)
+        log.info('   IDs: %s' % ', '.join(ids))
 
         for i, id in enumerate(ids):
             log.info('   Fetching %s...' % id)

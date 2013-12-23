@@ -20,7 +20,7 @@ class Workflow:
         self.steps = steps
 
     def run(self, start_after, start_from, overwrite, ask_before):
-        for i, step in izip(count(1), self.steps):
+        for i, step in izip(count(1), filter(None, self.steps)):
             if start_after is not None \
                     and isinstance(start_after, basestring) \
                     and start_after.lower() == step.name.lower():
@@ -41,12 +41,14 @@ class Workflow:
                     continue
 
             log.info(str(i) + '. ' + step.name)
-            if step.run(overwrite, ask_before) == 1:
-                log.warning('\n   Process was not complete. You can restart from this point '
+            if step.run(overwrite, ask_before) != 0:
+                log.info('')
+                log.warning('   Process was not complete. You can restart from this point '
                             'using --start-with "' + step.name + '"')
                 return 1
             log.info('   Done ' + step.name.lower())
             log.info('')
+
         return 0
 
 
@@ -179,6 +181,12 @@ class Step:
                             log.info('   ' + line.strip())
                         if self.stderr == 'log':
                             log.debug('   ' + line.strip())
+                ret_code = p.wait()
+                log.debug('      Ret ' + str(ret_code))
+                return ret_code
 
             except KeyboardInterrupt:
+                return 1
+
+            except:
                 return 1

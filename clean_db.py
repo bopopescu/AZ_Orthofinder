@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from os.path import join, dirname, realpath
 from mysql.connector import errorcode
 import mysql.connector
@@ -7,6 +9,11 @@ from src.db_connection import DbCursor
 
 orthomcl_config = join(dirname(realpath(__file__)), 'src/orthomcl.config')
 orthomcl_bin_dir = join(dirname(realpath(__file__)), 'src/orthomcl_software/bin')
+
+
+def prt(txt):
+    if __name__ == '__main__':
+        print txt
 
 
 def clean_db(workflow_id):
@@ -45,19 +52,19 @@ def clean_db(workflow_id):
         for table in tables:
             try:
                 query = 'drop table %s;' % table
-                print query
+                prt(query)
                 cursor.execute(query)
             except mysql.connector.Error, err:
-                print err.msg
+                prt(err.msg)
                 pass
         try:
             query = 'drop view %s;' % (conf['interTaxonMatchView'].strip() + '_' + workflow_id)
-            print query
+            prt(query)
             cursor.execute(query)
         except mysql.connector.Error, err:
-            print err.msg
+            prt(err.msg)
             pass
-
+    return 0
 
 if __name__ == '__main__':
     clean_db(sys.argv[1])

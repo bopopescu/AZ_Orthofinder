@@ -39,6 +39,7 @@ class DbCursor:
             try:
                 self.__connect()
                 connected = True
+
             except Exception:
                 #log.info('   MySql server must not be running, trying to start.')
                 with open(config.config) as cf:

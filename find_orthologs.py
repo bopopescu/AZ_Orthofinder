@@ -5,7 +5,8 @@ import logging
 from random import randint
 from shutil import copy
 from os import chdir, mkdir, remove, access, X_OK, environ, getcwd
-from os.path import join, isfile, exists, basename, isdir, relpath, split, pathsep
+from os.path import join, isfile, exists, basename, isdir, relpath, split, pathsep, dirname, realpath
+from clean_db import clean_db
 
 import src.config as config
 from src.fetch_annotations import fetch_annotations_species_name_ftp, fetch_annotations_ids
@@ -15,6 +16,7 @@ from src.Workflow import Step, Workflow
 log = logging.getLogger(config.log_fname)
 orthomcl_config = config.orthomcl_config
 orthomcl_bin_dir = config.orthomcl_bin_dir
+filepath = dirname(realpath(__file__))
 
 
 def make_workflow_id__from_species_names(species_names=None):
@@ -72,7 +74,7 @@ def parse_args(args):
 
     op.add_argument('-d', '--debug', dest='debug', action='store_true', default=False)
 
-    op.add_argument('--ask-each-step',
+    op.add_argument('--ask', '--ask-each-step',
                     dest='ask_each_step', action='store_true', default=False,
                     help='Wait for user to press ke every time before proceed to next step.')
 
@@ -153,12 +155,14 @@ def run_workflow(working_dir, overwrite,
     if not exists('intermediate'):
         mkdir('intermediate')
 
+    #clean_db_script = join(filepath, 'clean_db.py')
+
     proteomes_dir       = 'proteomes'
     annotations_dir     = 'annotations'
     sql_log             = 'intermediate/log.sql'
     good_proteins       = 'intermediate/good_proteins.fasta'
     poor_proteins       = 'intermediate/poor_proteins.fasta'
-    blast_db            = 'blastdb'
+    blast_db            = 'intermediate/blastdb'
     blast_out           = 'intermediate/blasted.tsv'
     similar_sequences   = 'intermediate/similar_sequences.txt'
     pairs_log           = 'intermediate/orthomclpairs.log'
@@ -234,7 +238,8 @@ def run_workflow(working_dir, overwrite,
                 '-input_type', 'fasta',
                 '-out', blast_db,
                 '-dbtype', 'prot',
-                '-title', basename(working_dir)]),
+                '-title', basename(working_dir)],
+             stdout='log'),
 
         Step('Blasting all vs. all',
              cmd='blastp',
@@ -247,7 +252,7 @@ def run_workflow(working_dir, overwrite,
                 '-outfmt', 6,  # tabular
                 '-evalue', 1e-5,
                 '-num_descriptions', 10000,  # don't care value
-                '-num_alignments', 10000,  # don't care value,
+                '-num_alignments', 10000,  # don't care value
                 '-num_threads', threads,
                 '-dbsize', config.BLAST_DBSIZE]),
 
@@ -259,6 +264,11 @@ def run_workflow(working_dir, overwrite,
                 blast_out,
                 proteomes_dir],
              stdout=similar_sequences),
+
+        Step('Cleaning database',
+             cmd=clean_db,
+             parameters=[workflow_id])
+        if overwrite else None,
 
         Step('Installing schema',
              cmd=join(orthomcl_bin_dir, 'orthomclInstallSchema.pl'),
@@ -289,7 +299,8 @@ def run_workflow(working_dir, overwrite,
 
         Step('Finding pairs',
              cmd=join(orthomcl_bin_dir, 'orthomclPairs.pl'),
-             req_files=[orthomcl_config],  # and initialized database
+             req_files=[orthomcl_config],
+             req_tables=[in_paralog_table, ortholog_table, coortholog_table],
              prod_files=[],  # populates InParalog, Ortholog, CoOrtholog
              parameters=[
                 orthomcl_config,
@@ -302,6 +313,7 @@ def run_workflow(working_dir, overwrite,
         Step('Dump pairs files',
              cmd=join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
              req_files=[orthomcl_config],  # and populated InParalog, Ortholog, CoOrtholog tables
+             req_tables=[in_paralog_table, ortholog_table, coortholog_table],
              prod_files=[
                 mcl_input,
                 'pairs',
@@ -350,7 +362,9 @@ def run_workflow(working_dir, overwrite,
     workflow = Workflow(steps)
     result = workflow.run(start_after, start_from, overwrite, ask_before)
     if result == 0:
-        log.info('Done. See groups in ' + join(working_dir, groups_file))
+        log.info('Done.')
+        log.info('Log in ' + join(working_dir, config.log_fname))
+        log.info('Groups in ' + join(working_dir, groups_file))
     return result
 
 

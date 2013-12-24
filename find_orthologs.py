@@ -84,7 +84,9 @@ def parse_args(args):
             '                      [--ids-file FILE] \n' \
             '                      [--annotations-dir DIR] \n' \
             '                       -o OUTPUT_DIRECTORY \n' \
-            '                      [--start-from STEP_NAME]'
+            '                      [--start-from STEP_NAME] \n' \
+            '                      [-t threads_num] \n' \
+
     op.usage = usage
 
     params = op.parse_args(args)
@@ -213,21 +215,13 @@ def run_workflow(working_dir, overwrite,
              cmd=make_proteomes,
              req_files=[annotations_dir],
              prod_files=[proteomes_dir],
-             parameters=[
-                annotations_dir,
-                workflow_id,
-                proteomes_dir]),
+             parameters=[annotations_dir, workflow_id, proteomes_dir]),
 
         Step('Filtering fasta',
              cmd=join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
              req_files=[proteomes_dir],
              prod_files=[good_proteins, poor_proteins],
-             parameters=[
-                proteomes_dir,
-                10,
-                20,
-                good_proteins,
-                poor_proteins]),
+             parameters=[proteomes_dir, 10, 20, good_proteins, poor_proteins]),
 
         Step('Making blast database',
              cmd='makeblastdb',
@@ -260,9 +254,7 @@ def run_workflow(working_dir, overwrite,
              cmd=join(orthomcl_bin_dir, 'orthomclBlastParser.pl'),
              req_files=[proteomes_dir, blast_out],
              prod_files=[similar_sequences],
-             parameters=[
-                blast_out,
-                proteomes_dir],
+             parameters=[blast_out, proteomes_dir],
              stdout=similar_sequences),
 
         Step('Cleaning database',
@@ -398,12 +390,14 @@ def read_list(file, out_dir):
 
 
 def main(args):
-    params = parse_args(args)
+    params = parse_args(args[1:])
 
     if not isdir(params.out_dir):
         mkdir(params.out_dir)
 
     config.set_up_logging(params.debug, params.out_dir)
+
+    log.info(' '.join(args) + '\n')
 
     species_list = read_list(params.species_file, params.out_dir)
     ref_id_list = read_list(params.ids_file, params.out_dir)
@@ -438,4 +432,4 @@ def main(args):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    main(sys.argv)

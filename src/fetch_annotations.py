@@ -1,8 +1,8 @@
 from os import mkdir, remove
 from os.path import join, isdir, basename
 from ftplib import FTP
+from ftp_proxy import setup_http_proxy
 from Bio import Entrez, SeqIO
-from src.ftp_proxy import setup_http_proxy
 Entrez.email = 'vladislav.sav@gmail.com'
 
 import config
@@ -12,7 +12,7 @@ log = logging.getLogger(config.log_fname)
 genbank_ext = 'gb'
 
 
-def fetch_annotations_species_name_ftp(save_dir, species_names, proxy=None, clip=None):
+def fetch_annotations_for_species_from_ftp(save_dir, species_names, proxy=None, clip=None):
     if not species_names:
         log.error('   No species names')
         return 1
@@ -50,7 +50,7 @@ def fetch_annotations_species_name_ftp(save_dir, species_names, proxy=None, clip
     return 0
 
 
-def fetch_annotations_ids(save_dir, ref_ids):
+def fetch_annotations_for_ids(save_dir, ref_ids):
     ids = ref_ids
 
     if not isdir(save_dir):

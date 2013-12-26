@@ -9,12 +9,13 @@ from zipfile import ZipFile, ZIP_DEFLATED
 about_html = 'about.html'
 
 structure = [
+    about_html,
     'find_orthologs.py',
     'clean_db.py',
     'src',
     'test_input',
     'config.txt',
-    about_html]
+    ]
 
 dropbox_folder = '/Users/vladsaveliev/Dropbox/Public/az'
 

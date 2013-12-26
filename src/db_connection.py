@@ -4,9 +4,6 @@ import mysql.connector
 from mysql.connector import errorcode
 from os.path import join, dirname, realpath
 
-orthomcl_config = join(dirname(realpath(__file__)), 'orthomcl.config')
-orthomcl_bin_dir = join(dirname(realpath(__file__)), 'orthomcl_software/bin')
-
 import config
 import logging
 log = logging.getLogger(config.log_fname)
@@ -14,10 +11,11 @@ log = logging.getLogger(config.log_fname)
 
 class DbCursor:
     def __init__(self, step=''):
-        with open(orthomcl_config) as f:
+        with open(config.config_file) as f:
             conf = dict(l.strip().split('=', 1) for l in f.readlines() if l.strip()[0] != '#')
-        self.db_login = conf['dbLogin']
-        self.db_passw = conf['dbPassword']
+        self.db_login = conf['db_login']
+        self.db_passw = conf['db_password']
+        self.db_port = conf['db_port']
 
         self.cnx = None
         self.cursor = None
@@ -29,7 +27,7 @@ class DbCursor:
             user=self.db_login,
             password=self.db_passw,
             host='127.0.0.1',
-            port=3307,
+            port=self.db_port,
             database='orthomcl',
             buffered=True)
 
@@ -42,7 +40,7 @@ class DbCursor:
 
             except Exception:
                 #log.info('   MySql server must not be running, trying to start.')
-                with open(config.config) as cf:
+                with open(config.config_file) as cf:
                     conf = dict(l.strip().split('=', 1) for l
                                 in cf.readlines() if l.strip()[0] != '#')
 

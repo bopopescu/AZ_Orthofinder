@@ -14,7 +14,7 @@ import logging
 log = logging.getLogger(config.log_fname)
 
 
-def make_proteomes(gbk_dir, workflow_id, out_dir):
+def make_proteomes(gbk_dir, out_dir):
     gbk_files = [join(gbk_dir, fname) for fname in listdir(gbk_dir) if fname[0] != '.']
     ref_num = len(gbk_files)
     if ref_num == 0:
@@ -26,9 +26,10 @@ def make_proteomes(gbk_dir, workflow_id, out_dir):
         makedirs(out_dir)
 
     #words = ' '.join(species_names).split()
-    speciescode = workflow_id[:4]  # ''.join(w[0].lower() for w in words[:3 - int(math.log10(ref_num))])
+    #speciescode = workflow_id[:4]  # ''.join(w[0].lower() for w in words[:3 - int(math.log10(ref_num))])
 
-    for i, gb_fpath in izip(count(1), gbk_files):
+    i = 1
+    for gb_fpath in gbk_files:
         try:
             rec = SeqIO.read(gb_fpath, 'genbank')
         except:
@@ -38,7 +39,7 @@ def make_proteomes(gbk_dir, workflow_id, out_dir):
         features = [f for f in rec.features if f.type == 'CDS']
         log.info('   %s: translating %d features' % (rec.id, len(features)))
 
-        taxoncode = speciescode + str(i)
+        taxoncode = rec.id
 
         proteins = []
         for f in features:
@@ -84,6 +85,7 @@ def make_proteomes(gbk_dir, workflow_id, out_dir):
             fpath = join(out_dir, taxoncode + '.fasta')
             SeqIO.write(proteins, fpath, 'fasta')
             log.info('   Written to ' + fpath)
+            i += 1
         log.info('')
 
     return 0

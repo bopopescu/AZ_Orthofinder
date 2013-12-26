@@ -16,8 +16,16 @@ orthomcl_bin_dir = config.orthomcl_bin_dir
 
 
 class Workflow:
-    def __init__(self, steps):
-        self.steps = steps
+    def __init__(self, working_dir, id):
+        self.working_dir = working_dir
+        self.id = id
+        self.steps = []
+
+    def add(self, step):
+        self.steps.append(step)
+
+    def extend(self, steps):
+        self.steps.extend(steps)
 
     def run(self, start_after, start_from, overwrite, ask_before):
         for i, step in izip(count(1), filter(None, self.steps)):
@@ -44,7 +52,7 @@ class Workflow:
             if step.run(overwrite, ask_before) != 0:
                 log.info('')
                 log.warning('   Process was not complete. You can restart from this point '
-                            'using --start-with "' + step.name + '"')
+                            'using --start-from "' + step.name + '"')
                 return 1
             log.info('   Done ' + step.name.lower())
             log.info('')

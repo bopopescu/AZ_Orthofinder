@@ -16,11 +16,11 @@ def prt(txt):
         print txt
 
 
-def clean_db(workflow_id):
+def clean_db(suffix):
     with open(orthomcl_config) as f:
         conf = dict(l.split('=', 1) for l in f.readlines() if l[0] != '#')
 
-    tables = [t.strip() + '_' + workflow_id for t in [
+    tables = [t.strip() + suffix for t in [
         conf['orthologTable'],
         conf['inParalogTable'],
         conf['coOrthologTable'],
@@ -58,7 +58,7 @@ def clean_db(workflow_id):
                 prt(err.msg)
                 pass
         try:
-            query = 'drop view %s;' % (conf['interTaxonMatchView'].strip() + '_' + workflow_id)
+            query = 'drop view %s;' % (conf['interTaxonMatchView'].strip() + '_' + suffix)
             prt(query)
             cursor.execute(query)
         except mysql.connector.Error, err:

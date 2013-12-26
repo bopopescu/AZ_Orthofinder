@@ -1,3 +1,6 @@
+    op.add_argument('-a', '--assembly', dest='assembly', help='Fasta file with contigs.')
+
+
 #!/usr/bin/env python
 
 from random import randint
@@ -13,7 +16,7 @@ import logging
 from az_orthofinder.src.Workflow import Step, Workflow
 
 import utils
-from src.fetch_annotations import fetch_annotations_ids, fetch_annotations_species_name_ftp
+from src.fetch_annotations import fetch_annotations_for_ids, fetch_annotations_for_species_from_ftp
 from src.make_proteomes import make_proteomes
 from src.db_connection import DbCursor
 

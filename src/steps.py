@@ -196,13 +196,13 @@ def mcl(inflation=1.5):
          stderr='log',
          stdout='log')
 
-def step_save_orthogroups():
+def step_save_orthogroups(annotations_dir=annotations_dir):
     return Step(
         'Saving orthogroups',
         cmd=save_orthogroups_gff,
         req_files=[mcl_output],
         prod_files=[orthogroups_file],
-        parameters=[mcl_input, orthogroups_file])
+        parameters=[annotations_dir, mcl_output, orthogroups_file])
 
 def groups_to_files(prefix, start_id):
     return Step(

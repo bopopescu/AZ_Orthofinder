@@ -14,11 +14,12 @@ import logging
 log = logging.getLogger(config.log_fname)
 
 
-def make_proteomes(gbk_dir, out_dir):
-    gbk_files = [join(gbk_dir, fname) for fname in listdir(gbk_dir) if fname[0] != '.']
-    ref_num = len(gbk_files)
+def make_proteomes(annotations_dir, out_dir):
+    gb_files = [join(annotations_dir, fname)
+                for fname in listdir(annotations_dir) if fname[0] != '.']
+    ref_num = len(gb_files)
     if ref_num == 0:
-        log.error('   No references in ' + gbk_dir)
+        log.error('   No references in ' + annotations_dir)
     if ref_num >= 1000:
         log.error('   Maximum 999 references are supported by OrthoMCL')
 
@@ -29,7 +30,7 @@ def make_proteomes(gbk_dir, out_dir):
     #speciescode = workflow_id[:4]  # ''.join(w[0].lower() for w in words[:3 - int(math.log10(ref_num))])
 
     i = 1
-    for gb_fpath in gbk_files:
+    for gb_fpath in gb_files:
         try:
             rec = SeqIO.read(gb_fpath, 'genbank')
         except:

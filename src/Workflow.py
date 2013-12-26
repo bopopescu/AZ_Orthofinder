@@ -7,10 +7,11 @@ from subprocess import call
 import subprocess
 from mysql.connector import errorcode
 from db_connection import DbCursor, mysql
+
 import config
 import logging
-
 log = logging.getLogger(config.log_fname)
+
 orthomcl_config = config.orthomcl_config
 orthomcl_bin_dir = config.orthomcl_bin_dir
 

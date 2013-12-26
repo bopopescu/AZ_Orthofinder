@@ -3,16 +3,13 @@
 import sys
 import logging
 from os import chdir, mkdir, getcwd
-from os.path import join, exists, basename, isdir, dirname, realpath
+from os.path import join, exists, isdir, dirname, realpath
 from src import steps
 
 from src.utils import which, make_workflow_id, read_list, set_up_config, get_start_after_from
 from src.parse_args import parse_args
 from src.logger import set_up_logging
-from src.make_proteomes import make_proteomes
-from src.Workflow import Step, Workflow
-from src import config
-import src.steps
+from src.Workflow import Workflow
 
 from src.config import log_fname
 log = logging.getLogger(log_fname)
@@ -82,8 +79,12 @@ def workflow_ini(working_dir,
         steps.load_blast_results(suffix),
         steps.find_pairs(suffix),
         steps.dump_pairs_to_files(suffix),
-        steps.mcl(),
-        steps.step_save_orthogroups()])
+        steps.mcl()])
+
+    if user_annotations_dir:
+        workflow.add(steps.step_save_orthogroups(user_annotations_dir))
+    else:
+        workflow.add(steps.step_save_orthogroups())
 
     result = workflow.run(start_after, start_from, overwrite, ask_before)
     if result == 0:

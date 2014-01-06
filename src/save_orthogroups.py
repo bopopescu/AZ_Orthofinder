@@ -10,12 +10,13 @@ log = logging.getLogger(config.log_fname)
 
 #Gene = namedtuple('Gene', 'protein strain gi gene locus product description')
 
-#TODO: make output columns align vertically, nicer!
-def save_orthogroups_gff(annotations_dir, mcl_output, out):
+def save_orthogroups(annotations_dir, mcl_output, out, out_nice):
     mcl_f = open(mcl_output)
     out_f = open(out, 'w')
+    nice_f = open(out_nice, 'w')
 
     strains = dict()
+    max_lengths = count(0)
     gb_files = [join(annotations_dir, fname)
                 for fname in listdir(annotations_dir) if fname[0] != '.']
     for fname in gb_files:
@@ -23,11 +24,12 @@ def save_orthogroups_gff(annotations_dir, mcl_output, out):
 
         rec = SeqIO.read(fname, 'genbank')
         strain = rec.annotations['source'] or rec.name
-        gi = rec.annotations['gi'] or rec.id or 'NA'
+        #gi = rec.annotations['gi'] or rec.id or 'NA'
         locus = rec.name
         description = rec.description
 
         genes_by_protid = dict()
+
         for feature in rec.features:
             if feature.type == 'CDS':
                 qs = feature.qualifiers
@@ -35,18 +37,31 @@ def save_orthogroups_gff(annotations_dir, mcl_output, out):
                 gene_id = qs.get('gene', ['NA'])[0]
                 product = qs.get('product', ['NA'])[0]
 
-                genes_by_protid[prot_id] = [prot_id, strain, gi, gene_id,
-                                            locus, product, description]
+                genes_by_protid[prot_id] = \
+                    [strain, prot_id, gene_id, locus, product, description]
+
+                max_lengths = map(max, zip(max_lengths, map(len, genes_by_protid[prot_id][:-1])))
+
         strains[rec.id] = genes_by_protid
 
     for i, line in izip(count(1), mcl_f):
-        print >> out_f, 'Orthogroups %d' % i
+        print >> out_f, 'Orthogroup %d' % i
+        print >> nice_f, 'Orthogroup %d' % i
+
         for gene in line.split():
             taxon_id, prot_id = gene.split('|')
-            print >> out_f, '\t'.join(strains[taxon_id][prot_id])
+            for l, val in zip(max_lengths, strains[taxon_id][prot_id][:-1]):
+                print >> out_f, str(val) + '\t',
+                print >> nice_f, str(val) + ' ' * (l - len(str(val))) + '\t',
+
+            print >> out_f, str(strains[taxon_id][prot_id][-1])
+            print >> nice_f, str(strains[taxon_id][prot_id][-1])
+
         print >> out_f
+        print >> nice_f
 
     mcl_f.close()
     out_f.close()
+    nice_f.close()
 
     return 0

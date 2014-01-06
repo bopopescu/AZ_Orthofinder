@@ -50,7 +50,8 @@ class Workflow:
                     continue
 
             log.info(str(i) + '. ' + step.name)
-            if step.run(overwrite, ask_before) != 0:
+            res = step._run(overwrite, ask_before)
+            if res != 0:
                 log.info('')
                 log.warning('   Process was not complete. You can restart from this point '
                             'using --start-from "' + step.name + '"')
@@ -61,30 +62,74 @@ class Workflow:
         return 0
 
 
+def cmdline(command, parameters=None, stdin=None,
+            stdout='pipe', stderr='pipe'):
+    parameters = parameters or []
+
+    def callback():
+        commandline = ' '.join([command] + map(str, parameters))
+
+        stdin_f = None
+        if stdin:
+            commandline += ' < ' + stdin
+            stdin_f = open(stdin)
+
+        stdout_f = subprocess.PIPE
+        stderr_f = subprocess.PIPE
+        if stdout and stdout not in ['log', 'pipe']:
+            stdout_f = open(stdout, 'w')
+            commandline += ' > ' + stdout
+        else:
+            stderr_f = subprocess.STDOUT
+
+        log.info('   ' + commandline)
+        try:
+            p = subprocess.Popen([command] + map(str, parameters),
+                                 stdin=stdin_f, stdout=stdout_f, stderr=stderr_f)
+            if stdout_f == subprocess.PIPE:
+                for line in iter(p.stdout.readline, ''):
+                    if stdout == 'pipe':
+                        log.info('   ' + line.strip())
+                    if stdout == 'log':
+                        log.debug('   ' + line.strip())
+            if stderr_f == subprocess.PIPE:
+                for line in iter(p.stderr.readline, ''):
+                    if stderr == 'pipe':
+                        log.info('   ' + line.strip())
+                    if stderr == 'log':
+                        log.debug('   ' + line.strip())
+            ret_code = p.wait()
+            log.debug('      Ret ' + str(ret_code))
+            return ret_code
+
+        except KeyboardInterrupt:
+            return 1
+
+        except:
+            return 1
+
+    return callback
+
+
 class Step:
-    def __init__(self, name, cmd,
+    def __init__(self, name, run,
                  req_files=None, prod_files=None,
-                 req_tables=None, prod_tables=None,
-                 parameters=None, stdin=None,
-                 stdout='pipe', stderr='pipe'):
+                 req_tables=None, prod_tables=None):
         self.name = name
-        self.command = cmd
+        self.run = run
         self.req_files = req_files or []
         self.req_tables = req_tables or []
         self.prod_files = prod_files or []
         self.prod_tables = prod_tables or []
-        self.parameters = parameters or []
-        self.stdin = stdin
-        self.stdout = stdout
-        self.stderr = stderr
 
-    def program(self):
-        return basename(self.command)
 
-    def run(self, overwrite=False, step_by_step=False):
-        assert self.command
+    #def __run(self):
+        #if hasattr(self.command, '__call__'):
+        #    return self.command(*self.parameters)
+        #else:
 
-        # Checking existence of produced tables and files
+
+    def __check_existence(self, overwrite):
         missing_prod_files = list(ifilterfalse(exists, self.prod_files))
 
         missing_prod_tables = []
@@ -112,14 +157,17 @@ class Step:
                          ', '.join(self.prod_tables))
             if not missing_prod_files and not missing_prod_tables:
                 log.info('   Skipping')
-                return 0
+                return False, existing_prod_tables, 0
 
-        # Checking requirements
+        return True, existing_prod_tables, 0
+
+
+    def __check_requirements(self, overwrite, existing_prod_tables):
         missing_req_files = list(ifilterfalse(exists, self.req_files))
         if missing_req_files:
             log.error('   ' + self.name + ' requires files ' +
                       ', '.join(missing_req_files))
-            return 1
+            return False, 1
 
         missing_req_tables = []
         if self.req_tables:
@@ -132,7 +180,7 @@ class Step:
         if missing_req_tables:
             log.error('   ' + self.name + ' requires tables ' +
                       ', '.join(missing_req_tables) + ' installed')
-            return 1
+            return False, 1
 
         # Removing existing data of overwrite
         existing_prod_files = list(ifilter(exists, self.prod_files))
@@ -151,51 +199,21 @@ class Step:
                         cursor.execute('drop table %s;' % table)
                     except mysql.connector.Error, err:
                         log.critical(err)
+        return True, 0
 
-        # Running
+
+    def _run(self, overwrite=False, step_by_step=False):
+        # Checking existence of produced tables and files
+        ok, existing_prod_tables, code = self.__check_existence(overwrite)
+        if not ok:
+            return code
+
+        # Checking requirements
+        ok, code = self.__check_requirements(overwrite, existing_prod_tables)
+        if not ok:
+            return code
+
         if step_by_step:
             raw_input('   Proceed?')
 
-        if hasattr(self.command, '__call__'):
-            return self.command(*self.parameters)
-        else:
-            commandline = ' '.join([self.command] + map(str, self.parameters))
-
-            stdin_f = None
-            if self.stdin:
-                commandline += ' < ' + self.stdin
-                stdin_f = open(self.stdin)
-
-            stdout_f = subprocess.PIPE
-            stderr_f = subprocess.PIPE
-            if self.stdout and self.stdout not in ['log', 'pipe']:
-                stdout_f = open(self.stdout, 'w')
-                commandline += ' > ' + self.stdout
-            else:
-                stderr_f = subprocess.STDOUT
-
-            log.info('   ' + commandline)
-            try:
-                p = subprocess.Popen([self.command] + map(str, self.parameters),
-                                     stdin=stdin_f, stdout=stdout_f, stderr=stderr_f)
-                if stdout_f == subprocess.PIPE:
-                    for line in iter(p.stdout.readline, ''):
-                        if self.stdout == 'pipe':
-                            log.info('   ' + line.strip())
-                        if self.stdout == 'log':
-                            log.debug('   ' + line.strip())
-                if stderr_f == subprocess.PIPE:
-                    for line in iter(p.stderr.readline, ''):
-                        if self.stderr == 'pipe':
-                            log.info('   ' + line.strip())
-                        if self.stderr == 'log':
-                            log.debug('   ' + line.strip())
-                ret_code = p.wait()
-                log.debug('      Ret ' + str(ret_code))
-                return ret_code
-
-            except KeyboardInterrupt:
-                return 1
-
-            except:
-                return 1
+        return self.run()

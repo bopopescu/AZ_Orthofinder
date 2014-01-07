@@ -208,11 +208,13 @@ def mcl(inflation=1.5):
          req_files=[mcl_input],
          prod_files=[mcl_output])
 
-def step_save_orthogroups(annotations_dir=annotations_dir):
+def step_save_orthogroups(annot_dir=None):
+    annot_dir = annot_dir or annotations_dir
+
     return Step(
         'Saving orthogroups',
         run=lambda: save_orthogroups(
-            annotations_dir, mcl_output, orthogroups_file, nice_orthogroups_file),
+            annot_dir, mcl_output, orthogroups_file, nice_orthogroups_file),
         req_files=[mcl_output],
         prod_files=[orthogroups_file, nice_orthogroups_file])
 

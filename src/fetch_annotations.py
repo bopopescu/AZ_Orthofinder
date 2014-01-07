@@ -76,10 +76,7 @@ def fetch_annotations_for_ids(save_dir, ref_ids):
 
         rec = SeqIO.read(gb_fpath, genbank_ext)
         log.info('       Definition: ' + rec.description)
-        if 'plasmid' in rec.description:
-            remove(gb_fpath)
-        else:
-            log.info('       saved %s' % gb_fpath)
+        log.info('       saved %s' % gb_fpath)
         log.info('')
 
     return 0

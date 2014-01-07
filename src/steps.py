@@ -105,7 +105,8 @@ def blast(threads):
 
     def run():
         res = cmdline('blastp',
-             parameters + ['-num_threads', threads])()
+                      parameters + ['-num_threads', threads],
+                      stdout=None)()
         if res == -6:
             log.info('')
             log.warn('Warning: blast refused to run multithreaded, running single-threaded instead.')
@@ -116,7 +117,7 @@ def blast(threads):
         'Blasting',
          run=run,
          req_files=[good_proteins],
-         prod_files=[blast_out],)
+         prod_files=[blast_out])
 
 def parse_blast_restults():
     return Step(

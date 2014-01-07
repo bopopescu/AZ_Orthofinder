@@ -133,11 +133,16 @@ def main(args):
 
     run_workflow(working_dir=p.out_dir,
 
-                 assembly=p.plus_assembly, genes=p.plus_gff, proteome=p.plus_proteome,
-                 existing_blast_result=p.existing_blast_results, existing_proteomes=p.existing_proteomes,
+                 assembly=p.plus_assembly,
+                 genes=p.plus_gff,
+                 proteome=p.plus_proteome,
+                 existing_blast_result=p.existing_blast_results,
+                 existing_proteomes=p.existing_proteomes,
 
                  ask_before=p.ask_each_step,
-                 start_after=start_after, start_from=start_from, overwrite=True,
+                 start_after=start_after,
+                 start_from=start_from,
+                 overwrite=True,
                  threads=p.threads,
                  proxy=p.proxy)
 

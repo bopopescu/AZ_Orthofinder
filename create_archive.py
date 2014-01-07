@@ -1,16 +1,19 @@
 #!/usr/bin/env python
 
 from genericpath import isfile, exists
-from os import walk, remove, mkdir
+from os import walk, remove, mkdir, symlink, unlink
 from os.path import isdir, join, relpath, abspath
-from shutil import copytree, ignore_patterns, copy2, rmtree, copy
+from shutil import copytree, ignore_patterns, copy2, rmtree
 from zipfile import ZipFile, ZIP_DEFLATED
+from datetime import datetime
+from time import strftime, strptime
 
 about_html = 'about.html'
 
 structure = [
     about_html,
-    'find_orthologs.py',
+    'scenario_1.py',
+    'scenario_2.py',
     'clean_db.py',
     'src',
     'test_input',
@@ -53,10 +56,13 @@ if __name__ == '__main__':
         else:
             print '  warning: %s does not exist.' % obj
 
-    archive_file = archive_dir + '.zip'
-
-    if isfile(archive_file):
-        remove(archive_file)
+    archive_basename = archive_dir + '_' + \
+                       datetime.now().strftime('%Y_%m_%d')
+    i = 1
+    archive_file = archive_basename + '.zip'
+    while exists(archive_file):
+        i += 1
+        archive_file = archive_basename + '__' + str(i) + '.zip'
 
     print '\nCompessing to %s' % archive_file
     compress(archive_dir, archive_file)
@@ -73,3 +79,10 @@ if __name__ == '__main__':
     copy2(archive_file, dropbox_folder)
 
     rmtree(archive_dir)
+
+    symlink_fpath = join(dropbox_folder, archive_dir + '.zip')
+    try:
+        unlink(symlink_fpath)
+    except:
+        pass
+    symlink(archive_file, symlink_fpath)

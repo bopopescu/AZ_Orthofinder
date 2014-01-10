@@ -22,6 +22,7 @@ script_path = dirname(realpath(__file__))
 
 def run_workflow(working_dir,
                  species_list, ids_list, annotations, proteomes, prot_id_field,
+                 min_length, max_percent_stop,
                  ask_before=False,
                  start_after=None, start_from=None, overwrite=True,
                  threads=1,
@@ -68,12 +69,11 @@ def run_workflow(working_dir,
                   'or step to start from has to be be speciefied.')
         exit(1)
 
-    workflow.add(steps.filter_proteomes())
-
     workflow.extend([
+        steps.filter_proteomes(min_length, max_percent_stop),
         steps.make_blast_db(),
         steps.blast(threads),
-        steps.parse_blast_restults(),
+        steps.parse_blast_results(),
         steps.clean_database(suffix),
         steps.install_schema(suffix),
         steps.load_blast_results(suffix),
@@ -112,7 +112,9 @@ def parse_args(args):
 
     Optional arguments:
     -s:                File with a list of organism names as in Genbank.
+
     -i:                File with reference ids (will be fetched from Genbank).
+
     --prot-id-field:   When specifying proteomes, use this fasta id field number
                        to retrieve protein ids (default if 1, like >NC_005816.1|NP_995567.1 ...).
     ''' % basename(__file__)
@@ -159,15 +161,19 @@ def main(args):
     if not isdir(p.directory):
         interrupt('No such directory: ' + p.directory)
 
-    files = listdir(p.directory)
-    if not files: interrupt('Directory contains no files.')
-
     set_up_logging(p.debug, p.directory)
     log.info(' '.join(args) + '\n')
     set_up_config()
     start_from, start_after = get_start_after_from(p.start_from, join(p.directory, log_fname))
 
-    if not start_from and not start_from:
+    if p.species_list or p.ids_list:
+        species_list = read_list(p.species_list, p.directory)
+        ref_id_list = read_list(p.ids_list, p.directory)
+
+    else:
+        files = listdir(p.directory)
+        if not files: interrupt('Directory contains no files.')
+
         for f in (join(p.directory, f) for f in files if isfile(join(p.directory, f))):
             try:
                 next(SeqIO.parse(f, 'fasta'))
@@ -187,21 +193,21 @@ def main(args):
         if proteomes and annotations:
             log.warn('Directory %s contains both fasta and genbank files, using fasta.')
 
-        species_list = read_list(p.species_list, p.out_dir)
-        ref_id_list = read_list(p.ids_list, p.out_dir)
         #if annotations: annotations = [join(getcwd(), path) for path in annotations]
         #if proteomes: proteomes = [join(getcwd(), path) for path in proteomes]
 
-    run_workflow(working_dir=p.directory,
+    return run_workflow(
+        working_dir=p.directory,
 
-                 species_list=species_list, ids_list=ref_id_list,
-                 annotations=annotations, proteomes=proteomes,
-                 prot_id_field=int(p.prot_id_field),
+        species_list=species_list, ids_list=ref_id_list,
+        annotations=annotations, proteomes=proteomes,
+        prot_id_field=int(p.prot_id_field),
+        min_length=int(p.min_length), max_percent_stop=int(p.max_percent_stop),
 
-                 ask_before=p.ask_each_step,
-                 start_after=start_after, start_from=start_from, overwrite=True,
-                 threads=p.threads,
-                 proxy=p.proxy)
+        ask_before=p.ask_each_step,
+        start_after=start_after, start_from=start_from, overwrite=True,
+        threads=p.threads,
+        proxy=p.proxy)
 
 
 if __name__ == '__main__':

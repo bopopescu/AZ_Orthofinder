@@ -74,13 +74,23 @@ def cmdline(command, parameters=None, stdin=None,
             commandline += ' < ' + stdin
             stdin_f = open(stdin)
 
-        stdout_f = subprocess.PIPE
-        stderr_f = subprocess.PIPE
-        if stdout and stdout not in ['log', 'pipe']:
-            stdout_f = open(stdout, 'w')
-            commandline += ' > ' + stdout
-        else:
-            stderr_f = subprocess.STDOUT
+        stdout_f = None
+        stderr_f = None
+        if stdout:
+            if stdout in ['log', 'pipe']:
+                stdout_f = subprocess.PIPE
+            else:
+                stdout_f = open(stdout, 'w')
+                commandline += ' > ' + stdout
+
+                if stderr in ['log', 'pipe']:
+                    stderr_f = subprocess.STDOUT
+
+        if stderr:
+            if stderr in ['log', 'pipe'] and stderr_f != subprocess.STDOUT:
+                stderr_f = subprocess.PIPE
+            else:
+                stderr_f = open(stderr, 'w')
 
         log.info('   ' + commandline)
         try:

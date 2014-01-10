@@ -83,12 +83,12 @@ def step_adjust_proteomes(proteomes_files, id_field=1):
          req_files=proteomes_files,
          prod_files=[proteomes_dir])
 
-def filter_proteomes():
+def filter_proteomes(min_length=10, max_percent_stop=20):
     return Step(
         'Filtering proteomes',
          run=cmdline(join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
              parameters=[proteomes_dir,
-                         10, 20,
+                         min_length, max_percent_stop,
                          good_proteins,
                          poor_proteins]),
          req_files=[proteomes_dir],
@@ -105,7 +105,7 @@ def make_blast_db():
                 '-input_type', 'fasta',
                 '-out', blast_db,
                 '-dbtype', 'prot'],
-              stdout='log'),
+              stderr='log',),
          req_files=[good_proteins],
          prod_files=[blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']])
 
@@ -123,7 +123,7 @@ def blast(threads):
     def run():
         res = cmdline('blastp',
                       parameters + ['-num_threads', threads],
-                      stdout=None)()
+                      stderr=None)()
         if res == -6:
             log.info('')
             log.warn('Warning: blast refused to run multithreaded, running single-threaded instead.')
@@ -136,7 +136,7 @@ def blast(threads):
          req_files=[good_proteins],
          prod_files=[blast_out])
 
-def parse_blast_restults():
+def parse_blast_results():
     return Step(
         'Parsing blast results',
          run=cmdline(join(orthomcl_bin_dir, 'orthomclBlastParser.pl'),

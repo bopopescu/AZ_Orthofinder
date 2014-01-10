@@ -59,6 +59,10 @@ def add_common_arguments(op):
 
     op.add_argument('-t', '--threads', dest='threads', default=30)
 
+    op.add_argument('--min-length', dest='min_length', default=10)
+
+    op.add_argument('--max-percent-stop', dest='max_percent_stop', default=20)
+
     op.add_argument('-d', '--debug', dest='debug', action='store_true', default=False)
 
     # op.add_argument('-w', '--overwrite', dest='overwrite', action='store_true', default=False,
@@ -74,6 +78,10 @@ def add_common_arguments(op):
     --start-from           Start from the specified step.
                            Either name or number (see log.txt) or "uselog".
                            If "uselog", the last "Done" record in log.txt will be searched.
+
+    --min-length           Minimum allowed length of proteins (default: 10)
+
+    --max-percent_stop     Maximum percent stop codons (default: 20)
 
     -t  --threads          Number of threads to run Blast. Default 30.
     '''

@@ -1,30 +1,53 @@
 from itertools import izip, count
-from shutil import rmtree
+from shutil import rmtree, copy, copyfile
+import subprocess
 from sys import stderr
 from os import makedirs, chdir, mkdir, listdir
-from os.path import join, isdir
+from os.path import join, isdir, basename, splitext
 from Bio import SeqIO, Entrez
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.SeqRecord import SeqRecord
-import math
 
 import config
 import logging
 log = logging.getLogger(config.log_fname)
 
 
-def make_proteomes(annotations_dir, out_dir):
-    gb_files = [join(annotations_dir, fname)
-                for fname in listdir(annotations_dir) if fname[0] != '.']
-    ref_num = len(gb_files)
-    if ref_num == 0:
-        log.error('   No references in ' + annotations_dir)
-    if ref_num >= 1000:
-        log.error('   Maximum 999 references are supported by OrthoMCL')
+def adjust_proteomes(proteomes, out_dir, id_field):
+    if not isdir(out_dir): mkdir(out_dir)
 
-    if not isdir(out_dir):
-        makedirs(out_dir)
+    prot_ids = set()
+    for proteome in proteomes:
+        records = []
+        taxon_id = splitext(basename(proteome))[0]
+        for seq in SeqIO.parse(proteome, 'fasta'):
+            fields = seq.id.replace('|', ' ').split()
+            prot_id = fields[id_field]
+            if prot_ids in prot_ids:
+                log.error('Fasta %s contains duplicate id: %s' % (proteome, prot_id))
+                return 1
+            prot_ids.add(prot_id)
+            seq.id = taxon_id + '|' + prot_id
+            records.append(seq)
+        SeqIO.write(records, join(out_dir, taxon_id + '.fasta'), 'fasta')
+
+    return 0
+
+
+def make_proteomes(annotations, out_dir):
+    gb_files = None
+    if isinstance(annotations, (list, tuple)):
+        gb_files = annotations
+
+    elif isdir(annotations) and listdir(annotations):
+        annotations_dir = annotations
+        gb_files = [join(annotations_dir, fname)
+                    for fname in listdir(annotations_dir) if fname[0] != '.']
+
+    if not gb_files: log.error('   No references provided.')
+
+    if not isdir(out_dir): makedirs(out_dir)
 
     #words = ' '.join(species_names).split()
     #speciescode = workflow_id[:4]  # ''.join(w[0].lower() for w in words[:3 - int(math.log10(ref_num))])

@@ -16,58 +16,62 @@ def prt(txt):
         print txt
 
 
-def clean_db(suffix):
-    with open(orthomcl_config) as f:
-        conf = dict(l.split('=', 1) for l in f.readlines() if l[0] != '#')
+def clean_db(suffixes):
+    if not isinstance(suffixes, (list, tuple)):
+        suffixes = [suffixes]
 
-    tables = [t.strip() + suffix for t in [
-        conf['orthologTable'],
-        conf['inParalogTable'],
-        conf['coOrthologTable'],
-        conf['similarSequencesTable'],
-        'BestInterTaxonScore',
-        'CoOrthNotOrtholog',
-        'CoOrthologTaxon',
-        'CoOrthologCandidate',
-        'CoOrthologAvgScore',
-        'CoOrthologTemp',
-        'BetterHit',
-        'InParalog2Way',
-        'InParalogAvgScore',
-        'InParalogTemp',
-        'InParalogTaxonAvg',
-        'InParalogOrtholog',
-        'InplgOrthTaxonAvg',
-        'InplgOrthoInplg',
-        'OrthologAvgScore',
-        'OrthologTemp',
-        'Ortholog2Way',
-        'OrthologTaxon',
-        'OrthologUniqueId',
-        'UniqSimSeqsQueryId',
-        'BestHit',
-        'BestQueryTaxonScore']]
+    for suffix in suffixes:
+        with open(orthomcl_config) as f:
+            conf = dict(l.split('=', 1) for l in f.readlines() if l[0] != '#')
 
-    with DbCursor() as cursor:
-        for table in tables:
+        tables = [t.strip() + suffix for t in [
+            conf['orthologTable'],
+            conf['inParalogTable'],
+            conf['coOrthologTable'],
+            conf['similarSequencesTable'],
+            'BestInterTaxonScore',
+            'CoOrthNotOrtholog',
+            'CoOrthologTaxon',
+            'CoOrthologCandidate',
+            'CoOrthologAvgScore',
+            'CoOrthologTemp',
+            'BetterHit',
+            'InParalog2Way',
+            'InParalogAvgScore',
+            'InParalogTemp',
+            'InParalogTaxonAvg',
+            'InParalogOrtholog',
+            'InplgOrthTaxonAvg',
+            'InplgOrthoInplg',
+            'OrthologAvgScore',
+            'OrthologTemp',
+            'Ortholog2Way',
+            'OrthologTaxon',
+            'OrthologUniqueId',
+            'UniqSimSeqsQueryId',
+            'BestHit',
+            'BestQueryTaxonScore']]
+
+        with DbCursor() as cursor:
+            for table in tables:
+                try:
+                    query = 'drop table %s;' % table
+                    prt(query)
+                    cursor.execute(query)
+                except mysql.connector.Error, err:
+                    prt(err.msg)
+                    pass
             try:
-                query = 'drop table %s;' % table
+                query = 'drop view %s;' % (conf['interTaxonMatchView'].strip() + suffix)
                 prt(query)
                 cursor.execute(query)
             except mysql.connector.Error, err:
                 prt(err.msg)
                 pass
-        try:
-            query = 'drop view %s;' % (conf['interTaxonMatchView'].strip() + '_' + suffix)
-            prt(query)
-            cursor.execute(query)
-        except mysql.connector.Error, err:
-            prt(err.msg)
-            pass
     return 0
 
 if __name__ == '__main__':
-    clean_db(sys.argv[1])
+    clean_db(sys.argv[1:])
 
 
 #    #cmd = ' '.join([

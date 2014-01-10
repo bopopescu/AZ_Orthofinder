@@ -3,9 +3,11 @@ from genericpath import isfile
 
 import sys
 import logging
-from os import chdir, mkdir, getcwd
-from os.path import join, exists, isdir, dirname, realpath, basename
+from os import chdir, mkdir, getcwd, listdir
+from os.path import join, exists, isdir, dirname, realpath, basename, relpath
+from Bio import SeqIO
 from src import steps
+from src.argparse import ArgumentParser
 
 from src.utils import which, make_workflow_id, read_list, set_up_config, get_start_after_from
 from src.parse_args import interrupt, check_file, check_dir, add_common_arguments, check_common_args
@@ -19,7 +21,7 @@ script_path = dirname(realpath(__file__))
 
 
 def run_workflow(working_dir,
-                 species_list, ids_list, user_annotations_dir, proteomes_dir,
+                 species_list, ids_list, annotations, proteomes, prot_id_field,
                  ask_before=False,
                  start_after=None, start_from=None, overwrite=True,
                  threads=1,
@@ -39,8 +41,9 @@ def run_workflow(working_dir,
     if not exists('intermediate'): mkdir('intermediate')
 
     workflow = Workflow(working_dir, id=make_workflow_id(working_dir))
-    log.info('Workflow id is "' + workflow.id + '"\n')
-    suffix = '_' + workflow.id[:10] if workflow.id else ''
+    log.info('Workflow id is "' + workflow.id + '"')
+    log.info('')
+    suffix = '_' + workflow.id
 
     if species_list:
         log.debug('Using species list: ' + str(species_list))
@@ -52,17 +55,22 @@ def run_workflow(working_dir,
         workflow.add(steps.step_fetch_annotations_for_ids(ids_list))
         workflow.add(steps.step_make_proteomes())
 
-    elif user_annotations_dir:
-        log.debug('Using user_annotations_dir: ' + user_annotations_dir)
-        workflow.add(steps.step_make_proteomes(user_annotations_dir))
+    elif annotations:
+        log.debug('Using genbank files.')
+        workflow.add(steps.step_make_proteomes(annotations))
+
+    elif proteomes:
+        log.debug('Using proteomes_files.')
+        workflow.add(steps.step_adjust_proteomes(proteomes, prot_id_field))
 
     elif start_from == 0:
-        log.error('Either species names, reference ids, annotations directory, '
+        log.error('Either species names, reference ids, annotations, proteomes, '
                   'or step to start from has to be be speciefied.')
         exit(1)
 
+    workflow.add(steps.filter_proteomes())
+
     workflow.extend([
-        steps.filter_proteomes(),
         steps.make_blast_db(),
         steps.blast(threads),
         steps.parse_blast_restults(),
@@ -71,9 +79,8 @@ def run_workflow(working_dir,
         steps.load_blast_results(suffix),
         steps.find_pairs(suffix),
         steps.dump_pairs_to_files(suffix),
-        steps.mcl()])
-
-    workflow.add(steps.step_save_orthogroups(user_annotations_dir or None))
+        steps.mcl(),
+        steps.step_save_orthogroups(annotations or None)])
 
     result = workflow.run(start_after, start_from, overwrite, ask_before)
     if result == 0:
@@ -85,73 +92,111 @@ def run_workflow(working_dir,
 
 
 def parse_args(args):
-    import argparse
-    op = argparse.ArgumentParser(description='Find groups of orthologous genes.')
+    op = ArgumentParser(description='Find groups of orthologous genes.')
 
-    op.add_argument('-p', '--proteomes-dir', dest='proteomes_dir',
-                    help='Directory with proteomes.')
+    op.add_argument(dest='directory')
+    op.add_argument('-s', '--species-list', dest='species_list')
+    op.add_argument('-i', '--ids-list', dest='ids_list')
+    op.add_argument('--annotations-files', dest='annotations_files')
+    op.add_argument('--proteomes-files', dest='proteomes_files')
+    op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
 
-    op.add_argument('-s', '--species-file', dest='species_file',
-                    help='File with a list of organism names as in Genbank. '
-                         'For example, "Salmonella enterica subsp. enterica '
-                         'serovar Typhi str. P-stx-12".'
-                         'Either species-file, ids-file or annotations-dir'
-                         'must be specified.')
+    op.usage = '''Finding orthogroups for a list of annotations / proteomes / ref ids / species.
 
-    op.add_argument('-i', '--ids-file', dest='ids_file',
-                    help='File with reference ids to fetch from Genbank.'
-                         'Either species-file, ids-file or annotations-dir'
-                         'must be specified.')
+    usage: %s directory [-t num] [--start-from step] [-i file] [-s file]
 
-    op.add_argument('-a', '--annotations-dir', dest='annotations_dir',
-                    help='Directory with .gb files.'
-                         'Either species-file, ids-file or annotations-dir'
-                         'must be specified.')
+    Directory contains fasta files with proteomes.
+    The directory can alternatively contain .gb files, or you can pass
+    a file instead with list of reference ids or species: annotations
+    will be fetched from Genbank instead.
 
-    indent = ' ' * len('usage: ' + basename(__file__) + ' ')
-    op.usage = basename(__file__) + ' [--proteomes-dir DIR]\n' + \
-        indent + '[--ids-file FILE]\n' + \
-        indent + '[--annotations-dir DIR]\n' + \
-        indent + '[--species-file FILE]\n'
+    Optional arguments:
+    -s:                File with a list of organism names as in Genbank.
+    -i:                File with reference ids (will be fetched from Genbank).
+    --prot-id-field:   When specifying proteomes, use this fasta id field number
+                       to retrieve protein ids (default if 1, like >NC_005816.1|NP_995567.1 ...).
+    ''' % basename(__file__)
 
-    add_common_arguments(op, indent)
+    #-a  --annotations-dir  Directory with .gb files.
+    #-p  --proteomes-dir    Directory with fasta files of proteomes.
+    #-i  --ids-list         File with reference ids (will be fetched from Genbank).
+    #-s  --species-list     File with a list of organism names as in Genbank.
+    #                       For example, "Salmonella enterica subsp. enterica serovar Typhi str. P-stx-12".
+    #'''
+
+    #indent = ' ' * len('usage: ' + basename(__file__) + ' ')
+    #op.usage = basename(__file__) + ' [--annotations-dir DIR]\n' + \
+    #    indent + '[--proteomes-dir DIR]\n' + \
+    #    indent + '[--ids-file FILE]\n' + \
+    #    indent + '[--species-file FILE]\n'
+
+    add_common_arguments(op)
 
     params = op.parse_args(args)
 
-    if not params.proteomes_dir and \
-       not params.species_file and \
-       not params.ids_file and \
-       not params.annotations_dir and \
-       not params.start_from:
-        interrupt('Either --proteomes-dir --species-file, --ids-file, --annotations-dir, '
-                  'or --start-from has to be specified.')
-    check_dir(params.proteomes_dir)
-    check_file(params.species_file)
-    check_file(params.ids_file)
-    check_dir(params.annotations_dir)
-
     check_common_args(params)
 
-    return params
+    if params.species_list or params.ids_list:
+        if not isdir(params.directory): mkdir(params.directory)
+        if params.species_list: check_file(params.species_list)
+        if params.ids_list: check_file(params.ids_list)
+        return params
+
+    else:
+        if not params.directory:
+            interrupt('Directory or file must be specified.')
+        return params
 
 
 def main(args):
     p = parse_args(args)
-    if not isdir(p.out_dir): mkdir(p.out_dir)
-    set_up_logging(p.debug, p.out_dir)
+
+    annotations = []
+    proteomes = []
+    species_list = []
+    ref_id_list = []
+
+    if not isdir(p.directory):
+        interrupt('No such directory: ' + p.directory)
+
+    files = listdir(p.directory)
+    if not files: interrupt('Directory contains no files.')
+
+    set_up_logging(p.debug, p.directory)
     log.info(' '.join(args) + '\n')
     set_up_config()
-    start_from, start_after = get_start_after_from(p.start_from, join(p.out_dir, log_fname))
+    start_from, start_after = get_start_after_from(p.start_from, join(p.directory, log_fname))
 
-    species_list = read_list(p.species_file, p.out_dir)
-    ref_id_list = read_list(p.ids_file, p.out_dir)
-    if p.annotations_dir: p.annotations_dir = join(getcwd(), p.annotations_dir)
-    if p.proteomes_dir: p.proteomes_dir = join(getcwd(), p.proteomes_dir)
+    if not start_from and not start_from:
+        for f in (join(p.directory, f) for f in files if isfile(join(p.directory, f))):
+            try:
+                next(SeqIO.parse(f, 'fasta'))
+            except Exception, e:
+                try:
+                    SeqIO.read(f, 'genbank')
+                except Exception, e:
+                    log.debug(str(e) + ', ' + f)
+                else:
+                    annotations.append(relpath(f, p.directory))
+            else:
+                proteomes.append(relpath(f, p.directory))
 
-    run_workflow(working_dir=p.out_dir,
+        if not proteomes and not annotations:
+            interrupt('Directory must contain fasta or genbank files.')
+
+        if proteomes and annotations:
+            log.warn('Directory %s contains both fasta and genbank files, using fasta.')
+
+        species_list = read_list(p.species_list, p.out_dir)
+        ref_id_list = read_list(p.ids_list, p.out_dir)
+        #if annotations: annotations = [join(getcwd(), path) for path in annotations]
+        #if proteomes: proteomes = [join(getcwd(), path) for path in proteomes]
+
+    run_workflow(working_dir=p.directory,
 
                  species_list=species_list, ids_list=ref_id_list,
-                 user_annotations_dir=p.annotations_dir, proteomes_dir=p.proteomes_dir,
+                 annotations=annotations, proteomes=proteomes,
+                 prot_id_field=int(p.prot_id_field),
 
                  ask_before=p.ask_each_step,
                  start_after=start_after, start_from=start_from, overwrite=True,

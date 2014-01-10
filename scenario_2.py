@@ -91,14 +91,23 @@ def parse_args(args):
                     help='Proteins fasta file to process with an existing blast tsv, '
                          'specified with --blast-results.')
 
-    indent = ' ' * len('usage: ' + basename(__file__) + ' ')
-    op.usage = basename(__file__) + ' [--existing-blast-results TSV]\n' + \
-        indent + '[--existing_proteomes DIR]\n' + \
-        indent + '[--assembly FASTA]\n' + \
-        indent + '[--genes GFF]\n' + \
-        indent + '[--proteome FASTA]\n'
+    op.usage = '''Finding orthogroups for a list of annotations / proteomes / ref ids / species.
 
-    add_common_arguments(op, indent)
+    -a  --existing-blast-results  Directory with .gb files.
+    -p  --proteomes-dir    Directory with fasta files of proteomes.
+    -i  --ids-list         File with reference ids (will be fetched from Genbank).
+    -s  --species-list     File with a list of organism names as in Genbank.
+                           For example, "Salmonella enterica subsp. enterica serovar Typhi str. P-stx-12".
+    '''
+
+    #indent = ' ' * len('usage: ' + basename(__file__) + ' ')
+    #op.usage = basename(__file__) + ' [--existing-blast-results TSV]\n' + \
+    #    indent + '[--existing_proteomes DIR]\n' + \
+    #    indent + '[--assembly FASTA]\n' + \
+    #    indent + '[--genes GFF]\n' + \
+    #    indent + '[--proteome FASTA]\n'
+
+    add_common_arguments(op)
 
     params = op.parse_args(args)
 

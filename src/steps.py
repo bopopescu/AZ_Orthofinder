@@ -2,7 +2,7 @@ from os.path import basename, join, relpath
 
 from Workflow import Step, cmdline
 from save_orthogroups import save_orthogroups
-from make_proteomes import make_proteomes
+from make_proteomes import make_proteomes, adjust_proteomes
 from fetch_annotations import fetch_annotations_for_species_from_ftp, fetch_annotations_for_ids
 from config import orthomcl_config, orthomcl_bin_dir, BLAST_DBSIZE
 from clean_db import clean_db
@@ -15,6 +15,7 @@ proteomes_dir         = 'proteomes'
 annotations_dir       = 'annotations'
 intermediate_dir      = 'intermediate'
 sql_log               = 'intermediate/log.sql'
+predicted_proteins    = 'intermediate/predicted_proteins.fasta'
 good_proteins         = 'intermediate/good_proteins.fasta'
 poor_proteins         = 'intermediate/poor_proteins.fasta'
 blast_db              = 'intermediate/blastdb'
@@ -44,6 +45,17 @@ with open(orthomcl_config) as f:
     best_hit_taxon_score_table = 'BestQueryTaxonScore'
 
 
+def find_genes(assembly):
+    return Step(
+        'Finding genes',
+         run=cmdline('prodigal',
+             parameters=[
+                 '-a', predicted_proteins,
+                 '-o', 'intermediate/predicted.gbk',
+                 '-i', assembly]),
+         req_files=assembly,
+         prod_files=[predicted_proteins])
+
 def step_fetching_annotations_for_species(specied_list, proxy):
     return Step(
         'Fetching annotations',
@@ -57,12 +69,19 @@ def step_fetch_annotations_for_ids(ids_list):
          run=lambda: fetch_annotations_for_ids(annotations_dir, ids_list),
          prod_files=[annotations_dir])
 
-def step_make_proteomes(annotations_dir=annotations_dir):
+def step_make_proteomes(annotations=None):
     return Step(
         'Preparing proteomes',
-         run=lambda: make_proteomes(annotations_dir, proteomes_dir),
-         req_files=[annotations_dir],
-         prod_files=[proteomes_dir],)
+         run=lambda: make_proteomes(annotations or annotations_dir, proteomes_dir),
+         prod_files=[proteomes_dir])
+
+def step_adjust_proteomes(proteomes_files, id_field=1):
+    return Step(
+        'Adjusting proteomes',
+         run=lambda: adjust_proteomes(proteomes_files, proteomes_dir,
+                                      id_field),
+         req_files=proteomes_files,
+         prod_files=[proteomes_dir])
 
 def filter_proteomes():
     return Step(
@@ -74,8 +93,7 @@ def filter_proteomes():
                          poor_proteins]),
          req_files=[proteomes_dir],
          prod_files=[good_proteins,
-                     poor_proteins],
-         )
+                     poor_proteins])
 
 def make_blast_db():
     return Step(
@@ -89,8 +107,7 @@ def make_blast_db():
                 '-dbtype', 'prot'],
               stdout='log'),
          req_files=[good_proteins],
-         prod_files=[blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']],
-         )
+         prod_files=[blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']])
 
 def blast(threads):
     parameters = [
@@ -148,16 +165,16 @@ def install_schema(suffix):
              in_paralog_table + suffix,
              coortholog_table + suffix,
              similar_sequeces_table + suffix,
-             inter_taxon_match_view + suffix],
-         )
+             inter_taxon_match_view + suffix])
 
 def load_blast_results(suffix):
     return Step(
         'Loading blast results into the database',
          run=cmdline(join(orthomcl_bin_dir, 'orthomclLoadBlast.pl'),
-                     parameters=[orthomcl_config,
-                             similar_sequences,
-                             suffix],
+                     parameters=[
+                         orthomcl_config,
+                         similar_sequences,
+                         suffix],
                      stderr='log'),
          req_files=[orthomcl_config,
                     similar_sequences],  # and initialized database
@@ -168,7 +185,10 @@ def find_pairs(suffix):
         'Finding pairs',
          run=cmdline(
              join(orthomcl_bin_dir, 'orthomclPairs.pl'),
-             parameters=[orthomcl_config, pairs_log, 'cleanup=no', 'suffix=' + suffix],
+             parameters=[orthomcl_config,
+                         pairs_log,
+                         'cleanup=yes',
+                         'suffix=' + suffix],
              stderr='log'),
          req_files=[orthomcl_config],
          req_tables=[in_paralog_table + suffix,
@@ -208,13 +228,11 @@ def mcl(inflation=1.5):
          req_files=[mcl_input],
          prod_files=[mcl_output])
 
-def step_save_orthogroups(annot_dir=None):
-    annot_dir = annot_dir or annotations_dir
-
+def step_save_orthogroups(annotations=None):
     return Step(
         'Saving orthogroups',
         run=lambda: save_orthogroups(
-            annot_dir, mcl_output, orthogroups_file, nice_orthogroups_file),
+            annotations or annotations_dir, mcl_output, orthogroups_file, nice_orthogroups_file),
         req_files=[mcl_output],
         prod_files=[orthogroups_file, nice_orthogroups_file])
 

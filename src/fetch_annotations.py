@@ -9,8 +9,6 @@ import config
 import logging
 log = logging.getLogger(config.log_fname)
 
-genbank_ext = 'gb'
-
 
 def fetch_annotations_for_species_from_ftp(save_dir, species_names, proxy=None, clip=None):
     if not species_names:
@@ -51,31 +49,30 @@ def fetch_annotations_for_species_from_ftp(save_dir, species_names, proxy=None, 
 
 
 def fetch_annotations_for_ids(save_dir, ref_ids):
-    ids = ref_ids
+    if not isdir(save_dir): mkdir(save_dir)
 
-    if not isdir(save_dir):
-        mkdir(save_dir)
-
-    if ids == []:
+    if ref_ids == []:
         log.info('   No references have been found.')
         ids = raw_input('   Put reference ids manually:').split()
         if ids == []:
             log.error('   No references :(')
             return 1
 
-    log.info('   IDs: %s' % ', '.join(ids))
+    log.info('   IDs: %s' % ', '.join(ref_ids))
 
-    for i, id in enumerate(ids):
+    for i, id in enumerate(ref_ids):
         log.info('   Fetching %s...' % id)
 
         fetch_handle = Entrez.efetch(db='nucleotide', id=id,
                                      retmode='text', rettype='gbwithparts')
-        gb_fpath = join(save_dir, id + '.' + genbank_ext)
+        gb_fpath = join(save_dir, id + '.gb')
         with open(gb_fpath, 'w') as file:
             file.write(fetch_handle.read())
 
-        rec = SeqIO.read(gb_fpath, genbank_ext)
-        log.info('       Definition: ' + rec.description)
+        rec = SeqIO.read(gb_fpath, 'genbank')
+        genes_number = len([f for f in rec.features if f.type == 'CDS'])
+        log.info('       ' + rec.description)
+        log.info('       %d genes found.' % genes_number)
         log.info('       saved %s' % gb_fpath)
         log.info('')
 

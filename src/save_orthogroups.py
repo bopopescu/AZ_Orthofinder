@@ -12,12 +12,19 @@ log = logging.getLogger(config.log_fname)
 
 #Gene = namedtuple('Gene', 'protein strain gi gene locus product description')
 
-def save_orthogroups(annotations_dir, mcl_output, out, out_nice):
+def save_orthogroups(annotations, mcl_output, out, out_nice):
     strains = dict()
     max_lengths = count(0)
 
-    if not isdir(annotations_dir) or not listdir(annotations_dir):
-        log.info('')
+    if isinstance(annotations, (list, tuple)):
+        gb_files = annotations
+
+    elif isdir(annotations) and listdir(annotations):
+        annotations_dir = annotations
+        gb_files = [join(annotations_dir, fname)
+                    for fname in listdir(annotations_dir) if fname[0] != '.']
+    else:
+        if not isdir(annotations): mkdir(annotations)
         log.info('   Fetching annotations from Genbank.')
 
         ids = set()
@@ -27,10 +34,10 @@ def save_orthogroups(annotations_dir, mcl_output, out, out_nice):
                     taxon_id, _ = gene.split('|')
                     ids.add(taxon_id)
 
-        fetch_annotations_for_ids(annotations_dir, ids)
+        fetch_annotations_for_ids(annotations, ids)
 
-    gb_files = [join(annotations_dir, fname)
-                for fname in listdir(annotations_dir) if fname[0] != '.']
+        gb_files = [join(annotations, fname)
+                    for fname in listdir(annotations) if fname[0] != '.']
 
     for fname in gb_files:
         log.debug('   Reading ' + fname)
@@ -60,14 +67,18 @@ def save_orthogroups(annotations_dir, mcl_output, out, out_nice):
     with open(mcl_output) as mcl_f:
         with open(out, 'w') as out_f:
             with open(out_nice, 'w') as nice_f:
-                for i, line in izip(count(1), mcl_f):
+                genes_number = 0
+                i = 0
+                for line in mcl_f:
+                    i += 1
                     print >> out_f, 'Orthogroup %d' % i
                     print >> nice_f, 'Orthogroup %d' % i
 
                     for gene in line.split():
+                        genes_number += 1
                         taxon_id, prot_id = gene.split('|')
                         if taxon_id not in strains:
-                            log.error('   No annotations for ' + taxon_id + ' in ' + annotations_dir)
+                            log.error('   No annotations for ' + taxon_id)
                             return 1
 
                         for l, val in zip(max_lengths, strains[taxon_id][prot_id][:-1]):
@@ -79,5 +90,8 @@ def save_orthogroups(annotations_dir, mcl_output, out, out_nice):
 
                     print >> out_f
                     print >> nice_f
+
+                log.info('')
+                log.info('   Saved %d groups, totally contating %d genes.' % (i, genes_number))
 
     return 0

@@ -1,0 +1,1437 @@
+Thu Jan  9 22:45:25 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:45:25 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:45:25 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:45:25 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:45:25 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:45:25 2014  INFO      1. Process proteomes
+Thu Jan  9 22:45:25 2014  INFO      
+Thu Jan  9 22:45:25 2014  WARNING      Process was not complete. You can restart from this point using --start-from "Process proteomes"
+Thu Jan  9 22:48:37 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:48:37 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:48:37 2014  DEBUG     No records found in handle
+Thu Jan  9 22:48:37 2014  DEBUG     No records found in handle
+Thu Jan  9 22:48:37 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:48:37 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:48:37 2014  ERROR     Either species names, reference ids, annotations, proteomes, or step to start from has to be be speciefied.
+Thu Jan  9 22:48:44 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:48:44 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:48:44 2014  DEBUG     No records found in handle
+Thu Jan  9 22:48:44 2014  DEBUG     No records found in handle
+Thu Jan  9 22:48:44 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:48:44 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:48:44 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:48:44 2014  INFO      1. Filtering proteomes
+Thu Jan  9 22:48:44 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclFilterFasta.pl proteomes 10 20 intermediate/good_proteins.fasta intermediate/poor_proteins.fasta
+Thu Jan  9 22:48:44 2014  INFO         Can't open input directory 'proteomes'
+Thu Jan  9 22:48:44 2014  DEBUG           Ret 20
+Thu Jan  9 22:48:44 2014  INFO      
+Thu Jan  9 22:48:44 2014  WARNING      Process was not complete. You can restart from this point using --start-from "Filtering proteomes"
+Thu Jan  9 22:49:46 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:49:46 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:49:46 2014  DEBUG     No records found in handle
+Thu Jan  9 22:49:46 2014  DEBUG     No records found in handle
+Thu Jan  9 22:49:49 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:49:49 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:49:53 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:50:28 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:50:28 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:50:28 2014  DEBUG     No records found in handle
+Thu Jan  9 22:50:28 2014  DEBUG     No records found in handle
+Thu Jan  9 22:50:28 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:50:28 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:50:28 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:50:28 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:50:28 2014  INFO         Overwriting existing proteomes
+Thu Jan  9 22:50:49 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:50:49 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:50:49 2014  DEBUG     No records found in handle
+Thu Jan  9 22:50:49 2014  DEBUG     No records found in handle
+Thu Jan  9 22:50:49 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:50:49 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:50:51 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:50:51 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:50:51 2014  INFO         Overwriting existing proteomes
+Thu Jan  9 22:51:15 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:51:15 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:51:15 2014  DEBUG     No records found in handle
+Thu Jan  9 22:51:15 2014  DEBUG     No records found in handle
+Thu Jan  9 22:51:15 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:51:15 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:51:17 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:51:57 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:52:05 2014  INFO      
+Thu Jan  9 22:52:05 2014  WARNING      Process was not complete. You can restart from this point using --start-from "Processing proteomes"
+Thu Jan  9 22:52:13 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:52:13 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:52:13 2014  DEBUG     No records found in handle
+Thu Jan  9 22:52:13 2014  DEBUG     No records found in handle
+Thu Jan  9 22:52:13 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:52:13 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:52:13 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:52:13 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:52:13 2014  INFO         Overwriting existing proteomes
+Thu Jan  9 22:52:46 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:52:46 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:52:46 2014  DEBUG     No records found in handle
+Thu Jan  9 22:52:46 2014  DEBUG     No records found in handle
+Thu Jan  9 22:52:46 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:52:46 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:52:46 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:52:46 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:52:57 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:52:57 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:52:57 2014  DEBUG     No records found in handle
+Thu Jan  9 22:52:57 2014  DEBUG     No records found in handle
+Thu Jan  9 22:52:57 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:52:57 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:52:57 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:52:57 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:53:00 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:53:00 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:53:00 2014  DEBUG     No records found in handle
+Thu Jan  9 22:53:00 2014  DEBUG     No records found in handle
+Thu Jan  9 22:53:00 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:53:00 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:53:00 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:53:00 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:53:10 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:53:10 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:53:10 2014  DEBUG     No records found in handle
+Thu Jan  9 22:53:10 2014  DEBUG     No records found in handle
+Thu Jan  9 22:53:10 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:53:10 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:53:10 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:53:10 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:53:10 2014  INFO      
+Thu Jan  9 22:53:10 2014  WARNING      Process was not complete. You can restart from this point using --start-from "Processing proteomes"
+Thu Jan  9 22:53:43 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:53:43 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:53:43 2014  DEBUG     No records found in handle
+Thu Jan  9 22:53:43 2014  DEBUG     No records found in handle
+Thu Jan  9 22:53:43 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:53:43 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:53:48 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:53:48 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:54:18 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:54:18 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:54:18 2014  DEBUG     No records found in handle
+Thu Jan  9 22:54:18 2014  DEBUG     No records found in handle
+Thu Jan  9 22:54:18 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:54:18 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:54:18 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:54:18 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:54:37 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:54:37 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:54:37 2014  DEBUG     No records found in handle
+Thu Jan  9 22:54:37 2014  DEBUG     No records found in handle
+Thu Jan  9 22:54:37 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:54:37 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:54:37 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:54:37 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:54:37 2014  INFO      
+Thu Jan  9 22:54:37 2014  WARNING      Process was not complete. You can restart from this point using --start-from "Processing proteomes"
+Thu Jan  9 22:54:44 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:54:44 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:54:44 2014  DEBUG     No records found in handle
+Thu Jan  9 22:54:44 2014  DEBUG     No records found in handle
+Thu Jan  9 22:54:44 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:54:44 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:54:44 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:54:44 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:54:44 2014  INFO         Overwriting existing proteomes
+Thu Jan  9 22:54:44 2014  INFO      
+Thu Jan  9 22:54:44 2014  WARNING      Process was not complete. You can restart from this point using --start-from "Processing proteomes"
+Thu Jan  9 22:54:49 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:54:49 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:54:49 2014  DEBUG     No records found in handle
+Thu Jan  9 22:54:49 2014  DEBUG     No records found in handle
+Thu Jan  9 22:54:49 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:54:49 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:54:49 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:54:49 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:54:49 2014  INFO         Overwriting existing proteomes
+Thu Jan  9 22:55:00 2014  INFO      
+Thu Jan  9 22:55:12 2014  INFO      test_input/prots -d
+
+Thu Jan  9 22:55:12 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan  9 22:55:12 2014  DEBUG     No records found in handle
+Thu Jan  9 22:55:12 2014  DEBUG     No records found in handle
+Thu Jan  9 22:55:12 2014  INFO      Changing to test_input/prots
+Thu Jan  9 22:55:12 2014  INFO      Workflow id is "prots"
+
+Thu Jan  9 22:55:12 2014  DEBUG     Using proteomes_files.
+Thu Jan  9 22:55:12 2014  INFO      1. Processing proteomes
+Thu Jan  9 22:55:12 2014  INFO         Overwriting existing proteomes
+Thu Jan  9 22:55:12 2014  INFO         Done processing proteomes
+Thu Jan  9 22:55:12 2014  INFO      
+Thu Jan  9 22:55:12 2014  INFO      2. Filtering proteomes
+Thu Jan  9 22:55:12 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclFilterFasta.pl proteomes 10 20 intermediate/good_proteins.fasta intermediate/poor_proteins.fasta
+Thu Jan  9 22:55:12 2014  INFO         processing file NC_005816.1.fasta
+Thu Jan  9 22:55:12 2014  INFO         processing file NC_008253.1.fasta
+Thu Jan  9 22:55:12 2014  INFO         processing file NC_011748.1.fasta
+Thu Jan  9 22:55:12 2014  DEBUG           Ret 0
+Thu Jan  9 22:55:12 2014  INFO         Done filtering proteomes
+Thu Jan  9 22:55:12 2014  INFO      
+Thu Jan  9 22:55:12 2014  INFO      3. Making blast database
+Thu Jan  9 22:55:12 2014  INFO         makeblastdb -in intermediate/good_proteins.fasta -input_type fasta -out intermediate/blastdb -dbtype prot
+Thu Jan  9 22:55:12 2014  DEBUG        
+Thu Jan  9 22:55:12 2014  DEBUG        
+Thu Jan  9 22:55:12 2014  DEBUG        Building a new DB, current time: 01/09/2014 22:55:12
+Thu Jan  9 22:55:12 2014  DEBUG        New DB name:   intermediate/blastdb
+Thu Jan  9 22:55:12 2014  DEBUG        New DB title:  intermediate/good_proteins.fasta
+Thu Jan  9 22:55:12 2014  DEBUG        Sequence type: Protein
+Thu Jan  9 22:55:12 2014  DEBUG        Keep Linkouts: T
+Thu Jan  9 22:55:12 2014  DEBUG        Keep MBits: T
+Thu Jan  9 22:55:12 2014  DEBUG        Maximum file size: 1073741824B
+Thu Jan  9 22:55:12 2014  DEBUG        Adding sequences from FASTA; added 988 sequences in 0.115471 seconds.
+Thu Jan  9 22:55:12 2014  DEBUG           Ret 0
+Thu Jan  9 22:55:12 2014  INFO         Done making blast database
+Thu Jan  9 22:55:12 2014  INFO      
+Thu Jan  9 22:55:12 2014  INFO      4. Blasting
+Thu Jan  9 22:55:12 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000 -num_threads 30
+Thu Jan  9 22:55:13 2014  DEBUG           Ret -6
+Thu Jan  9 22:55:13 2014  INFO      
+Thu Jan  9 22:55:13 2014  WARNING   Warning: blast refused to run multithreaded, running single-threaded instead.
+Thu Jan  9 22:55:13 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000
+Thu Jan  9 22:55:27 2014  DEBUG           Ret 0
+Thu Jan  9 22:55:27 2014  INFO         Done blasting
+Thu Jan  9 22:55:27 2014  INFO      
+Thu Jan  9 22:55:27 2014  INFO      5. Parsing blast results
+Thu Jan  9 22:55:27 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclBlastParser.pl intermediate/blasted.tsv proteomes > intermediate/similar_sequences.txt
+Thu Jan  9 22:55:27 2014  INFO         acquiring genes from NC_005816.1.fasta
+Thu Jan  9 22:55:27 2014  INFO         acquiring genes from NC_008253.1.fasta
+Thu Jan  9 22:55:27 2014  INFO         acquiring genes from NC_011748.1.fasta
+Thu Jan  9 22:55:27 2014  DEBUG           Ret 0
+Thu Jan  9 22:55:27 2014  INFO         Done parsing blast results
+Thu Jan  9 22:55:27 2014  INFO      
+Thu Jan  9 22:55:27 2014  INFO      6. Cleaning database
+Thu Jan  9 22:55:27 2014  INFO         Done cleaning database
+Thu Jan  9 22:55:27 2014  INFO      
+Thu Jan  9 22:55:27 2014  INFO      7. Installing schema
+Thu Jan  9 22:55:27 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclInstallSchema.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/log.sql _prots
+Thu Jan  9 22:55:27 2014  DEBUG           Ret 0
+Thu Jan  9 22:55:27 2014  INFO         Done installing schema
+Thu Jan  9 22:55:27 2014  INFO      
+Thu Jan  9 22:55:27 2014  INFO      8. Loading blast results into the database
+Thu Jan  9 22:55:27 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclLoadBlast.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/similar_sequences.txt _prots
+Thu Jan  9 22:55:27 2014  DEBUG           Ret 0
+Thu Jan  9 22:55:27 2014  INFO         Done loading blast results into the database
+Thu Jan  9 22:55:27 2014  INFO      
+Thu Jan  9 22:55:27 2014  INFO      9. Finding pairs
+Thu Jan  9 22:55:27 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclPairs.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/orthomclpairs.log cleanup=no suffix=_prots
+Thu Jan  9 22:55:29 2014  DEBUG           Ret 0
+Thu Jan  9 22:55:29 2014  INFO         Done finding pairs
+Thu Jan  9 22:55:29 2014  INFO      
+Thu Jan  9 22:55:29 2014  INFO      10. Dump pairs files
+Thu Jan  9 22:55:29 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclDumpPairsFiles.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config mcl_input intermediate _prots
+Thu Jan  9 22:55:29 2014  DEBUG           Ret 0
+Thu Jan  9 22:55:29 2014  INFO         Done dump pairs files
+Thu Jan  9 22:55:29 2014  INFO      
+Thu Jan  9 22:55:29 2014  INFO      11. MCL
+Thu Jan  9 22:55:29 2014  INFO         mcl intermediate/mcl_input --abc -I 1.5 -o intermediate/mcl_output
+Thu Jan  9 22:55:29 2014  DEBUG        [mcl] new tab created
+Thu Jan  9 22:55:29 2014  DEBUG        [mcl] pid 57536
+Thu Jan  9 22:55:29 2014  DEBUG        ite -------------------  chaos  time hom(avg,lo,hi) expa expb expc fmv
+Thu Jan  9 22:55:29 2014  DEBUG        1  ...................   1.66  0.00 0.97/0.63/1.36 1.08 1.08 1.08   3
+Thu Jan  9 22:55:29 2014  DEBUG        2  ...................   1.46  0.00 0.96/0.50/1.32 1.01 1.01 1.10   4
+Thu Jan  9 22:55:29 2014  DEBUG        3  ...................   1.07  0.00 0.96/0.54/1.11 1.00 1.00 1.09   4
+Thu Jan  9 22:55:29 2014  DEBUG        4  ...................   1.11  0.00 0.97/0.42/1.31 1.00 0.97 1.07   4
+Thu Jan  9 22:55:29 2014  DEBUG        5  ...................   1.21  0.00 0.97/0.41/1.00 1.01 0.95 1.01   4
+Thu Jan  9 22:55:29 2014  DEBUG        6  ...................   1.24  0.00 0.97/0.57/1.00 1.01 0.93 0.94   3
+Thu Jan  9 22:55:29 2014  DEBUG        7  ...................   0.92  0.00 0.98/0.54/1.00 1.00 0.91 0.86   3
+Thu Jan  9 22:55:29 2014  DEBUG        8  ...................   0.81  0.00 0.98/0.64/1.00 1.00 0.92 0.79   3
+Thu Jan  9 22:55:29 2014  DEBUG        9  ...................   0.45  0.00 0.98/0.76/1.00 1.00 0.99 0.78   3
+Thu Jan  9 22:55:29 2014  DEBUG        10  ...................   0.27  0.00 0.99/0.76/1.00 1.00 0.96 0.74   3
+Thu Jan  9 22:55:29 2014  DEBUG        11  ...................   0.38  0.00 0.99/0.78/1.00 1.00 0.97 0.72   0
+Thu Jan  9 22:55:29 2014  DEBUG        12  ...................   0.52  0.00 0.99/0.69/1.00 1.00 0.99 0.71   0
+Thu Jan  9 22:55:29 2014  DEBUG        13  ...................   0.64  0.00 0.99/0.61/1.00 1.00 0.95 0.68   0
+Thu Jan  9 22:55:29 2014  DEBUG        14  ...................   0.68  0.00 0.98/0.62/1.00 1.00 1.00 0.68   0
+Thu Jan  9 22:55:29 2014  DEBUG        15  ...................   0.55  0.00 0.98/0.71/1.00 1.00 0.99 0.68   0
+Thu Jan  9 22:55:29 2014  DEBUG        16  ...................   0.29  0.00 0.99/0.76/1.00 1.00 0.99 0.67   0
+Thu Jan  9 22:55:29 2014  DEBUG        17  ...................   0.25  0.00 0.99/0.77/1.00 1.00 1.00 0.67   0
+Thu Jan  9 22:55:29 2014  DEBUG        18  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.66   0
+Thu Jan  9 22:55:29 2014  DEBUG        19  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.66   0
+Thu Jan  9 22:55:29 2014  DEBUG        20  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.65   0
+Thu Jan  9 22:55:29 2014  DEBUG        21  ...................   0.25  0.00 0.98/0.76/1.00 1.00 0.99 0.64   0
+Thu Jan  9 22:55:29 2014  DEBUG        22  ...................   0.24  0.00 0.98/0.78/1.00 1.00 1.00 0.64   0
+Thu Jan  9 22:55:29 2014  DEBUG        23  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.64   0
+Thu Jan  9 22:55:29 2014  DEBUG        24  ...................   0.22  0.00 0.99/0.78/1.00 1.00 0.99 0.64   0
+Thu Jan  9 22:55:29 2014  DEBUG        25  ...................   0.24  0.00 0.99/0.78/1.00 1.00 1.00 0.63   0
+Thu Jan  9 22:55:29 2014  DEBUG        26  ...................   0.24  0.00 1.00/0.76/1.00 1.00 0.99 0.63   0
+Thu Jan  9 22:55:29 2014  DEBUG        27  ...................   0.18  0.00 1.00/0.82/1.00 1.00 0.99 0.62   0
+Thu Jan  9 22:55:29 2014  DEBUG        28  ...................   0.08  0.00 1.00/0.92/1.00 1.00 0.98 0.61   0
+Thu Jan  9 22:55:29 2014  DEBUG        29  ...................   0.02  0.00 1.00/0.98/1.00 1.00 1.00 0.61   0
+Thu Jan  9 22:55:29 2014  DEBUG        30  ...................   0.00  0.00 1.00/1.00/1.00 1.00 1.00 0.61   0
+Thu Jan  9 22:55:29 2014  DEBUG        31  ...................   0.00  0.00 1.00/1.00/1.00 1.00 1.00 0.60   0
+Thu Jan  9 22:55:29 2014  DEBUG        [mcl] jury pruning marks: <100,100,100>, out of 100
+Thu Jan  9 22:55:29 2014  DEBUG        [mcl] jury pruning synopsis: <100.0 or really really really good> (cf -scheme, -do log)
+Thu Jan  9 22:55:29 2014  DEBUG        [mcl] output is in intermediate/mcl_output
+Thu Jan  9 22:55:29 2014  DEBUG        [mcl] 260 clusters found
+Thu Jan  9 22:55:29 2014  DEBUG        [mcl] output is in intermediate/mcl_output
+Thu Jan  9 22:55:29 2014  DEBUG        
+Thu Jan  9 22:55:29 2014  DEBUG        Please cite:
+Thu Jan  9 22:55:29 2014  DEBUG        Stijn van Dongen, Graph Clustering by Flow Simulation.  PhD thesis,
+Thu Jan  9 22:55:29 2014  DEBUG        University of Utrecht, May 2000.
+Thu Jan  9 22:55:29 2014  DEBUG        (  http://www.library.uu.nl/digiarchief/dip/diss/1895620/full.pdf
+Thu Jan  9 22:55:29 2014  DEBUG        or  http://micans.org/mcl/lit/svdthesis.pdf.gz)
+Thu Jan  9 22:55:29 2014  DEBUG        OR
+Thu Jan  9 22:55:29 2014  DEBUG        Stijn van Dongen, A cluster algorithm for graphs. Technical
+Thu Jan  9 22:55:29 2014  DEBUG        Report INS-R0010, National Research Institute for Mathematics
+Thu Jan  9 22:55:29 2014  DEBUG        and Computer Science in the Netherlands, Amsterdam, May 2000.
+Thu Jan  9 22:55:29 2014  DEBUG        (  http://www.cwi.nl/ftp/CWIreports/INS/INS-R0010.ps.Z
+Thu Jan  9 22:55:29 2014  DEBUG        or  http://micans.org/mcl/lit/INS-R0010.ps.Z)
+Thu Jan  9 22:55:29 2014  DEBUG        
+Thu Jan  9 22:55:29 2014  DEBUG           Ret 0
+Thu Jan  9 22:55:29 2014  INFO         Done mcl
+Thu Jan  9 22:55:29 2014  INFO      
+Thu Jan  9 22:55:29 2014  INFO      12. Saving orthogroups
+Thu Jan  9 22:55:29 2014  INFO      
+Thu Jan  9 22:55:29 2014  INFO         Fetching annotations from Genbank.
+Thu Jan  9 22:55:29 2014  INFO         IDs: NC_011748.1, NC_008253.1, NC_005816.1
+Thu Jan  9 22:55:29 2014  INFO         Fetching NC_011748.1...
+Thu Jan  9 22:58:08 2014  INFO             Definition: Escherichia coli 55989 chromosome, complete genome.
+Thu Jan  9 22:58:08 2014  INFO             saved annotations/NC_011748.1.gb
+Thu Jan  9 22:58:08 2014  INFO      
+Thu Jan  9 22:58:08 2014  INFO         Fetching NC_008253.1...
+Fri Jan 10 03:49:10 2014  INFO      test_input/prots -d --start-from 12
+
+Fri Jan 10 03:49:10 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 03:49:10 2014  DEBUG     No records found in handle
+Fri Jan 10 03:49:10 2014  DEBUG     No records found in handle
+Fri Jan 10 03:49:10 2014  INFO      Changing to test_input/prots
+Fri Jan 10 03:49:10 2014  INFO      Workflow id is "prots"
+
+Fri Jan 10 03:49:10 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 03:49:10 2014  INFO      12. Saving orthogroups
+Fri Jan 10 03:49:10 2014  DEBUG        Reading annotations/NC_008253.1.gb
+Fri Jan 10 03:49:35 2014  INFO      test_input/prots -d --start-from 12
+
+Fri Jan 10 03:49:35 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 03:49:35 2014  DEBUG     No records found in handle
+Fri Jan 10 03:49:35 2014  DEBUG     No records found in handle
+Fri Jan 10 03:49:35 2014  INFO      Changing to test_input/prots
+Fri Jan 10 03:49:35 2014  INFO      Workflow id is "prots"
+
+Fri Jan 10 03:49:35 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 03:49:35 2014  INFO      12. Saving orthogroups
+Fri Jan 10 03:49:35 2014  INFO      
+Fri Jan 10 03:49:35 2014  INFO         Fetching annotations from Genbank.
+Fri Jan 10 03:49:35 2014  INFO         IDs: NC_011748.1, NC_008253.1, NC_005816.1
+Fri Jan 10 03:49:35 2014  INFO         Fetching NC_011748.1...
+Fri Jan 10 03:49:52 2014  INFO             Definition: Escherichia coli 55989 chromosome, complete genome.
+Fri Jan 10 03:49:52 2014  INFO             saved annotations/NC_011748.1.gb
+Fri Jan 10 03:49:52 2014  INFO      
+Fri Jan 10 03:49:52 2014  INFO         Fetching NC_008253.1...
+Fri Jan 10 03:50:12 2014  INFO             Definition: Escherichia coli 536, complete genome.
+Fri Jan 10 03:50:12 2014  INFO             saved annotations/NC_008253.1.gb
+Fri Jan 10 03:50:12 2014  INFO      
+Fri Jan 10 03:50:12 2014  INFO         Fetching NC_005816.1...
+Fri Jan 10 03:50:13 2014  INFO             Definition: Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.
+Fri Jan 10 03:50:13 2014  INFO             saved annotations/NC_005816.1.gb
+Fri Jan 10 03:50:13 2014  INFO      
+Fri Jan 10 03:50:13 2014  DEBUG        Reading annotations/NC_005816.1.gb
+Fri Jan 10 03:50:13 2014  DEBUG        Reading annotations/NC_008253.1.gb
+Fri Jan 10 03:50:15 2014  DEBUG        Reading annotations/NC_011748.1.gb
+Fri Jan 10 03:50:16 2014  INFO         Done saving orthogroups
+Fri Jan 10 03:50:16 2014  INFO      
+Fri Jan 10 03:50:16 2014  INFO      Done.
+Fri Jan 10 03:50:16 2014  INFO      Log is in test_input/prots/log.txt
+Fri Jan 10 03:50:16 2014  INFO      Groups are in test_input/prots/orthogroups.tsv
+Fri Jan 10 03:50:16 2014  INFO      Groups with aligned columns are in test_input/prots/orthogroups_nice.txt
+Fri Jan 10 04:20:38 2014  INFO      test_input/prots -d --start-from 12
+
+Fri Jan 10 04:20:38 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 04:20:38 2014  DEBUG     No records found in handle
+Fri Jan 10 04:20:38 2014  DEBUG     No records found in handle
+Fri Jan 10 04:20:38 2014  DEBUG     No records found in handle
+Fri Jan 10 04:20:38 2014  DEBUG     No records found in handle
+Fri Jan 10 04:20:38 2014  INFO      Changing to test_input/prots
+Fri Jan 10 04:20:38 2014  INFO      Workflow id is "prots"
+Fri Jan 10 04:20:38 2014  INFO      
+Fri Jan 10 04:20:38 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 04:20:38 2014  INFO      12. Saving orthogroups
+Fri Jan 10 04:20:38 2014  INFO         Overwriting existing orthogroups.tsv, orthogroups_nice.txt
+Fri Jan 10 04:20:38 2014  DEBUG        Reading annotations/NC_005816.1.gb
+Fri Jan 10 04:20:38 2014  DEBUG        Reading annotations/NC_008253.1.gb
+Fri Jan 10 04:20:39 2014  DEBUG        Reading annotations/NC_011748.1.gb
+Fri Jan 10 04:20:52 2014  INFO      test_input/prots -d --start-from 12
+
+Fri Jan 10 04:20:52 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 04:20:52 2014  DEBUG     No records found in handle
+Fri Jan 10 04:20:52 2014  DEBUG     No records found in handle
+Fri Jan 10 04:20:52 2014  DEBUG     No records found in handle
+Fri Jan 10 04:20:52 2014  DEBUG     No records found in handle
+Fri Jan 10 04:20:52 2014  INFO      Changing to test_input/prots
+Fri Jan 10 04:20:52 2014  INFO      Workflow id is "prots"
+Fri Jan 10 04:20:52 2014  INFO      
+Fri Jan 10 04:20:52 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 04:20:52 2014  INFO      12. Saving orthogroups
+Fri Jan 10 04:20:52 2014  INFO         Overwriting existing orthogroups.tsv, orthogroups_nice.txt
+Fri Jan 10 04:20:52 2014  DEBUG        Reading annotations/NC_005816.1.gb
+Fri Jan 10 04:20:52 2014  DEBUG        Reading annotations/NC_008253.1.gb
+Fri Jan 10 04:20:54 2014  DEBUG        Reading annotations/NC_011748.1.gb
+Fri Jan 10 04:20:55 2014  INFO      
+Fri Jan 10 04:20:55 2014  INFO         Saved 260 groups, totally contating 0 genes.
+Fri Jan 10 04:20:55 2014  INFO         Done.
+Fri Jan 10 04:20:55 2014  INFO      
+Fri Jan 10 04:20:55 2014  INFO      Done.
+Fri Jan 10 04:20:55 2014  INFO      Log is in test_input/prots/log.txt
+Fri Jan 10 04:20:55 2014  INFO      Groups are in test_input/prots/orthogroups.tsv
+Fri Jan 10 04:20:55 2014  INFO      Groups with aligned columns are in test_input/prots/orthogroups_nice.txt
+Fri Jan 10 04:21:47 2014  INFO      test_input/prots -d --start-from 12
+
+Fri Jan 10 04:21:47 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 04:21:47 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 04:21:47 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 04:21:47 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 04:21:47 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 04:21:47 2014  INFO      Changing to test_input/prots
+Fri Jan 10 04:21:47 2014  INFO      Workflow id is "prots"
+Fri Jan 10 04:21:47 2014  INFO      
+Fri Jan 10 04:21:47 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 04:21:47 2014  INFO      12. Saving orthogroups
+Fri Jan 10 04:21:47 2014  INFO         Overwriting existing orthogroups.tsv, orthogroups_nice.txt
+Fri Jan 10 04:21:47 2014  DEBUG        Reading annotations/NC_005816.1.gb
+Fri Jan 10 04:21:47 2014  DEBUG        Reading annotations/NC_008253.1.gb
+Fri Jan 10 04:21:48 2014  DEBUG        Reading annotations/NC_011748.1.gb
+Fri Jan 10 04:21:50 2014  INFO      
+Fri Jan 10 04:21:50 2014  INFO         Saved 260 groups, totally contating 0 genes.
+Fri Jan 10 04:21:50 2014  INFO         Done.
+Fri Jan 10 04:21:50 2014  INFO      
+Fri Jan 10 04:21:50 2014  INFO      Done.
+Fri Jan 10 04:21:50 2014  INFO      Log is in test_input/prots/log.txt
+Fri Jan 10 04:21:50 2014  INFO      Groups are in test_input/prots/orthogroups.tsv
+Fri Jan 10 04:21:50 2014  INFO      Groups with aligned columns are in test_input/prots/orthogroups_nice.txt
+Fri Jan 10 04:38:04 2014  INFO      test_input/prots -d --start-from 12
+
+Fri Jan 10 04:38:04 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 04:38:04 2014  INFO      Changing to test_input/prots
+Fri Jan 10 04:38:04 2014  INFO      Workflow id is "prots"
+Fri Jan 10 04:38:04 2014  INFO      
+Fri Jan 10 04:38:04 2014  INFO      Done.
+Fri Jan 10 04:38:04 2014  INFO      Log is in test_input/prots/log.txt
+Fri Jan 10 04:38:04 2014  INFO      Groups are in test_input/prots/orthogroups.tsv
+Fri Jan 10 04:38:04 2014  INFO      Groups with aligned columns are in test_input/prots/orthogroups_nice.txt
+Fri Jan 10 04:38:25 2014  INFO      test_input/prots -d --start-from 12
+
+Fri Jan 10 04:38:25 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 04:38:54 2014  INFO      Changing to test_input/prots
+Fri Jan 10 04:38:58 2014  INFO      Workflow id is "prots"
+Fri Jan 10 04:38:58 2014  INFO      
+Fri Jan 10 04:40:13 2014  INFO      Done.
+Fri Jan 10 04:40:13 2014  INFO      Log is in test_input/prots/log.txt
+Fri Jan 10 04:40:13 2014  INFO      Groups are in test_input/prots/orthogroups.tsv
+Fri Jan 10 04:40:13 2014  INFO      Groups with aligned columns are in test_input/prots/orthogroups_nice.txt
+Fri Jan 10 04:40:19 2014  INFO      test_input/prots -d --start-from 11
+
+Fri Jan 10 04:40:19 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 04:40:19 2014  INFO      Changing to test_input/prots
+Fri Jan 10 04:40:19 2014  INFO      Workflow id is "prots"
+Fri Jan 10 04:40:19 2014  INFO      
+Fri Jan 10 04:40:19 2014  INFO      11. Saving orthogroups
+Fri Jan 10 04:40:19 2014  INFO         Overwriting existing orthogroups.tsv, orthogroups_nice.txt
+Fri Jan 10 04:40:19 2014  DEBUG        Reading annotations/NC_005816.1.gb
+Fri Jan 10 04:40:19 2014  DEBUG        Reading annotations/NC_008253.1.gb
+Fri Jan 10 04:40:21 2014  DEBUG        Reading annotations/NC_011748.1.gb
+Fri Jan 10 04:40:23 2014  INFO      
+Fri Jan 10 04:40:23 2014  INFO         Saved 260 groups, totally contating 0 genes.
+Fri Jan 10 04:40:23 2014  INFO         Done.
+Fri Jan 10 04:40:23 2014  INFO      
+Fri Jan 10 04:40:23 2014  INFO      Done.
+Fri Jan 10 04:40:23 2014  INFO      Log is in test_input/prots/log.txt
+Fri Jan 10 04:40:23 2014  INFO      Groups are in test_input/prots/orthogroups.tsv
+Fri Jan 10 04:40:23 2014  INFO      Groups with aligned columns are in test_input/prots/orthogroups_nice.txt
+Fri Jan 10 04:48:25 2014  INFO      test_input/prots -d --start-from 11
+
+Fri Jan 10 04:48:25 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 04:48:25 2014  INFO      Changing to test_input/prots
+Fri Jan 10 04:48:25 2014  INFO      Workflow id is "prots"
+Fri Jan 10 04:48:25 2014  INFO      
+Fri Jan 10 04:48:25 2014  INFO      11. Saving orthogroups
+Fri Jan 10 04:48:25 2014  INFO         Overwriting existing orthogroups.tsv, orthogroups_nice.txt
+Fri Jan 10 04:48:25 2014  DEBUG        Reading annotations/NC_005816.1.gb
+Fri Jan 10 04:48:25 2014  DEBUG        Reading annotations/NC_008253.1.gb
+Fri Jan 10 04:48:27 2014  DEBUG        Reading annotations/NC_011748.1.gb
+Fri Jan 10 04:48:29 2014  INFO      
+Fri Jan 10 04:48:29 2014  INFO         Saved 260 groups, totally contating 602 genes.
+Fri Jan 10 04:48:29 2014  INFO         Done.
+Fri Jan 10 04:48:29 2014  INFO      
+Fri Jan 10 04:48:29 2014  INFO      Done.
+Fri Jan 10 04:48:29 2014  INFO      Log is in test_input/prots/log.txt
+Fri Jan 10 04:48:29 2014  INFO      Groups are in test_input/prots/orthogroups.tsv
+Fri Jan 10 04:48:29 2014  INFO      Groups with aligned columns are in test_input/prots/orthogroups_nice.txt
+Fri Jan 10 04:48:46 2014  INFO      test_input/prots -d
+
+Fri Jan 10 04:48:46 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 04:48:46 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 04:48:46 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 04:48:46 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 04:48:46 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 04:48:46 2014  INFO      Changing to test_input/prots
+Fri Jan 10 04:48:46 2014  INFO      Workflow id is "prots"
+Fri Jan 10 04:48:46 2014  INFO      
+Fri Jan 10 04:48:46 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 04:48:46 2014  INFO      1. Processing proteomes
+Fri Jan 10 04:48:46 2014  INFO         Overwriting existing proteomes
+Fri Jan 10 04:48:46 2014  INFO         Done.
+Fri Jan 10 04:48:46 2014  INFO      
+Fri Jan 10 04:48:46 2014  INFO      2. Filtering proteomes
+Fri Jan 10 04:48:46 2014  INFO         Overwriting existing intermediate/good_proteins.fasta, intermediate/poor_proteins.fasta
+Fri Jan 10 04:48:46 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclFilterFasta.pl proteomes 10 20 intermediate/good_proteins.fasta intermediate/poor_proteins.fasta
+Fri Jan 10 04:48:46 2014  INFO         processing file NC_005816.1.fasta
+Fri Jan 10 04:48:46 2014  INFO         processing file NC_008253.1.fasta
+Fri Jan 10 04:48:46 2014  INFO         processing file NC_011748.1.fasta
+Fri Jan 10 04:48:46 2014  DEBUG           Ret 0
+Fri Jan 10 04:48:46 2014  INFO         Done.
+Fri Jan 10 04:48:46 2014  INFO      
+Fri Jan 10 04:48:46 2014  INFO      3. Making blast database
+Fri Jan 10 04:48:46 2014  INFO         Overwriting existing intermediate/blastdb.phr, intermediate/blastdb.pin, intermediate/blastdb.psq
+Fri Jan 10 04:48:46 2014  INFO         makeblastdb -in intermediate/good_proteins.fasta -input_type fasta -out intermediate/blastdb -dbtype prot
+Fri Jan 10 04:48:47 2014  DEBUG        
+Fri Jan 10 04:48:47 2014  DEBUG        
+Fri Jan 10 04:48:47 2014  DEBUG        Building a new DB, current time: 01/10/2014 04:48:46
+Fri Jan 10 04:48:47 2014  DEBUG        New DB name:   intermediate/blastdb
+Fri Jan 10 04:48:47 2014  DEBUG        New DB title:  intermediate/good_proteins.fasta
+Fri Jan 10 04:48:47 2014  DEBUG        Sequence type: Protein
+Fri Jan 10 04:48:47 2014  DEBUG        Keep Linkouts: T
+Fri Jan 10 04:48:47 2014  DEBUG        Keep MBits: T
+Fri Jan 10 04:48:47 2014  DEBUG        Maximum file size: 1073741824B
+Fri Jan 10 04:48:47 2014  DEBUG        Adding sequences from FASTA; added 988 sequences in 0.103448 seconds.
+Fri Jan 10 04:48:47 2014  DEBUG           Ret 0
+Fri Jan 10 04:48:47 2014  INFO         Done.
+Fri Jan 10 04:48:47 2014  INFO      
+Fri Jan 10 04:48:47 2014  INFO      4. Blasting
+Fri Jan 10 04:48:47 2014  INFO         Overwriting existing intermediate/blasted.tsv
+Fri Jan 10 04:48:47 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000 -num_threads 30
+Fri Jan 10 04:48:47 2014  DEBUG           Ret -6
+Fri Jan 10 04:48:47 2014  INFO      
+Fri Jan 10 04:48:47 2014  WARNING   Warning: blast refused to run multithreaded, running single-threaded instead.
+Fri Jan 10 04:48:47 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000
+Fri Jan 10 04:48:58 2014  DEBUG           Ret 0
+Fri Jan 10 04:48:58 2014  INFO         Done.
+Fri Jan 10 04:48:58 2014  INFO      
+Fri Jan 10 04:48:58 2014  INFO      5. Parsing blast results
+Fri Jan 10 04:48:58 2014  INFO         Overwriting existing intermediate/similar_sequences.txt
+Fri Jan 10 04:48:58 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclBlastParser.pl intermediate/blasted.tsv proteomes > intermediate/similar_sequences.txt
+Fri Jan 10 04:48:58 2014  INFO         acquiring genes from NC_005816.1.fasta
+Fri Jan 10 04:48:58 2014  INFO         acquiring genes from NC_008253.1.fasta
+Fri Jan 10 04:48:58 2014  INFO         acquiring genes from NC_011748.1.fasta
+Fri Jan 10 04:48:58 2014  DEBUG           Ret 0
+Fri Jan 10 04:48:58 2014  INFO         Done.
+Fri Jan 10 04:48:58 2014  INFO      
+Fri Jan 10 04:48:58 2014  INFO      6. Cleaning database
+Fri Jan 10 04:48:58 2014  INFO         Done.
+Fri Jan 10 04:48:58 2014  INFO      
+Fri Jan 10 04:48:58 2014  INFO      7. Installing schema
+Fri Jan 10 04:48:58 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclInstallSchema.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/log.sql prots
+Fri Jan 10 04:48:59 2014  DEBUG           Ret 0
+Fri Jan 10 04:48:59 2014  INFO         Done.
+Fri Jan 10 04:48:59 2014  INFO      
+Fri Jan 10 04:48:59 2014  INFO      8. Loading blast results into the database
+Fri Jan 10 04:48:59 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclLoadBlast.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/similar_sequences.txt prots
+Fri Jan 10 04:48:59 2014  DEBUG           Ret 0
+Fri Jan 10 04:48:59 2014  INFO         Done.
+Fri Jan 10 04:48:59 2014  INFO      
+Fri Jan 10 04:48:59 2014  INFO      9. Finding pairs
+Fri Jan 10 04:48:59 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclPairs.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/orthomclpairs.log cleanup=yes suffix=prots
+Fri Jan 10 04:49:00 2014  DEBUG           Ret 0
+Fri Jan 10 04:49:00 2014  INFO         Done.
+Fri Jan 10 04:49:00 2014  INFO      
+Fri Jan 10 04:49:00 2014  INFO      10. Dump pairs files
+Fri Jan 10 04:49:00 2014  INFO         Overwriting existing intermediate/mcl_input, intermediate/pairs
+Fri Jan 10 04:49:00 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclDumpPairsFiles.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config mcl_input intermediate prots
+Fri Jan 10 04:49:00 2014  DEBUG           Ret 0
+Fri Jan 10 04:49:00 2014  INFO         Done.
+Fri Jan 10 04:49:00 2014  INFO      
+Fri Jan 10 04:49:00 2014  INFO      11. MCL
+Fri Jan 10 04:49:00 2014  INFO         Overwriting existing intermediate/mcl_output
+Fri Jan 10 04:49:00 2014  INFO         mcl intermediate/mcl_input --abc -I 1.5 -o intermediate/mcl_output
+Fri Jan 10 04:49:00 2014  DEBUG        [mcl] new tab created
+Fri Jan 10 04:49:00 2014  DEBUG        [mcl] pid 59604
+Fri Jan 10 04:49:00 2014  DEBUG        ite -------------------  chaos  time hom(avg,lo,hi) expa expb expc fmv
+Fri Jan 10 04:49:00 2014  DEBUG        1  ...................   1.66  0.00 0.97/0.63/1.36 1.08 1.08 1.08   3
+Fri Jan 10 04:49:00 2014  DEBUG        2  ...................   1.46  0.00 0.96/0.50/1.32 1.01 1.01 1.10   4
+Fri Jan 10 04:49:00 2014  DEBUG        3  ...................   1.07  0.00 0.96/0.54/1.11 1.00 1.00 1.09   4
+Fri Jan 10 04:49:00 2014  DEBUG        4  ...................   1.11  0.00 0.97/0.42/1.31 1.00 0.97 1.07   4
+Fri Jan 10 04:49:00 2014  DEBUG        5  ...................   1.21  0.00 0.97/0.41/1.00 1.01 0.95 1.01   4
+Fri Jan 10 04:49:00 2014  DEBUG        6  ...................   1.24  0.00 0.97/0.57/1.00 1.01 0.93 0.94   3
+Fri Jan 10 04:49:00 2014  DEBUG        7  ...................   0.92  0.00 0.98/0.54/1.00 1.00 0.91 0.86   3
+Fri Jan 10 04:49:00 2014  DEBUG        8  ...................   0.81  0.00 0.98/0.64/1.00 1.00 0.92 0.79   3
+Fri Jan 10 04:49:00 2014  DEBUG        9  ...................   0.45  0.00 0.98/0.76/1.00 1.00 0.99 0.78   3
+Fri Jan 10 04:49:00 2014  DEBUG        10  ...................   0.27  0.00 0.99/0.76/1.00 1.00 0.96 0.74   3
+Fri Jan 10 04:49:00 2014  DEBUG        11  ...................   0.38  0.00 0.99/0.78/1.00 1.00 0.97 0.72   0
+Fri Jan 10 04:49:00 2014  DEBUG        12  ...................   0.52  0.00 0.99/0.69/1.00 1.00 0.99 0.71   0
+Fri Jan 10 04:49:00 2014  DEBUG        13  ...................   0.64  0.00 0.99/0.61/1.00 1.00 0.95 0.68   0
+Fri Jan 10 04:49:00 2014  DEBUG        14  ...................   0.68  0.00 0.98/0.62/1.00 1.00 1.00 0.68   0
+Fri Jan 10 04:49:00 2014  DEBUG        15  ...................   0.55  0.00 0.98/0.71/1.00 1.00 0.99 0.68   0
+Fri Jan 10 04:49:00 2014  DEBUG        16  ...................   0.29  0.00 0.99/0.76/1.00 1.00 0.99 0.67   0
+Fri Jan 10 04:49:00 2014  DEBUG        17  ...................   0.25  0.00 0.99/0.77/1.00 1.00 1.00 0.67   0
+Fri Jan 10 04:49:00 2014  DEBUG        18  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.66   0
+Fri Jan 10 04:49:00 2014  DEBUG        19  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.66   0
+Fri Jan 10 04:49:00 2014  DEBUG        20  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.65   0
+Fri Jan 10 04:49:00 2014  DEBUG        21  ...................   0.25  0.00 0.98/0.76/1.00 1.00 0.99 0.64   0
+Fri Jan 10 04:49:00 2014  DEBUG        22  ...................   0.24  0.00 0.98/0.78/1.00 1.00 1.00 0.64   0
+Fri Jan 10 04:49:00 2014  DEBUG        23  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.64   0
+Fri Jan 10 04:49:00 2014  DEBUG        24  ...................   0.22  0.00 0.99/0.78/1.00 1.00 0.99 0.64   0
+Fri Jan 10 04:49:00 2014  DEBUG        25  ...................   0.24  0.00 0.99/0.78/1.00 1.00 1.00 0.63   0
+Fri Jan 10 04:49:00 2014  DEBUG        26  ...................   0.24  0.00 1.00/0.76/1.00 1.00 0.99 0.63   0
+Fri Jan 10 04:49:00 2014  DEBUG        27  ...................   0.18  0.00 1.00/0.82/1.00 1.00 0.99 0.62   0
+Fri Jan 10 04:49:00 2014  DEBUG        28  ...................   0.08  0.00 1.00/0.92/1.00 1.00 0.98 0.61   0
+Fri Jan 10 04:49:00 2014  DEBUG        29  ...................   0.02  0.00 1.00/0.98/1.00 1.00 1.00 0.61   0
+Fri Jan 10 04:49:00 2014  DEBUG        30  ...................   0.00  0.00 1.00/1.00/1.00 1.00 1.00 0.61   0
+Fri Jan 10 04:49:00 2014  DEBUG        31  ...................   0.00  0.00 1.00/1.00/1.00 1.00 1.00 0.60   0
+Fri Jan 10 04:49:00 2014  DEBUG        [mcl] jury pruning marks: <100,100,100>, out of 100
+Fri Jan 10 04:49:00 2014  DEBUG        [mcl] jury pruning synopsis: <100.0 or really really really good> (cf -scheme, -do log)
+Fri Jan 10 04:49:00 2014  DEBUG        [mcl] output is in intermediate/mcl_output
+Fri Jan 10 04:49:00 2014  DEBUG        [mcl] 260 clusters found
+Fri Jan 10 04:49:00 2014  DEBUG        [mcl] output is in intermediate/mcl_output
+Fri Jan 10 04:49:00 2014  DEBUG        
+Fri Jan 10 04:49:00 2014  DEBUG        Please cite:
+Fri Jan 10 04:49:00 2014  DEBUG        Stijn van Dongen, Graph Clustering by Flow Simulation.  PhD thesis,
+Fri Jan 10 04:49:00 2014  DEBUG        University of Utrecht, May 2000.
+Fri Jan 10 04:49:00 2014  DEBUG        (  http://www.library.uu.nl/digiarchief/dip/diss/1895620/full.pdf
+Fri Jan 10 04:49:00 2014  DEBUG        or  http://micans.org/mcl/lit/svdthesis.pdf.gz)
+Fri Jan 10 04:49:00 2014  DEBUG        OR
+Fri Jan 10 04:49:00 2014  DEBUG        Stijn van Dongen, A cluster algorithm for graphs. Technical
+Fri Jan 10 04:49:00 2014  DEBUG        Report INS-R0010, National Research Institute for Mathematics
+Fri Jan 10 04:49:00 2014  DEBUG        and Computer Science in the Netherlands, Amsterdam, May 2000.
+Fri Jan 10 04:49:00 2014  DEBUG        (  http://www.cwi.nl/ftp/CWIreports/INS/INS-R0010.ps.Z
+Fri Jan 10 04:49:00 2014  DEBUG        or  http://micans.org/mcl/lit/INS-R0010.ps.Z)
+Fri Jan 10 04:49:00 2014  DEBUG        
+Fri Jan 10 04:49:00 2014  DEBUG           Ret 0
+Fri Jan 10 04:49:00 2014  INFO         Done.
+Fri Jan 10 04:49:00 2014  INFO      
+Fri Jan 10 04:49:00 2014  INFO      12. Saving orthogroups
+Fri Jan 10 04:49:00 2014  INFO         Overwriting existing orthogroups.tsv, orthogroups_nice.txt
+Fri Jan 10 04:49:00 2014  DEBUG        Reading annotations/NC_005816.1.gb
+Fri Jan 10 04:49:00 2014  DEBUG        Reading annotations/NC_008253.1.gb
+Fri Jan 10 04:49:02 2014  DEBUG        Reading annotations/NC_011748.1.gb
+Fri Jan 10 04:49:04 2014  INFO      
+Fri Jan 10 04:49:04 2014  INFO         Saved 260 groups, totally contating 602 genes.
+Fri Jan 10 04:49:04 2014  INFO         Done.
+Fri Jan 10 04:49:04 2014  INFO      
+Fri Jan 10 04:49:04 2014  INFO      Done.
+Fri Jan 10 04:49:04 2014  INFO      Log is in test_input/prots/log.txt
+Fri Jan 10 04:49:04 2014  INFO      Groups are in test_input/prots/orthogroups.tsv
+Fri Jan 10 04:49:04 2014  INFO      Groups with aligned columns are in test_input/prots/orthogroups_nice.txt
+Fri Jan 10 04:58:02 2014  INFO      test_input/prots -d
+
+Fri Jan 10 04:58:02 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 04:58:02 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 04:58:02 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 04:58:02 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 04:58:02 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 04:58:02 2014  INFO      Changing to test_input/prots
+Fri Jan 10 04:58:02 2014  INFO      Workflow id is "prots"
+Fri Jan 10 04:58:02 2014  INFO      
+Fri Jan 10 04:58:02 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 04:58:02 2014  INFO      1. Processing proteomes
+Fri Jan 10 04:58:02 2014  INFO         Overwriting existing proteomes
+Fri Jan 10 04:58:02 2014  INFO         Done.
+Fri Jan 10 04:58:02 2014  INFO      
+Fri Jan 10 04:58:02 2014  INFO      2. Filtering proteomes
+Fri Jan 10 04:58:02 2014  INFO         Overwriting existing intermediate/good_proteins.fasta, intermediate/poor_proteins.fasta
+Fri Jan 10 04:58:02 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclFilterFasta.pl proteomes 10 20 intermediate/good_proteins.fasta intermediate/poor_proteins.fasta
+Fri Jan 10 04:58:02 2014  INFO         processing file NC_005816.1.fasta
+Fri Jan 10 04:58:02 2014  INFO         processing file NC_008253.1.fasta
+Fri Jan 10 04:58:02 2014  INFO         processing file NC_011748.1.fasta
+Fri Jan 10 04:58:02 2014  DEBUG           Ret 0
+Fri Jan 10 04:58:02 2014  INFO         Done.
+Fri Jan 10 04:58:02 2014  INFO      
+Fri Jan 10 04:58:02 2014  INFO      3. Making blast database
+Fri Jan 10 04:58:02 2014  INFO         Overwriting existing intermediate/blastdb.phr, intermediate/blastdb.pin, intermediate/blastdb.psq
+Fri Jan 10 04:58:02 2014  INFO         makeblastdb -in intermediate/good_proteins.fasta -input_type fasta -out intermediate/blastdb -dbtype prot
+Fri Jan 10 04:58:02 2014  DEBUG        
+Fri Jan 10 04:58:02 2014  DEBUG        
+Fri Jan 10 04:58:02 2014  DEBUG        Building a new DB, current time: 01/10/2014 04:58:02
+Fri Jan 10 04:58:02 2014  DEBUG        New DB name:   intermediate/blastdb
+Fri Jan 10 04:58:02 2014  DEBUG        New DB title:  intermediate/good_proteins.fasta
+Fri Jan 10 04:58:02 2014  DEBUG        Sequence type: Protein
+Fri Jan 10 04:58:02 2014  DEBUG        Keep Linkouts: T
+Fri Jan 10 04:58:02 2014  DEBUG        Keep MBits: T
+Fri Jan 10 04:58:02 2014  DEBUG        Maximum file size: 1073741824B
+Fri Jan 10 04:58:03 2014  DEBUG        Adding sequences from FASTA; added 988 sequences in 0.133495 seconds.
+Fri Jan 10 04:58:03 2014  DEBUG           Ret 0
+Fri Jan 10 04:58:03 2014  INFO         Done.
+Fri Jan 10 04:58:03 2014  INFO      
+Fri Jan 10 04:58:03 2014  INFO      4. Blasting
+Fri Jan 10 04:58:03 2014  INFO         Overwriting existing intermediate/blasted.tsv
+Fri Jan 10 04:58:03 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000 -num_threads 30
+Fri Jan 10 04:58:03 2014  DEBUG           Ret -6
+Fri Jan 10 04:58:03 2014  INFO      
+Fri Jan 10 04:58:03 2014  WARNING   Warning: blast refused to run multithreaded, running single-threaded instead.
+Fri Jan 10 04:58:03 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000
+Fri Jan 10 04:58:14 2014  DEBUG           Ret 0
+Fri Jan 10 04:58:14 2014  INFO         Done.
+Fri Jan 10 04:58:14 2014  INFO      
+Fri Jan 10 04:58:14 2014  INFO      5. Parsing blast results
+Fri Jan 10 04:58:14 2014  INFO         Overwriting existing intermediate/similar_sequences.txt
+Fri Jan 10 04:58:14 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclBlastParser.pl intermediate/blasted.tsv proteomes > intermediate/similar_sequences.txt
+Fri Jan 10 04:58:14 2014  INFO         acquiring genes from NC_005816.1.fasta
+Fri Jan 10 04:58:14 2014  INFO         acquiring genes from NC_008253.1.fasta
+Fri Jan 10 04:58:14 2014  INFO         acquiring genes from NC_011748.1.fasta
+Fri Jan 10 04:58:14 2014  DEBUG           Ret 0
+Fri Jan 10 04:58:14 2014  INFO         Done.
+Fri Jan 10 04:58:14 2014  INFO      
+Fri Jan 10 04:58:14 2014  INFO      6. Cleaning database
+Fri Jan 10 04:58:14 2014  INFO         Done.
+Fri Jan 10 04:58:14 2014  INFO      
+Fri Jan 10 04:58:14 2014  INFO      7. Installing schema
+Fri Jan 10 04:58:14 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclInstallSchema.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/log.sql _prots
+Fri Jan 10 04:58:14 2014  DEBUG           Ret 0
+Fri Jan 10 04:58:14 2014  INFO         Done.
+Fri Jan 10 04:58:14 2014  INFO      
+Fri Jan 10 04:58:14 2014  INFO      8. Loading blast results into the database
+Fri Jan 10 04:58:14 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclLoadBlast.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/similar_sequences.txt _prots
+Fri Jan 10 04:58:15 2014  DEBUG           Ret 0
+Fri Jan 10 04:58:15 2014  INFO         Done.
+Fri Jan 10 04:58:15 2014  INFO      
+Fri Jan 10 04:58:15 2014  INFO      9. Finding pairs
+Fri Jan 10 04:58:15 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclPairs.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/orthomclpairs.log cleanup=yes suffix=_prots
+Fri Jan 10 04:58:16 2014  DEBUG           Ret 0
+Fri Jan 10 04:58:16 2014  INFO         Done.
+Fri Jan 10 04:58:16 2014  INFO      
+Fri Jan 10 04:58:16 2014  INFO      10. Dump pairs files
+Fri Jan 10 04:58:16 2014  INFO         Overwriting existing intermediate/mcl_input, intermediate/pairs
+Fri Jan 10 04:58:16 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclDumpPairsFiles.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config mcl_input intermediate _prots
+Fri Jan 10 04:58:16 2014  DEBUG           Ret 0
+Fri Jan 10 04:58:16 2014  INFO         Done.
+Fri Jan 10 04:58:16 2014  INFO      
+Fri Jan 10 04:58:16 2014  INFO      11. MCL
+Fri Jan 10 04:58:16 2014  INFO         Overwriting existing intermediate/mcl_output
+Fri Jan 10 04:58:16 2014  INFO         mcl intermediate/mcl_input --abc -I 1.5 -o intermediate/mcl_output
+Fri Jan 10 04:58:16 2014  DEBUG        [mcl] new tab created
+Fri Jan 10 04:58:16 2014  DEBUG        [mcl] pid 59757
+Fri Jan 10 04:58:16 2014  DEBUG        ite -------------------  chaos  time hom(avg,lo,hi) expa expb expc fmv
+Fri Jan 10 04:58:16 2014  DEBUG        1  ...................   1.66  0.00 0.97/0.63/1.36 1.08 1.08 1.08   3
+Fri Jan 10 04:58:16 2014  DEBUG        2  ...................   1.46  0.00 0.96/0.50/1.32 1.01 1.01 1.10   4
+Fri Jan 10 04:58:16 2014  DEBUG        3  ...................   1.07  0.00 0.96/0.54/1.11 1.00 1.00 1.09   4
+Fri Jan 10 04:58:16 2014  DEBUG        4  ...................   1.11  0.00 0.97/0.42/1.31 1.00 0.97 1.07   4
+Fri Jan 10 04:58:16 2014  DEBUG        5  ...................   1.21  0.00 0.97/0.41/1.00 1.01 0.95 1.01   4
+Fri Jan 10 04:58:16 2014  DEBUG        6  ...................   1.24  0.00 0.97/0.57/1.00 1.01 0.93 0.94   3
+Fri Jan 10 04:58:16 2014  DEBUG        7  ...................   0.92  0.00 0.98/0.54/1.00 1.00 0.91 0.86   3
+Fri Jan 10 04:58:16 2014  DEBUG        8  ...................   0.81  0.00 0.98/0.64/1.00 1.00 0.92 0.79   3
+Fri Jan 10 04:58:16 2014  DEBUG        9  ...................   0.45  0.00 0.98/0.76/1.00 1.00 0.99 0.78   3
+Fri Jan 10 04:58:16 2014  DEBUG        10  ...................   0.27  0.00 0.99/0.76/1.00 1.00 0.96 0.74   3
+Fri Jan 10 04:58:16 2014  DEBUG        11  ...................   0.38  0.00 0.99/0.78/1.00 1.00 0.97 0.72   0
+Fri Jan 10 04:58:16 2014  DEBUG        12  ...................   0.52  0.00 0.99/0.69/1.00 1.00 0.99 0.71   0
+Fri Jan 10 04:58:16 2014  DEBUG        13  ...................   0.64  0.00 0.99/0.61/1.00 1.00 0.95 0.68   0
+Fri Jan 10 04:58:16 2014  DEBUG        14  ...................   0.68  0.00 0.98/0.62/1.00 1.00 1.00 0.68   0
+Fri Jan 10 04:58:16 2014  DEBUG        15  ...................   0.55  0.00 0.98/0.71/1.00 1.00 0.99 0.68   0
+Fri Jan 10 04:58:16 2014  DEBUG        16  ...................   0.29  0.00 0.99/0.76/1.00 1.00 0.99 0.67   0
+Fri Jan 10 04:58:16 2014  DEBUG        17  ...................   0.25  0.00 0.99/0.77/1.00 1.00 1.00 0.67   0
+Fri Jan 10 04:58:16 2014  DEBUG        18  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.66   0
+Fri Jan 10 04:58:16 2014  DEBUG        19  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.66   0
+Fri Jan 10 04:58:16 2014  DEBUG        20  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.65   0
+Fri Jan 10 04:58:16 2014  DEBUG        21  ...................   0.25  0.00 0.98/0.76/1.00 1.00 0.99 0.64   0
+Fri Jan 10 04:58:16 2014  DEBUG        22  ...................   0.24  0.00 0.98/0.78/1.00 1.00 1.00 0.64   0
+Fri Jan 10 04:58:16 2014  DEBUG        23  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.64   0
+Fri Jan 10 04:58:16 2014  DEBUG        24  ...................   0.22  0.00 0.99/0.78/1.00 1.00 0.99 0.64   0
+Fri Jan 10 04:58:16 2014  DEBUG        25  ...................   0.24  0.00 0.99/0.78/1.00 1.00 1.00 0.63   0
+Fri Jan 10 04:58:16 2014  DEBUG        26  ...................   0.24  0.00 1.00/0.76/1.00 1.00 0.99 0.63   0
+Fri Jan 10 04:58:16 2014  DEBUG        27  ...................   0.18  0.00 1.00/0.82/1.00 1.00 0.99 0.62   0
+Fri Jan 10 04:58:16 2014  DEBUG        28  ...................   0.08  0.00 1.00/0.92/1.00 1.00 0.98 0.61   0
+Fri Jan 10 04:58:16 2014  DEBUG        29  ...................   0.02  0.00 1.00/0.98/1.00 1.00 1.00 0.61   0
+Fri Jan 10 04:58:16 2014  DEBUG        30  ...................   0.00  0.00 1.00/1.00/1.00 1.00 1.00 0.61   0
+Fri Jan 10 04:58:16 2014  DEBUG        31  ...................   0.00  0.00 1.00/1.00/1.00 1.00 1.00 0.60   0
+Fri Jan 10 04:58:16 2014  DEBUG        [mcl] jury pruning marks: <100,100,100>, out of 100
+Fri Jan 10 04:58:16 2014  DEBUG        [mcl] jury pruning synopsis: <100.0 or really really really good> (cf -scheme, -do log)
+Fri Jan 10 04:58:16 2014  DEBUG        [mcl] output is in intermediate/mcl_output
+Fri Jan 10 04:58:16 2014  DEBUG        [mcl] 260 clusters found
+Fri Jan 10 04:58:16 2014  DEBUG        [mcl] output is in intermediate/mcl_output
+Fri Jan 10 04:58:16 2014  DEBUG        
+Fri Jan 10 04:58:16 2014  DEBUG        Please cite:
+Fri Jan 10 04:58:16 2014  DEBUG        Stijn van Dongen, Graph Clustering by Flow Simulation.  PhD thesis,
+Fri Jan 10 04:58:16 2014  DEBUG        University of Utrecht, May 2000.
+Fri Jan 10 04:58:16 2014  DEBUG        (  http://www.library.uu.nl/digiarchief/dip/diss/1895620/full.pdf
+Fri Jan 10 04:58:16 2014  DEBUG        or  http://micans.org/mcl/lit/svdthesis.pdf.gz)
+Fri Jan 10 04:58:16 2014  DEBUG        OR
+Fri Jan 10 04:58:16 2014  DEBUG        Stijn van Dongen, A cluster algorithm for graphs. Technical
+Fri Jan 10 04:58:16 2014  DEBUG        Report INS-R0010, National Research Institute for Mathematics
+Fri Jan 10 04:58:16 2014  DEBUG        and Computer Science in the Netherlands, Amsterdam, May 2000.
+Fri Jan 10 04:58:16 2014  DEBUG        (  http://www.cwi.nl/ftp/CWIreports/INS/INS-R0010.ps.Z
+Fri Jan 10 04:58:16 2014  DEBUG        or  http://micans.org/mcl/lit/INS-R0010.ps.Z)
+Fri Jan 10 04:58:16 2014  DEBUG        
+Fri Jan 10 04:58:16 2014  DEBUG           Ret 0
+Fri Jan 10 04:58:16 2014  INFO         Done.
+Fri Jan 10 04:58:16 2014  INFO      
+Fri Jan 10 04:58:16 2014  INFO      12. Saving orthogroups
+Fri Jan 10 04:58:16 2014  INFO         Overwriting existing orthogroups.tsv, orthogroups_nice.txt
+Fri Jan 10 04:58:16 2014  DEBUG        Reading annotations/NC_005816.1.gb
+Fri Jan 10 04:58:16 2014  DEBUG        Reading annotations/NC_008253.1.gb
+Fri Jan 10 04:58:17 2014  DEBUG        Reading annotations/NC_011748.1.gb
+Fri Jan 10 04:58:19 2014  INFO      
+Fri Jan 10 04:58:19 2014  INFO         Saved 260 groups, totally contating 602 genes.
+Fri Jan 10 04:58:20 2014  INFO         Done.
+Fri Jan 10 04:58:20 2014  INFO      
+Fri Jan 10 04:58:20 2014  INFO      Done.
+Fri Jan 10 04:58:20 2014  INFO      Log is in test_input/prots/log.txt
+Fri Jan 10 04:58:20 2014  INFO      Groups are in test_input/prots/orthogroups.tsv
+Fri Jan 10 04:58:20 2014  INFO      Groups with aligned columns are in test_input/prots/orthogroups_nice.txt
+Fri Jan 10 05:04:13 2014  INFO      test_input/prots
+
+Fri Jan 10 05:04:13 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 05:04:13 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 05:04:13 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 05:04:13 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 05:04:13 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 05:04:13 2014  INFO      Changing to test_input/prots
+Fri Jan 10 05:04:13 2014  INFO      Workflow id is "prots"
+Fri Jan 10 05:04:13 2014  INFO      
+Fri Jan 10 05:04:13 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 05:04:13 2014  INFO      1. Processing proteomes
+Fri Jan 10 05:04:13 2014  INFO         Overwriting existing proteomes
+Fri Jan 10 05:04:13 2014  INFO         Done.
+Fri Jan 10 05:04:13 2014  INFO      
+Fri Jan 10 05:04:13 2014  INFO      2. Filtering proteomes
+Fri Jan 10 05:04:13 2014  INFO         Overwriting existing intermediate/good_proteins.fasta, intermediate/poor_proteins.fasta
+Fri Jan 10 05:04:13 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclFilterFasta.pl proteomes 10 20 intermediate/good_proteins.fasta intermediate/poor_proteins.fasta
+Fri Jan 10 05:04:13 2014  INFO         processing file NC_005816.1.fasta
+Fri Jan 10 05:04:13 2014  INFO         processing file NC_008253.1.fasta
+Fri Jan 10 05:04:13 2014  INFO         processing file NC_011748.1.fasta
+Fri Jan 10 05:04:13 2014  DEBUG           Ret 0
+Fri Jan 10 05:04:13 2014  INFO         Done.
+Fri Jan 10 05:04:13 2014  INFO      
+Fri Jan 10 05:04:13 2014  INFO      3. Making blast database
+Fri Jan 10 05:04:13 2014  INFO         Overwriting existing intermediate/blastdb.phr, intermediate/blastdb.pin, intermediate/blastdb.psq
+Fri Jan 10 05:04:13 2014  INFO         makeblastdb -in intermediate/good_proteins.fasta -input_type fasta -out intermediate/blastdb -dbtype prot
+Fri Jan 10 05:04:13 2014  DEBUG        
+Fri Jan 10 05:04:13 2014  DEBUG        
+Fri Jan 10 05:04:13 2014  DEBUG        Building a new DB, current time: 01/10/2014 05:04:13
+Fri Jan 10 05:04:13 2014  DEBUG        New DB name:   intermediate/blastdb
+Fri Jan 10 05:04:13 2014  DEBUG        New DB title:  intermediate/good_proteins.fasta
+Fri Jan 10 05:04:13 2014  DEBUG        Sequence type: Protein
+Fri Jan 10 05:04:13 2014  DEBUG        Keep Linkouts: T
+Fri Jan 10 05:04:13 2014  DEBUG        Keep MBits: T
+Fri Jan 10 05:04:13 2014  DEBUG        Maximum file size: 1073741824B
+Fri Jan 10 05:04:14 2014  DEBUG        Adding sequences from FASTA; added 988 sequences in 0.101224 seconds.
+Fri Jan 10 05:04:14 2014  DEBUG           Ret 0
+Fri Jan 10 05:04:14 2014  INFO         Done.
+Fri Jan 10 05:04:14 2014  INFO      
+Fri Jan 10 05:04:14 2014  INFO      4. Blasting
+Fri Jan 10 05:04:14 2014  INFO         Overwriting existing intermediate/blasted.tsv
+Fri Jan 10 05:04:14 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000 -num_threads 30
+Fri Jan 10 05:04:14 2014  DEBUG           Ret -6
+Fri Jan 10 05:04:14 2014  INFO      
+Fri Jan 10 05:04:14 2014  WARNING   Warning: blast refused to run multithreaded, running single-threaded instead.
+Fri Jan 10 05:04:14 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000
+Fri Jan 10 05:04:25 2014  DEBUG           Ret 0
+Fri Jan 10 05:04:25 2014  INFO         Done.
+Fri Jan 10 05:04:25 2014  INFO      
+Fri Jan 10 05:04:25 2014  INFO      5. Parsing blast results
+Fri Jan 10 05:04:25 2014  INFO         Overwriting existing intermediate/similar_sequences.txt
+Fri Jan 10 05:04:25 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclBlastParser.pl intermediate/blasted.tsv proteomes > intermediate/similar_sequences.txt
+Fri Jan 10 05:04:25 2014  INFO         acquiring genes from NC_005816.1.fasta
+Fri Jan 10 05:04:25 2014  INFO         acquiring genes from NC_008253.1.fasta
+Fri Jan 10 05:04:25 2014  INFO         acquiring genes from NC_011748.1.fasta
+Fri Jan 10 05:04:25 2014  DEBUG           Ret 0
+Fri Jan 10 05:04:25 2014  INFO         Done.
+Fri Jan 10 05:04:25 2014  INFO      
+Fri Jan 10 05:04:25 2014  INFO      6. Cleaning database
+Fri Jan 10 05:04:25 2014  INFO         Done.
+Fri Jan 10 05:04:25 2014  INFO      
+Fri Jan 10 05:04:25 2014  INFO      7. Installing schema
+Fri Jan 10 05:04:25 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclInstallSchema.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/log.sql _prots
+Fri Jan 10 05:04:25 2014  INFO         DBD::mysql::st execute failed: Table 'similarsequences_prots' already exists at /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclInstallSchema.pl line 184, <F> line 12.
+Fri Jan 10 05:04:25 2014  DEBUG           Ret 25
+Fri Jan 10 05:04:25 2014  INFO      
+Fri Jan 10 05:04:25 2014  WARNING      Process was not complete. You can restart from this point using --start-from "Installing schema"
+Fri Jan 10 05:40:57 2014  INFO      test_input/prots --prot-id-field 1
+
+Fri Jan 10 05:40:57 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 05:40:57 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 05:40:57 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 05:40:57 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 05:40:58 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 05:40:58 2014  INFO      Changing to test_input/prots
+Fri Jan 10 05:40:58 2014  INFO      Workflow id is "prots"
+Fri Jan 10 05:40:58 2014  INFO      
+Fri Jan 10 05:40:58 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 05:45:35 2014  INFO      test_input/prots --prot-id-field 1
+
+Fri Jan 10 05:45:35 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 05:45:35 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 05:45:35 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 05:45:35 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 05:45:35 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 05:45:35 2014  INFO      Changing to test_input/prots
+Fri Jan 10 05:45:35 2014  INFO      Workflow id is "prots"
+Fri Jan 10 05:45:35 2014  INFO      
+Fri Jan 10 05:45:35 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 05:45:35 2014  INFO      1. Adjusting proteomes
+Fri Jan 10 05:45:35 2014  INFO         Overwriting existing proteomes
+Fri Jan 10 05:46:08 2014  INFO      test_input/prots --prot-id-field 1
+
+Fri Jan 10 05:46:08 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 05:46:09 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 05:46:09 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 05:46:09 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 05:46:09 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 05:46:09 2014  INFO      Changing to test_input/prots
+Fri Jan 10 05:46:09 2014  INFO      Workflow id is "prots"
+Fri Jan 10 05:46:09 2014  INFO      
+Fri Jan 10 05:46:09 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 05:46:09 2014  INFO      1. Adjusting proteomes
+Fri Jan 10 05:46:09 2014  INFO         Overwriting existing proteomes
+Fri Jan 10 05:46:22 2014  INFO      test_input/prots --prot-id-field 1
+
+Fri Jan 10 05:46:22 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 05:46:24 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 05:46:24 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 05:46:24 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 05:46:24 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 05:46:24 2014  INFO      Changing to test_input/prots
+Fri Jan 10 05:46:24 2014  INFO      Workflow id is "prots"
+Fri Jan 10 05:46:24 2014  INFO      
+Fri Jan 10 05:46:24 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 05:46:24 2014  INFO      1. Adjusting proteomes
+Fri Jan 10 05:46:24 2014  INFO         Overwriting existing proteomes
+Fri Jan 10 05:47:20 2014  INFO      test_input/prots --prot-id-field 1
+
+Fri Jan 10 05:47:20 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 05:47:20 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 05:47:20 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 05:47:20 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 05:47:20 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 05:47:20 2014  INFO      Changing to test_input/prots
+Fri Jan 10 05:47:20 2014  INFO      Workflow id is "prots"
+Fri Jan 10 05:47:20 2014  INFO      
+Fri Jan 10 05:47:20 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 05:47:20 2014  INFO      1. Adjusting proteomes
+Fri Jan 10 05:47:20 2014  INFO         Overwriting existing proteomes
+Fri Jan 10 05:47:20 2014  INFO         Done.
+Fri Jan 10 05:47:20 2014  INFO      
+Fri Jan 10 05:47:20 2014  INFO      2. Filtering proteomes
+Fri Jan 10 05:47:20 2014  INFO         Overwriting existing intermediate/good_proteins.fasta, intermediate/poor_proteins.fasta
+Fri Jan 10 05:47:20 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclFilterFasta.pl proteomes 10 20 intermediate/good_proteins.fasta intermediate/poor_proteins.fasta
+Fri Jan 10 05:47:21 2014  INFO         processing file NC_005816.1.fasta.fasta
+Fri Jan 10 05:47:21 2014  INFO         processing file NC_008253.1.fasta.fasta
+Fri Jan 10 05:47:21 2014  INFO         processing file NC_011748.1.fasta.fasta
+Fri Jan 10 05:47:21 2014  DEBUG           Ret 0
+Fri Jan 10 05:47:21 2014  INFO         Done.
+Fri Jan 10 05:47:21 2014  INFO      
+Fri Jan 10 05:47:21 2014  INFO      3. Making blast database
+Fri Jan 10 05:47:21 2014  INFO         Overwriting existing intermediate/blastdb.phr, intermediate/blastdb.pin, intermediate/blastdb.psq
+Fri Jan 10 05:47:21 2014  INFO         makeblastdb -in intermediate/good_proteins.fasta -input_type fasta -out intermediate/blastdb -dbtype prot
+Fri Jan 10 05:47:21 2014  DEBUG        
+Fri Jan 10 05:47:21 2014  DEBUG        
+Fri Jan 10 05:47:21 2014  DEBUG        Building a new DB, current time: 01/10/2014 05:47:21
+Fri Jan 10 05:47:21 2014  DEBUG        New DB name:   intermediate/blastdb
+Fri Jan 10 05:47:21 2014  DEBUG        New DB title:  intermediate/good_proteins.fasta
+Fri Jan 10 05:47:21 2014  DEBUG        Sequence type: Protein
+Fri Jan 10 05:47:21 2014  DEBUG        Keep Linkouts: T
+Fri Jan 10 05:47:21 2014  DEBUG        Keep MBits: T
+Fri Jan 10 05:47:21 2014  DEBUG        Maximum file size: 1073741824B
+Fri Jan 10 05:47:21 2014  DEBUG        Adding sequences from FASTA; added 3 sequences in 0.00127292 seconds.
+Fri Jan 10 05:47:21 2014  DEBUG           Ret 0
+Fri Jan 10 05:47:21 2014  INFO         Done.
+Fri Jan 10 05:47:21 2014  INFO      
+Fri Jan 10 05:47:21 2014  INFO      4. Blasting
+Fri Jan 10 05:47:21 2014  INFO         Overwriting existing intermediate/blasted.tsv
+Fri Jan 10 05:47:21 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000 -num_threads 30
+Fri Jan 10 05:47:21 2014  DEBUG           Ret -6
+Fri Jan 10 05:47:21 2014  INFO      
+Fri Jan 10 05:47:21 2014  WARNING   Warning: blast refused to run multithreaded, running single-threaded instead.
+Fri Jan 10 05:47:21 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000
+Fri Jan 10 05:47:21 2014  DEBUG           Ret 0
+Fri Jan 10 05:47:21 2014  INFO         Done.
+Fri Jan 10 05:47:21 2014  INFO      
+Fri Jan 10 05:47:21 2014  INFO      5. Parsing blast results
+Fri Jan 10 05:47:21 2014  INFO         Overwriting existing intermediate/similar_sequences.txt
+Fri Jan 10 05:47:21 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclBlastParser.pl intermediate/blasted.tsv proteomes > intermediate/similar_sequences.txt
+Fri Jan 10 05:47:21 2014  INFO         acquiring genes from NC_005816.1.fasta.fasta
+Fri Jan 10 05:47:21 2014  INFO         acquiring genes from NC_008253.1.fasta.fasta
+Fri Jan 10 05:47:21 2014  INFO         acquiring genes from NC_011748.1.fasta.fasta
+Fri Jan 10 05:47:21 2014  DEBUG           Ret 0
+Fri Jan 10 05:47:21 2014  INFO         Done.
+Fri Jan 10 05:47:21 2014  INFO      
+Fri Jan 10 05:47:21 2014  INFO      6. Cleaning database
+Fri Jan 10 05:47:21 2014  INFO         Done.
+Fri Jan 10 05:47:21 2014  INFO      
+Fri Jan 10 05:47:21 2014  INFO      7. Installing schema
+Fri Jan 10 05:47:21 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclInstallSchema.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/log.sql _prots
+Fri Jan 10 05:47:21 2014  INFO         DBD::mysql::st execute failed: Table 'similarsequences_prots' already exists at /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclInstallSchema.pl line 184, <F> line 12.
+Fri Jan 10 05:47:21 2014  DEBUG           Ret 25
+Fri Jan 10 05:47:21 2014  INFO      
+Fri Jan 10 05:47:21 2014  WARNING      Process was not complete. You can restart from this point using --start-from "Installing schema"
+Fri Jan 10 05:47:43 2014  INFO      test_input/prots --prot-id-field 1
+
+Fri Jan 10 05:47:43 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 05:47:47 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 05:47:47 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 05:47:47 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 05:47:47 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 05:47:47 2014  INFO      Changing to test_input/prots
+Fri Jan 10 05:47:47 2014  INFO      Workflow id is "prots"
+Fri Jan 10 05:47:47 2014  INFO      
+Fri Jan 10 05:47:47 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 05:47:47 2014  INFO      1. Adjusting proteomes
+Fri Jan 10 05:47:47 2014  INFO         Overwriting existing proteomes
+Fri Jan 10 05:47:51 2014  INFO         Done.
+Fri Jan 10 05:47:51 2014  INFO      
+Fri Jan 10 05:47:51 2014  INFO      2. Filtering proteomes
+Fri Jan 10 05:47:51 2014  INFO         Overwriting existing intermediate/good_proteins.fasta, intermediate/poor_proteins.fasta
+Fri Jan 10 05:47:51 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclFilterFasta.pl proteomes 10 20 intermediate/good_proteins.fasta intermediate/poor_proteins.fasta
+Fri Jan 10 05:47:51 2014  INFO         processing file NC_005816.1.fasta.fasta
+Fri Jan 10 05:47:51 2014  INFO         processing file NC_008253.1.fasta.fasta
+Fri Jan 10 05:47:51 2014  INFO         processing file NC_011748.1.fasta.fasta
+Fri Jan 10 05:47:51 2014  DEBUG           Ret 0
+Fri Jan 10 05:47:51 2014  INFO         Done.
+Fri Jan 10 05:47:51 2014  INFO      
+Fri Jan 10 05:47:51 2014  INFO      3. Making blast database
+Fri Jan 10 05:47:51 2014  INFO         Overwriting existing intermediate/blastdb.phr, intermediate/blastdb.pin, intermediate/blastdb.psq
+Fri Jan 10 05:47:51 2014  INFO         makeblastdb -in intermediate/good_proteins.fasta -input_type fasta -out intermediate/blastdb -dbtype prot
+Fri Jan 10 05:47:51 2014  DEBUG        
+Fri Jan 10 05:47:51 2014  DEBUG        
+Fri Jan 10 05:47:51 2014  DEBUG        Building a new DB, current time: 01/10/2014 05:47:51
+Fri Jan 10 05:47:51 2014  DEBUG        New DB name:   intermediate/blastdb
+Fri Jan 10 05:47:51 2014  DEBUG        New DB title:  intermediate/good_proteins.fasta
+Fri Jan 10 05:47:51 2014  DEBUG        Sequence type: Protein
+Fri Jan 10 05:47:51 2014  DEBUG        Keep Linkouts: T
+Fri Jan 10 05:47:51 2014  DEBUG        Keep MBits: T
+Fri Jan 10 05:47:51 2014  DEBUG        Maximum file size: 1073741824B
+Fri Jan 10 05:47:51 2014  DEBUG        Adding sequences from FASTA; added 3 sequences in 0.00117493 seconds.
+Fri Jan 10 05:47:51 2014  DEBUG           Ret 0
+Fri Jan 10 05:47:51 2014  INFO         Done.
+Fri Jan 10 05:47:51 2014  INFO      
+Fri Jan 10 05:47:51 2014  INFO      4. Blasting
+Fri Jan 10 05:47:51 2014  INFO         Overwriting existing intermediate/blasted.tsv
+Fri Jan 10 05:47:51 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000 -num_threads 30
+Fri Jan 10 05:47:51 2014  DEBUG           Ret -6
+Fri Jan 10 05:47:51 2014  INFO      
+Fri Jan 10 05:47:51 2014  WARNING   Warning: blast refused to run multithreaded, running single-threaded instead.
+Fri Jan 10 05:47:51 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000
+Fri Jan 10 05:47:52 2014  DEBUG           Ret 0
+Fri Jan 10 05:47:52 2014  INFO         Done.
+Fri Jan 10 05:47:52 2014  INFO      
+Fri Jan 10 05:47:52 2014  INFO      5. Parsing blast results
+Fri Jan 10 05:47:52 2014  INFO         Overwriting existing intermediate/similar_sequences.txt
+Fri Jan 10 05:47:52 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclBlastParser.pl intermediate/blasted.tsv proteomes > intermediate/similar_sequences.txt
+Fri Jan 10 05:47:52 2014  INFO         acquiring genes from NC_005816.1.fasta.fasta
+Fri Jan 10 05:47:52 2014  INFO         acquiring genes from NC_008253.1.fasta.fasta
+Fri Jan 10 05:47:52 2014  INFO         acquiring genes from NC_011748.1.fasta.fasta
+Fri Jan 10 05:47:52 2014  DEBUG           Ret 0
+Fri Jan 10 05:47:52 2014  INFO         Done.
+Fri Jan 10 05:47:52 2014  INFO      
+Fri Jan 10 05:47:52 2014  INFO      6. Cleaning database
+Fri Jan 10 05:48:50 2014  INFO      test_input/prots --prot-id-field 1
+
+Fri Jan 10 05:48:50 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 05:48:50 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 05:48:50 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 05:48:50 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 05:48:50 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 05:48:50 2014  INFO      Changing to test_input/prots
+Fri Jan 10 05:48:50 2014  INFO      Workflow id is "prots"
+Fri Jan 10 05:48:50 2014  INFO      
+Fri Jan 10 05:48:50 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 05:48:50 2014  INFO      1. Adjusting proteomes
+Fri Jan 10 05:48:50 2014  INFO         Overwriting existing proteomes
+Fri Jan 10 05:48:50 2014  INFO         Done.
+Fri Jan 10 05:48:50 2014  INFO      
+Fri Jan 10 05:48:50 2014  INFO      2. Filtering proteomes
+Fri Jan 10 05:48:50 2014  INFO         Overwriting existing intermediate/good_proteins.fasta, intermediate/poor_proteins.fasta
+Fri Jan 10 05:48:50 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclFilterFasta.pl proteomes 10 20 intermediate/good_proteins.fasta intermediate/poor_proteins.fasta
+Fri Jan 10 05:48:50 2014  INFO         processing file NC_005816.1.fasta.fasta
+Fri Jan 10 05:48:50 2014  INFO         processing file NC_008253.1.fasta.fasta
+Fri Jan 10 05:48:50 2014  INFO         processing file NC_011748.1.fasta.fasta
+Fri Jan 10 05:48:50 2014  DEBUG           Ret 0
+Fri Jan 10 05:48:50 2014  INFO         Done.
+Fri Jan 10 05:48:50 2014  INFO      
+Fri Jan 10 05:48:50 2014  INFO      3. Making blast database
+Fri Jan 10 05:48:50 2014  INFO         Overwriting existing intermediate/blastdb.phr, intermediate/blastdb.pin, intermediate/blastdb.psq
+Fri Jan 10 05:48:50 2014  INFO         makeblastdb -in intermediate/good_proteins.fasta -input_type fasta -out intermediate/blastdb -dbtype prot
+Fri Jan 10 05:48:50 2014  DEBUG        
+Fri Jan 10 05:48:50 2014  DEBUG        
+Fri Jan 10 05:48:50 2014  DEBUG        Building a new DB, current time: 01/10/2014 05:48:50
+Fri Jan 10 05:48:50 2014  DEBUG        New DB name:   intermediate/blastdb
+Fri Jan 10 05:48:50 2014  DEBUG        New DB title:  intermediate/good_proteins.fasta
+Fri Jan 10 05:48:50 2014  DEBUG        Sequence type: Protein
+Fri Jan 10 05:48:50 2014  DEBUG        Keep Linkouts: T
+Fri Jan 10 05:48:50 2014  DEBUG        Keep MBits: T
+Fri Jan 10 05:48:50 2014  DEBUG        Maximum file size: 1073741824B
+Fri Jan 10 05:48:50 2014  DEBUG        Adding sequences from FASTA; added 3 sequences in 0.00123906 seconds.
+Fri Jan 10 05:48:50 2014  DEBUG           Ret 0
+Fri Jan 10 05:48:50 2014  INFO         Done.
+Fri Jan 10 05:48:50 2014  INFO      
+Fri Jan 10 05:48:50 2014  INFO      4. Blasting
+Fri Jan 10 05:48:50 2014  INFO         Overwriting existing intermediate/blasted.tsv
+Fri Jan 10 05:48:50 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000 -num_threads 30
+Fri Jan 10 05:48:51 2014  INFO      
+Fri Jan 10 05:48:51 2014  WARNING      Process was not complete. You can restart from this point using --start-from "Blasting"
+Fri Jan 10 05:48:54 2014  INFO      test_input/prots --prot-id-field 1
+
+Fri Jan 10 05:48:54 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 05:48:54 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 05:48:54 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 05:48:54 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 05:48:54 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 05:48:54 2014  INFO      Changing to test_input/prots
+Fri Jan 10 05:48:54 2014  INFO      Workflow id is "prots"
+Fri Jan 10 05:48:54 2014  INFO      
+Fri Jan 10 05:48:54 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 05:48:54 2014  INFO      1. Adjusting proteomes
+Fri Jan 10 05:48:54 2014  INFO         Overwriting existing proteomes
+Fri Jan 10 05:48:55 2014  INFO         Done.
+Fri Jan 10 05:48:55 2014  INFO      
+Fri Jan 10 05:48:55 2014  INFO      2. Filtering proteomes
+Fri Jan 10 05:48:55 2014  INFO         Overwriting existing intermediate/good_proteins.fasta, intermediate/poor_proteins.fasta
+Fri Jan 10 05:48:55 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclFilterFasta.pl proteomes 10 20 intermediate/good_proteins.fasta intermediate/poor_proteins.fasta
+Fri Jan 10 05:48:55 2014  INFO         processing file NC_005816.1.fasta.fasta
+Fri Jan 10 05:48:55 2014  INFO         processing file NC_008253.1.fasta.fasta
+Fri Jan 10 05:48:55 2014  INFO         processing file NC_011748.1.fasta.fasta
+Fri Jan 10 05:48:55 2014  DEBUG           Ret 0
+Fri Jan 10 05:48:55 2014  INFO         Done.
+Fri Jan 10 05:48:55 2014  INFO      
+Fri Jan 10 05:48:55 2014  INFO      3. Making blast database
+Fri Jan 10 05:48:55 2014  INFO         Overwriting existing intermediate/blastdb.phr, intermediate/blastdb.pin, intermediate/blastdb.psq
+Fri Jan 10 05:48:55 2014  INFO         makeblastdb -in intermediate/good_proteins.fasta -input_type fasta -out intermediate/blastdb -dbtype prot
+Fri Jan 10 05:48:55 2014  DEBUG        
+Fri Jan 10 05:48:55 2014  DEBUG        
+Fri Jan 10 05:48:55 2014  DEBUG        Building a new DB, current time: 01/10/2014 05:48:55
+Fri Jan 10 05:48:55 2014  DEBUG        New DB name:   intermediate/blastdb
+Fri Jan 10 05:48:55 2014  DEBUG        New DB title:  intermediate/good_proteins.fasta
+Fri Jan 10 05:48:55 2014  DEBUG        Sequence type: Protein
+Fri Jan 10 05:48:55 2014  DEBUG        Keep Linkouts: T
+Fri Jan 10 05:48:55 2014  DEBUG        Keep MBits: T
+Fri Jan 10 05:48:55 2014  DEBUG        Maximum file size: 1073741824B
+Fri Jan 10 05:48:55 2014  DEBUG        Adding sequences from FASTA; added 3 sequences in 0.00123906 seconds.
+Fri Jan 10 05:48:55 2014  DEBUG           Ret 0
+Fri Jan 10 05:48:55 2014  INFO         Done.
+Fri Jan 10 05:48:55 2014  INFO      
+Fri Jan 10 05:48:55 2014  INFO      4. Blasting
+Fri Jan 10 05:48:55 2014  INFO         Overwriting existing intermediate/blasted.tsv
+Fri Jan 10 05:48:55 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000 -num_threads 30
+Fri Jan 10 05:48:56 2014  DEBUG           Ret -6
+Fri Jan 10 05:48:56 2014  INFO      
+Fri Jan 10 05:48:56 2014  WARNING   Warning: blast refused to run multithreaded, running single-threaded instead.
+Fri Jan 10 05:48:56 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000
+Fri Jan 10 05:48:56 2014  DEBUG           Ret 0
+Fri Jan 10 05:48:56 2014  INFO         Done.
+Fri Jan 10 05:48:56 2014  INFO      
+Fri Jan 10 05:48:56 2014  INFO      5. Parsing blast results
+Fri Jan 10 05:48:56 2014  INFO         Overwriting existing intermediate/similar_sequences.txt
+Fri Jan 10 05:48:56 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclBlastParser.pl intermediate/blasted.tsv proteomes > intermediate/similar_sequences.txt
+Fri Jan 10 05:48:56 2014  INFO         acquiring genes from NC_005816.1.fasta.fasta
+Fri Jan 10 05:48:56 2014  INFO         acquiring genes from NC_008253.1.fasta.fasta
+Fri Jan 10 05:48:56 2014  INFO         acquiring genes from NC_011748.1.fasta.fasta
+Fri Jan 10 05:48:56 2014  DEBUG           Ret 0
+Fri Jan 10 05:48:56 2014  INFO         Done.
+Fri Jan 10 05:48:56 2014  INFO      
+Fri Jan 10 05:48:56 2014  INFO      6. Cleaning database
+Fri Jan 10 05:48:56 2014  INFO         Done.
+Fri Jan 10 05:48:56 2014  INFO      
+Fri Jan 10 05:48:56 2014  INFO      7. Installing schema
+Fri Jan 10 05:48:56 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclInstallSchema.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/log.sql _prots
+Fri Jan 10 05:48:56 2014  DEBUG           Ret 0
+Fri Jan 10 05:48:56 2014  INFO         Done.
+Fri Jan 10 05:48:56 2014  INFO      
+Fri Jan 10 05:48:56 2014  INFO      8. Loading blast results into the database
+Fri Jan 10 05:48:56 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclLoadBlast.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/similar_sequences.txt _prots
+Fri Jan 10 05:48:56 2014  DEBUG           Ret 0
+Fri Jan 10 05:48:56 2014  INFO         Done.
+Fri Jan 10 05:48:56 2014  INFO      
+Fri Jan 10 05:48:56 2014  INFO      9. Finding pairs
+Fri Jan 10 05:48:56 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclPairs.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/orthomclpairs.log cleanup=yes suffix=_prots
+Fri Jan 10 05:48:57 2014  DEBUG           Ret 0
+Fri Jan 10 05:48:57 2014  INFO         Done.
+Fri Jan 10 05:48:57 2014  INFO      
+Fri Jan 10 05:48:57 2014  INFO      10. Dump pairs files
+Fri Jan 10 05:48:57 2014  INFO         Overwriting existing intermediate/mcl_input, intermediate/pairs
+Fri Jan 10 05:48:57 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclDumpPairsFiles.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config mcl_input intermediate _prots
+Fri Jan 10 05:48:57 2014  DEBUG           Ret 0
+Fri Jan 10 05:48:57 2014  INFO         Done.
+Fri Jan 10 05:48:57 2014  INFO      
+Fri Jan 10 05:48:57 2014  INFO      11. MCL
+Fri Jan 10 05:48:57 2014  INFO         Overwriting existing intermediate/mcl_output
+Fri Jan 10 05:48:57 2014  INFO         mcl intermediate/mcl_input --abc -I 1.5 -o intermediate/mcl_output
+Fri Jan 10 05:48:57 2014  DEBUG        [mclxIOstreamIn] no assignments yield void/empty matrix
+Fri Jan 10 05:48:57 2014  DEBUG        [mcl] new tab created
+Fri Jan 10 05:48:57 2014  DEBUG        ___ [mclAlgorithmStart] attempting to cluster the void
+Fri Jan 10 05:48:57 2014  DEBUG        [mcl] pid 60867
+Fri Jan 10 05:48:57 2014  DEBUG        ite   chaos  time hom(avg,lo,hi) expa expb expc fmv
+Fri Jan 10 05:48:57 2014  DEBUG        1
+Fri Jan 10 05:48:57 2014  DEBUG           Ret -11
+Fri Jan 10 05:48:57 2014  INFO      
+Fri Jan 10 05:48:57 2014  WARNING      Process was not complete. You can restart from this point using --start-from "MCL"
+Fri Jan 10 05:50:36 2014  INFO      test_input/prots --prot-id-field 1
+
+Fri Jan 10 05:50:36 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 05:50:36 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 05:50:36 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 05:50:36 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 05:50:36 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 05:50:36 2014  INFO      Changing to test_input/prots
+Fri Jan 10 05:50:36 2014  INFO      Workflow id is "prots"
+Fri Jan 10 05:50:36 2014  INFO      
+Fri Jan 10 05:50:36 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 05:50:36 2014  INFO      1. Adjusting proteomes
+Fri Jan 10 05:50:36 2014  INFO         Overwriting existing proteomes
+Fri Jan 10 05:50:37 2014  INFO         Done.
+Fri Jan 10 05:50:37 2014  INFO      
+Fri Jan 10 05:50:37 2014  INFO      2. Filtering proteomes
+Fri Jan 10 05:50:37 2014  INFO         Overwriting existing intermediate/good_proteins.fasta, intermediate/poor_proteins.fasta
+Fri Jan 10 05:50:37 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclFilterFasta.pl proteomes 10 20 intermediate/good_proteins.fasta intermediate/poor_proteins.fasta
+Fri Jan 10 05:50:37 2014  INFO         processing file NC_005816.1.fasta
+Fri Jan 10 05:50:37 2014  INFO         processing file NC_008253.1.fasta
+Fri Jan 10 05:50:37 2014  INFO         processing file NC_011748.1.fasta
+Fri Jan 10 05:50:37 2014  DEBUG           Ret 0
+Fri Jan 10 05:50:37 2014  INFO         Done.
+Fri Jan 10 05:50:37 2014  INFO      
+Fri Jan 10 05:50:37 2014  INFO      3. Making blast database
+Fri Jan 10 05:50:37 2014  INFO         Overwriting existing intermediate/blastdb.phr, intermediate/blastdb.pin, intermediate/blastdb.psq
+Fri Jan 10 05:50:37 2014  INFO         makeblastdb -in intermediate/good_proteins.fasta -input_type fasta -out intermediate/blastdb -dbtype prot
+Fri Jan 10 05:50:37 2014  DEBUG        
+Fri Jan 10 05:50:37 2014  DEBUG        
+Fri Jan 10 05:50:37 2014  DEBUG        Building a new DB, current time: 01/10/2014 05:50:37
+Fri Jan 10 05:50:37 2014  DEBUG        New DB name:   intermediate/blastdb
+Fri Jan 10 05:50:37 2014  DEBUG        New DB title:  intermediate/good_proteins.fasta
+Fri Jan 10 05:50:37 2014  DEBUG        Sequence type: Protein
+Fri Jan 10 05:50:37 2014  DEBUG        Keep Linkouts: T
+Fri Jan 10 05:50:37 2014  DEBUG        Keep MBits: T
+Fri Jan 10 05:50:37 2014  DEBUG        Maximum file size: 1073741824B
+Fri Jan 10 05:50:37 2014  DEBUG        Adding sequences from FASTA; added 3 sequences in 0.00134802 seconds.
+Fri Jan 10 05:50:37 2014  DEBUG           Ret 0
+Fri Jan 10 05:50:37 2014  INFO         Done.
+Fri Jan 10 05:50:37 2014  INFO      
+Fri Jan 10 05:50:37 2014  INFO      4. Blasting
+Fri Jan 10 05:50:37 2014  INFO         Overwriting existing intermediate/blasted.tsv
+Fri Jan 10 05:50:37 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000 -num_threads 30
+Fri Jan 10 05:50:38 2014  DEBUG           Ret -6
+Fri Jan 10 05:50:38 2014  INFO      
+Fri Jan 10 05:50:38 2014  WARNING   Warning: blast refused to run multithreaded, running single-threaded instead.
+Fri Jan 10 05:50:38 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000
+Fri Jan 10 05:50:38 2014  DEBUG           Ret 0
+Fri Jan 10 05:50:38 2014  INFO         Done.
+Fri Jan 10 05:50:38 2014  INFO      
+Fri Jan 10 05:50:38 2014  INFO      5. Parsing blast results
+Fri Jan 10 05:50:38 2014  INFO         Overwriting existing intermediate/similar_sequences.txt
+Fri Jan 10 05:50:38 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclBlastParser.pl intermediate/blasted.tsv proteomes > intermediate/similar_sequences.txt
+Fri Jan 10 05:50:38 2014  INFO         acquiring genes from NC_005816.1.fasta
+Fri Jan 10 05:50:38 2014  INFO         acquiring genes from NC_008253.1.fasta
+Fri Jan 10 05:50:38 2014  INFO         acquiring genes from NC_011748.1.fasta
+Fri Jan 10 05:50:38 2014  DEBUG           Ret 0
+Fri Jan 10 05:50:38 2014  INFO         Done.
+Fri Jan 10 05:50:38 2014  INFO      
+Fri Jan 10 05:50:38 2014  INFO      6. Cleaning database
+Fri Jan 10 05:50:38 2014  INFO         Done.
+Fri Jan 10 05:50:38 2014  INFO      
+Fri Jan 10 05:50:38 2014  INFO      7. Installing schema
+Fri Jan 10 05:50:38 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclInstallSchema.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/log.sql _prots
+Fri Jan 10 05:50:38 2014  DEBUG           Ret 0
+Fri Jan 10 05:50:38 2014  INFO         Done.
+Fri Jan 10 05:50:38 2014  INFO      
+Fri Jan 10 05:50:38 2014  INFO      8. Loading blast results into the database
+Fri Jan 10 05:50:38 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclLoadBlast.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/similar_sequences.txt _prots
+Fri Jan 10 05:50:38 2014  DEBUG           Ret 0
+Fri Jan 10 05:50:38 2014  INFO         Done.
+Fri Jan 10 05:50:38 2014  INFO      
+Fri Jan 10 05:50:38 2014  INFO      9. Finding pairs
+Fri Jan 10 05:50:38 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclPairs.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/orthomclpairs.log cleanup=yes suffix=_prots
+Fri Jan 10 05:50:39 2014  DEBUG           Ret 0
+Fri Jan 10 05:50:39 2014  INFO         Done.
+Fri Jan 10 05:50:39 2014  INFO      
+Fri Jan 10 05:50:39 2014  INFO      10. Dump pairs files
+Fri Jan 10 05:50:39 2014  INFO         Overwriting existing intermediate/mcl_input, intermediate/pairs
+Fri Jan 10 05:50:39 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclDumpPairsFiles.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config mcl_input intermediate _prots
+Fri Jan 10 05:50:39 2014  DEBUG           Ret 0
+Fri Jan 10 05:50:39 2014  INFO         Done.
+Fri Jan 10 05:50:39 2014  INFO      
+Fri Jan 10 05:50:39 2014  INFO      11. MCL
+Fri Jan 10 05:50:39 2014  INFO         mcl intermediate/mcl_input --abc -I 1.5 -o intermediate/mcl_output
+Fri Jan 10 05:50:39 2014  DEBUG        [mclxIOstreamIn] no assignments yield void/empty matrix
+Fri Jan 10 05:50:40 2014  DEBUG        [mcl] new tab created
+Fri Jan 10 05:50:40 2014  DEBUG        ___ [mclAlgorithmStart] attempting to cluster the void
+Fri Jan 10 05:50:40 2014  DEBUG        [mcl] pid 60932
+Fri Jan 10 05:50:40 2014  DEBUG        ite   chaos  time hom(avg,lo,hi) expa expb expc fmv
+Fri Jan 10 05:50:40 2014  DEBUG        1
+Fri Jan 10 05:50:40 2014  DEBUG           Ret -11
+Fri Jan 10 05:50:40 2014  INFO      
+Fri Jan 10 05:50:40 2014  WARNING      Process was not complete. You can restart from this point using --start-from "MCL"
+Fri Jan 10 05:51:49 2014  INFO      test_input/prots --prot-id-field 1
+
+Fri Jan 10 05:51:49 2014  DEBUG     Read conf: {'db_password': '1234', 'db_login': 'orthomcl', 'db_port': '3307'}
+Fri Jan 10 05:51:49 2014  DEBUG     No records found in handle, test_input/prots/.DS_Store
+Fri Jan 10 05:51:49 2014  DEBUG     No records found in handle, test_input/prots/log.txt
+Fri Jan 10 05:51:49 2014  DEBUG     No records found in handle, test_input/prots/orthogroups.tsv
+Fri Jan 10 05:51:49 2014  DEBUG     No records found in handle, test_input/prots/orthogroups_nice.txt
+Fri Jan 10 05:51:49 2014  INFO      Changing to test_input/prots
+Fri Jan 10 05:51:49 2014  INFO      Workflow id is "prots"
+Fri Jan 10 05:51:49 2014  INFO      
+Fri Jan 10 05:51:49 2014  DEBUG     Using proteomes_files.
+Fri Jan 10 05:51:49 2014  INFO      1. Adjusting proteomes
+Fri Jan 10 05:51:49 2014  INFO         Overwriting existing proteomes
+Fri Jan 10 05:51:49 2014  INFO         Done.
+Fri Jan 10 05:51:49 2014  INFO      
+Fri Jan 10 05:51:49 2014  INFO      2. Filtering proteomes
+Fri Jan 10 05:51:49 2014  INFO         Overwriting existing intermediate/good_proteins.fasta, intermediate/poor_proteins.fasta
+Fri Jan 10 05:51:49 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclFilterFasta.pl proteomes 10 20 intermediate/good_proteins.fasta intermediate/poor_proteins.fasta
+Fri Jan 10 05:51:49 2014  INFO         processing file NC_005816.1.fasta
+Fri Jan 10 05:51:49 2014  INFO         processing file NC_008253.1.fasta
+Fri Jan 10 05:51:49 2014  INFO         processing file NC_011748.1.fasta
+Fri Jan 10 05:51:49 2014  DEBUG           Ret 0
+Fri Jan 10 05:51:49 2014  INFO         Done.
+Fri Jan 10 05:51:49 2014  INFO      
+Fri Jan 10 05:51:49 2014  INFO      3. Making blast database
+Fri Jan 10 05:51:49 2014  INFO         Overwriting existing intermediate/blastdb.phr, intermediate/blastdb.pin, intermediate/blastdb.psq
+Fri Jan 10 05:51:49 2014  INFO         makeblastdb -in intermediate/good_proteins.fasta -input_type fasta -out intermediate/blastdb -dbtype prot
+Fri Jan 10 05:51:49 2014  DEBUG        
+Fri Jan 10 05:51:49 2014  DEBUG        
+Fri Jan 10 05:51:49 2014  DEBUG        Building a new DB, current time: 01/10/2014 05:51:49
+Fri Jan 10 05:51:49 2014  DEBUG        New DB name:   intermediate/blastdb
+Fri Jan 10 05:51:49 2014  DEBUG        New DB title:  intermediate/good_proteins.fasta
+Fri Jan 10 05:51:49 2014  DEBUG        Sequence type: Protein
+Fri Jan 10 05:51:49 2014  DEBUG        Keep Linkouts: T
+Fri Jan 10 05:51:49 2014  DEBUG        Keep MBits: T
+Fri Jan 10 05:51:49 2014  DEBUG        Maximum file size: 1073741824B
+Fri Jan 10 05:51:49 2014  DEBUG        Adding sequences from FASTA; added 988 sequences in 0.0835371 seconds.
+Fri Jan 10 05:51:49 2014  DEBUG           Ret 0
+Fri Jan 10 05:51:49 2014  INFO         Done.
+Fri Jan 10 05:51:49 2014  INFO      
+Fri Jan 10 05:51:49 2014  INFO      4. Blasting
+Fri Jan 10 05:51:49 2014  INFO         Overwriting existing intermediate/blasted.tsv
+Fri Jan 10 05:51:49 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000 -num_threads 30
+Fri Jan 10 05:51:50 2014  DEBUG           Ret -6
+Fri Jan 10 05:51:50 2014  INFO      
+Fri Jan 10 05:51:50 2014  WARNING   Warning: blast refused to run multithreaded, running single-threaded instead.
+Fri Jan 10 05:51:50 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000
+Fri Jan 10 05:52:01 2014  DEBUG           Ret 0
+Fri Jan 10 05:52:01 2014  INFO         Done.
+Fri Jan 10 05:52:01 2014  INFO      
+Fri Jan 10 05:52:01 2014  INFO      5. Parsing blast results
+Fri Jan 10 05:52:01 2014  INFO         Overwriting existing intermediate/similar_sequences.txt
+Fri Jan 10 05:52:01 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclBlastParser.pl intermediate/blasted.tsv proteomes > intermediate/similar_sequences.txt
+Fri Jan 10 05:52:01 2014  INFO         acquiring genes from NC_005816.1.fasta
+Fri Jan 10 05:52:01 2014  INFO         acquiring genes from NC_008253.1.fasta
+Fri Jan 10 05:52:01 2014  INFO         acquiring genes from NC_011748.1.fasta
+Fri Jan 10 05:52:01 2014  DEBUG           Ret 0
+Fri Jan 10 05:52:01 2014  INFO         Done.
+Fri Jan 10 05:52:01 2014  INFO      
+Fri Jan 10 05:52:01 2014  INFO      6. Cleaning database
+Fri Jan 10 05:52:01 2014  INFO         Done.
+Fri Jan 10 05:52:01 2014  INFO      
+Fri Jan 10 05:52:01 2014  INFO      7. Installing schema
+Fri Jan 10 05:52:01 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclInstallSchema.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/log.sql _prots
+Fri Jan 10 05:52:02 2014  DEBUG           Ret 0
+Fri Jan 10 05:52:02 2014  INFO         Done.
+Fri Jan 10 05:52:02 2014  INFO      
+Fri Jan 10 05:52:02 2014  INFO      8. Loading blast results into the database
+Fri Jan 10 05:52:02 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclLoadBlast.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/similar_sequences.txt _prots
+Fri Jan 10 05:52:02 2014  DEBUG           Ret 0
+Fri Jan 10 05:52:02 2014  INFO         Done.
+Fri Jan 10 05:52:02 2014  INFO      
+Fri Jan 10 05:52:02 2014  INFO      9. Finding pairs
+Fri Jan 10 05:52:02 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclPairs.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/orthomclpairs.log cleanup=yes suffix=_prots
+Fri Jan 10 05:52:03 2014  DEBUG           Ret 0
+Fri Jan 10 05:52:03 2014  INFO         Done.
+Fri Jan 10 05:52:03 2014  INFO      
+Fri Jan 10 05:52:03 2014  INFO      10. Dump pairs files
+Fri Jan 10 05:52:03 2014  INFO         Overwriting existing intermediate/mcl_input, intermediate/pairs
+Fri Jan 10 05:52:03 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclDumpPairsFiles.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config mcl_input intermediate _prots
+Fri Jan 10 05:52:03 2014  DEBUG           Ret 0
+Fri Jan 10 05:52:03 2014  INFO         Done.
+Fri Jan 10 05:52:03 2014  INFO      
+Fri Jan 10 05:52:03 2014  INFO      11. MCL
+Fri Jan 10 05:52:03 2014  INFO         mcl intermediate/mcl_input --abc -I 1.5 -o intermediate/mcl_output
+Fri Jan 10 05:52:03 2014  DEBUG        [mcl] new tab created
+Fri Jan 10 05:52:03 2014  DEBUG        [mcl] pid 61004
+Fri Jan 10 05:52:03 2014  DEBUG        ite -------------------  chaos  time hom(avg,lo,hi) expa expb expc fmv
+Fri Jan 10 05:52:03 2014  DEBUG        1  ...................   1.66  0.00 0.97/0.63/1.36 1.08 1.08 1.08   3
+Fri Jan 10 05:52:03 2014  DEBUG        2  ...................   1.46  0.00 0.96/0.50/1.32 1.01 1.01 1.10   4
+Fri Jan 10 05:52:03 2014  DEBUG        3  ...................   1.07  0.00 0.96/0.54/1.11 1.00 1.00 1.09   4
+Fri Jan 10 05:52:03 2014  DEBUG        4  ...................   1.11  0.00 0.97/0.42/1.31 1.00 0.97 1.07   4
+Fri Jan 10 05:52:03 2014  DEBUG        5  ...................   1.21  0.00 0.97/0.41/1.00 1.01 0.95 1.01   4
+Fri Jan 10 05:52:03 2014  DEBUG        6  ...................   1.24  0.00 0.97/0.57/1.00 1.01 0.93 0.94   3
+Fri Jan 10 05:52:03 2014  DEBUG        7  ...................   0.92  0.00 0.98/0.54/1.00 1.00 0.91 0.86   3
+Fri Jan 10 05:52:03 2014  DEBUG        8  ...................   0.81  0.00 0.98/0.64/1.00 1.00 0.92 0.79   3
+Fri Jan 10 05:52:03 2014  DEBUG        9  ...................   0.45  0.00 0.98/0.76/1.00 1.00 0.99 0.78   3
+Fri Jan 10 05:52:03 2014  DEBUG        10  ...................   0.27  0.00 0.99/0.76/1.00 1.00 0.96 0.74   3
+Fri Jan 10 05:52:03 2014  DEBUG        11  ...................   0.38  0.00 0.99/0.78/1.00 1.00 0.97 0.72   0
+Fri Jan 10 05:52:03 2014  DEBUG        12  ...................   0.52  0.00 0.99/0.69/1.00 1.00 0.99 0.71   0
+Fri Jan 10 05:52:03 2014  DEBUG        13  ...................   0.64  0.00 0.99/0.61/1.00 1.00 0.95 0.68   0
+Fri Jan 10 05:52:03 2014  DEBUG        14  ...................   0.68  0.00 0.98/0.62/1.00 1.00 1.00 0.68   0
+Fri Jan 10 05:52:03 2014  DEBUG        15  ...................   0.55  0.00 0.98/0.71/1.00 1.00 0.99 0.68   0
+Fri Jan 10 05:52:03 2014  DEBUG        16  ...................   0.29  0.00 0.99/0.76/1.00 1.00 0.99 0.67   0
+Fri Jan 10 05:52:03 2014  DEBUG        17  ...................   0.25  0.00 0.99/0.77/1.00 1.00 1.00 0.67   0
+Fri Jan 10 05:52:03 2014  DEBUG        18  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.66   0
+Fri Jan 10 05:52:03 2014  DEBUG        19  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.66   0
+Fri Jan 10 05:52:03 2014  DEBUG        20  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.65   0
+Fri Jan 10 05:52:03 2014  DEBUG        21  ...................   0.25  0.00 0.98/0.76/1.00 1.00 0.99 0.64   0
+Fri Jan 10 05:52:03 2014  DEBUG        22  ...................   0.24  0.00 0.98/0.78/1.00 1.00 1.00 0.64   0
+Fri Jan 10 05:52:03 2014  DEBUG        23  ...................   0.25  0.00 0.99/0.76/1.00 1.00 0.99 0.64   0
+Fri Jan 10 05:52:03 2014  DEBUG        24  ...................   0.22  0.00 0.99/0.78/1.00 1.00 0.99 0.64   0
+Fri Jan 10 05:52:03 2014  DEBUG        25  ...................   0.24  0.00 0.99/0.78/1.00 1.00 1.00 0.63   0
+Fri Jan 10 05:52:03 2014  DEBUG        26  ...................   0.24  0.00 1.00/0.76/1.00 1.00 0.99 0.63   0
+Fri Jan 10 05:52:03 2014  DEBUG        27  ...................   0.18  0.00 1.00/0.82/1.00 1.00 0.99 0.62   0
+Fri Jan 10 05:52:03 2014  DEBUG        28  ...................   0.08  0.00 1.00/0.92/1.00 1.00 0.98 0.61   0
+Fri Jan 10 05:52:03 2014  DEBUG        29  ...................   0.02  0.00 1.00/0.98/1.00 1.00 1.00 0.61   0
+Fri Jan 10 05:52:03 2014  DEBUG        30  ...................   0.00  0.00 1.00/1.00/1.00 1.00 1.00 0.61   0
+Fri Jan 10 05:52:03 2014  DEBUG        31  ...................   0.00  0.00 1.00/1.00/1.00 1.00 1.00 0.60   0
+Fri Jan 10 05:52:03 2014  DEBUG        [mcl] jury pruning marks: <100,100,100>, out of 100
+Fri Jan 10 05:52:03 2014  DEBUG        [mcl] jury pruning synopsis: <100.0 or really really really good> (cf -scheme, -do log)
+Fri Jan 10 05:52:03 2014  DEBUG        [mcl] output is in intermediate/mcl_output
+Fri Jan 10 05:52:03 2014  DEBUG        [mcl] 260 clusters found
+Fri Jan 10 05:52:03 2014  DEBUG        [mcl] output is in intermediate/mcl_output
+Fri Jan 10 05:52:03 2014  DEBUG        
+Fri Jan 10 05:52:03 2014  DEBUG        Please cite:
+Fri Jan 10 05:52:03 2014  DEBUG        Stijn van Dongen, Graph Clustering by Flow Simulation.  PhD thesis,
+Fri Jan 10 05:52:03 2014  DEBUG        University of Utrecht, May 2000.
+Fri Jan 10 05:52:03 2014  DEBUG        (  http://www.library.uu.nl/digiarchief/dip/diss/1895620/full.pdf
+Fri Jan 10 05:52:03 2014  DEBUG        or  http://micans.org/mcl/lit/svdthesis.pdf.gz)
+Fri Jan 10 05:52:03 2014  DEBUG        OR
+Fri Jan 10 05:52:03 2014  DEBUG        Stijn van Dongen, A cluster algorithm for graphs. Technical
+Fri Jan 10 05:52:03 2014  DEBUG        Report INS-R0010, National Research Institute for Mathematics
+Fri Jan 10 05:52:03 2014  DEBUG        and Computer Science in the Netherlands, Amsterdam, May 2000.
+Fri Jan 10 05:52:03 2014  DEBUG        (  http://www.cwi.nl/ftp/CWIreports/INS/INS-R0010.ps.Z
+Fri Jan 10 05:52:03 2014  DEBUG        or  http://micans.org/mcl/lit/INS-R0010.ps.Z)
+Fri Jan 10 05:52:03 2014  DEBUG        
+Fri Jan 10 05:52:03 2014  DEBUG           Ret 0
+Fri Jan 10 05:52:03 2014  INFO         Done.
+Fri Jan 10 05:52:03 2014  INFO      
+Fri Jan 10 05:52:03 2014  INFO      12. Saving orthogroups
+Fri Jan 10 05:52:03 2014  INFO         Overwriting existing orthogroups.tsv, orthogroups_nice.txt
+Fri Jan 10 05:52:03 2014  DEBUG        Reading annotations/NC_005816.1.gb
+Fri Jan 10 05:52:03 2014  DEBUG        Reading annotations/NC_008253.1.gb
+Fri Jan 10 05:52:06 2014  DEBUG        Reading annotations/NC_011748.1.gb
+Fri Jan 10 05:52:09 2014  INFO      
+Fri Jan 10 05:52:09 2014  INFO         Saved 260 groups, totally contating 602 genes.
+Fri Jan 10 05:52:09 2014  INFO         Done.
+Fri Jan 10 05:52:09 2014  INFO      
+Fri Jan 10 05:52:09 2014  INFO      Done.
+Fri Jan 10 05:52:09 2014  INFO      Log is in test_input/prots/log.txt
+Fri Jan 10 05:52:09 2014  INFO      Groups are in test_input/prots/orthogroups.tsv
+Fri Jan 10 05:52:09 2014  INFO      Groups with aligned columns are in test_input/prots/orthogroups_nice.txt

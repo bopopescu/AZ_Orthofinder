@@ -56,7 +56,7 @@ class Workflow:
                 log.warning('   Process was not complete. You can restart from this point '
                             'using --start-from "' + step.name + '"')
                 return 1
-            log.info('   Done ' + step.name.lower())
+            log.info('   Done.')
             log.info('')
 
         return 0

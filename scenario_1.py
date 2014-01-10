@@ -171,29 +171,39 @@ def main(args):
         ref_id_list = read_list(p.ids_list, p.directory)
 
     else:
-        files = listdir(p.directory)
-        if not files: interrupt('Directory contains no files.')
+        if 'proteomes' in listdir(p.directory):
+            proteomes = [relpath(join('proteomes', f))
+                         for f in listdir(join(p.directory, 'proteomes'))
+                         if f and f[0] != '.']
 
-        for f in (join(p.directory, f) for f in files if isfile(join(p.directory, f))):
-            if '.' in f and splitext(f)[1] in ['.fasta', '.faa', '.fa', '.fsa']:
-                try:
-                    log.debug('   Checking if %s is fasta.' % f)
-                    next(SeqIO.parse(f, 'fasta'))
-                except Exception, e:
-                    pass
-                else:
-                    proteomes.append(relpath(f, p.directory))
-                    continue
-            if '.' in f and splitext(f)[1] in ['.gb', '.genbank', '.gbk']:
-                try:
-                    log.debug('   Checking if %s is genbank.' % f)
-                    SeqIO.read(f, 'genbank')
-                except Exception, e:
-                    log.debug(str(e) + ', ' + f)
-                else:
-                    annotations.append(relpath(f, p.directory))
-        log.debug('')
+        if 'annotations' in listdir(p.directory):
+            annotations = [relpath(join('annotations', f))
+                           for f in listdir(join(p.directory, 'annotations'))
+                           if f and f[0] != '.']
 
+        if not proteomes and not annotations:
+            files = listdir(p.directory)
+            if not files: interrupt('Directory contains no files.')
+
+            for f in (join(p.directory, f) for f in files if isfile(join(p.directory, f))):
+                if '.' in f and splitext(f)[1] in ['.fasta', '.faa', '.fa', '.fsa']:
+                    try:
+                        log.debug('   Checking if %s is fasta.' % f)
+                        next(SeqIO.parse(f, 'fasta'))
+                    except Exception, e:
+                        pass
+                    else:
+                        proteomes.append(relpath(f, p.directory))
+                        continue
+                if '.' in f and splitext(f)[1] in ['.gb', '.genbank', '.gbk']:
+                    try:
+                        log.debug('   Checking if %s is genbank.' % f)
+                        SeqIO.read(f, 'genbank')
+                    except Exception, e:
+                        log.debug(str(e) + ', ' + f)
+                    else:
+                        annotations.append(relpath(f, p.directory))
+            log.debug('')
 
         if not proteomes and not annotations:
             interrupt('Directory must contain fasta or genbank files.')

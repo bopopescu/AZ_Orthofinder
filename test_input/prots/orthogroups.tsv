@@ -1,0 +1,1122 @@
+Orthogroup 1
+Escherichia coli 536	YP_668008.1	thiQ	NC_008253	thiamine transporter ATP-binding subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401203.1	thiQ	NC_011748	thiamine transporter ATP-binding subunit	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401495.1	tauB	NC_011748	taurine transporter ATP-binding subunit	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401332.1	metN	NC_011748	DL-methionine transporter ATP-binding subunit	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668148.1	metN	NC_008253	DL-methionine transporter ATP-binding subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401759.1	gltL	NC_011748	glutamate and aspartate transporter subunit ; ATP-binding component of ABC superfamily	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401696.1	fepC	NC_011748	iron-enterobactin transporter ATP-binding protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668239.1	NA	NC_008253	ABC transporter	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401284.1	fhuC	NC_011748	iron-hydroxamate transporter ATP-binding subunit	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668100.1	NA	NC_008253	iron-hydroxamate transporter ATP-binding subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401624.1	ybbA	NC_011748	ABC transporter ATP-binding protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401578.1	mdlA	NC_011748	multidrug transporter membrane\ATP-binding components	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401619.1	ybbL	NC_011748	ABC transporter ATP-binding protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401260.1	yadG	NC_011748	transporter subunit: ATP-binding component of ABC superfamily	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668074.1	NA	NC_008253	ABC transporter ATP-binding protein	Escherichia coli 536, complete genome.
+Escherichia coli 536	YP_668219.1	NA	NC_008253	ABC transporter ATP-binding protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401453.1	NA	NC_011748	ATP-binding component of ABC sugar transport system	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002405894.1	yjjK	NC_011748	ABC transporter ATP-binding protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401579.1	mdlB	NC_011748	multidrug transporter membrane\ATP-binding components	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 2
+Escherichia coli 536	YP_668052.1	NA	NC_008253	colicin	Escherichia coli 536, complete genome.
+Escherichia coli 536	YP_668054.1	NA	NC_008253	uropathogenic specific protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401347.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668056.1	NA	NC_008253	uropathogenic specific protein	Escherichia coli 536, complete genome.
+Escherichia coli 536	YP_668160.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 536	YP_668175.1	NA	NC_008253	hemolysin co-regulated protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401364.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 3
+Escherichia coli 536	YP_668227.1	NA	NC_008253	S-fimbrial protein subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401660.1	sfmA	NC_011748	fimbrial-like adhesin protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668228.1	NA	NC_008253	minor F1C fimbrial subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401664.1	sfmF	NC_011748	fimbrial protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668231.1	NA	NC_008253	F1C minor fimbrial subunit F	Escherichia coli 536, complete genome.
+Escherichia coli 536	YP_668232.1	NA	NC_008253	F1C minor fimbrial subunit protein G presursor	Escherichia coli 536, complete genome.
+Escherichia coli 536	YP_668233.1	NA	NC_008253	F1C fimbrial adhesin	Escherichia coli 536, complete genome.
+
+Orthogroup 4
+Escherichia coli 55989	YP_002401526.1	phoB	NC_011748	transcriptional regulator PhoB	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401787.1	kdpE	NC_011748	DNA-binding transcriptional activator KdpE	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002405901.1	creB	NC_011748	DNA-binding response regulator CreB	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401678.1	cusR	NC_011748	DNA-binding transcriptional activator CusR	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002405904.1	arcA	NC_011748	two-component response regulator	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401665.1	fimZ	NC_011748	transcriptional regulator FimZ	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401728.1	dpiA	NC_011748	two-component response regulator DpiA	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 5
+Escherichia coli 536	YP_668180.1	NA	NC_008253	H repeat-containing Rhs element protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401671.1	yhhI	NC_011748	transposase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668181.1	NA	NC_008253	H repeat-containing Rhs element protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401369.1	yhhI	NC_011748	transposase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401368.1	yncM	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401367.1	yncI	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 6
+Escherichia coli 536	YP_667978.1	caiC	NC_008253	crotonobetaine/carnitine-CoA ligase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401176.1	caiC	NC_011748	crotonobetaine/carnitine-CoA ligase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401702.1	entE	NC_011748	enterobactin synthase subunit E	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401465.1	prpE	NC_011748	propionyl-CoA synthetase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401694.1	entF	NC_011748	enterobactin synthase subunit F	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 7
+Escherichia coli 536	YP_668051.1	NA	NC_008253	aromatic amino acid transporter	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401245.1	aroP	NC_011748	aromatic amino acid transporter	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401683.1	pheP	NC_011748	phenylalanine transporter	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401530.1	proY	NC_011748	proline-specific permease	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401615.1	ybaT	NC_011748	nitrogen-containing metabolite transporter	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 8
+Escherichia coli 55989	YP_002401712.1	ybdO	NC_011748	DNA-binding transcriptional regulator, LysR-type	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401736.1	ybeF	NC_011748	DNA-binding transcriptional regulator	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668017.1	leuO	NC_008253	leucine transcriptional activator	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401213.1	leuO	NC_011748	leucine transcriptional activator	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 9
+Escherichia coli 536	YP_668088.1	NA	NC_008253	outer membrane usher protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401272.1	htrE	NC_011748	outer membrane usher protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668230.1	NA	NC_008253	F1C fimbrial usher	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401662.1	sfmD	NC_011748	outer membrane export usher protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 10
+Escherichia coli 536	YP_668089.1	NA	NC_008253	chaperone protein EcpD	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401273.1	ecpD	NC_011748	chaperone protein EcpD	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668229.1	NA	NC_008253	F1C periplasmic chaperone	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401661.1	sfmC	NC_011748	pilin chaperone, periplasmic	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 11
+Escherichia coli 536	YP_668102.1	NA	NC_008253	iron-hydroxamate transporter permease subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401286.1	fhuB	NC_011748	iron-hydroxamate transporter permease subunit	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401697.1	fepG	NC_011748	iron-enterobactin transporter permease	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401698.1	fepD	NC_011748	iron-enterobactin transporter membrane protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 12
+Escherichia coli 536	YP_668147.1	NA	NC_008253	DL-methionine transporter permease	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401331.1	metI	NC_011748	DL-methionine transporter permease	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401760.1	gltK	NC_011748	glutamate and aspartate transporter subunit ; membrane component of ABC superfamily	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401761.1	gltJ	NC_011748	glutamate and aspartate transporter subunit ; membrane component of ABC superfamily	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 13
+Escherichia coli 55989	YP_002401527.1	phoR	NC_011748	phosphate regulon sensor protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401677.1	cusS	NC_011748	sensor kinase CusS	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401788.1	kdpD	NC_011748	sensor protein KdpD	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002405902.1	creC	NC_011748	sensory histidine kinase CreC	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 14
+Yersinia pestis biovar Microtus str. 91001	NP_995567.1	NA	NC_005816	putative transposase	Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.
+Escherichia coli 536	YP_668210.1	NA	NC_008253	transposase for insertion sequence IS100	Escherichia coli 536, complete genome.
+Escherichia coli 536	YP_668251.1	NA	NC_008253	transposase for insertion sequence IS100	Escherichia coli 536, complete genome.
+
+Orthogroup 15
+Yersinia pestis biovar Microtus str. 91001	NP_995568.1	NA	NC_005816	transposase/IS protein	Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.
+Escherichia coli 536	YP_668211.1	NA	NC_008253	transposase/IS protein	Escherichia coli 536, complete genome.
+Escherichia coli 536	YP_668252.1	NA	NC_008253	transposase/IS protein	Escherichia coli 536, complete genome.
+
+Orthogroup 16
+Escherichia coli 55989	YP_002401469.1	cynR	NC_011748	DNA-binding transcriptional regulator CynR	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668151.1	NA	NC_008253	LysR family transcriptional regulator	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401337.1	yafC	NC_011748	DNA-binding transcriptional regulator	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 17
+Escherichia coli 536	YP_667965.1	ileS	NC_008253	isoleucyl-tRNA synthetase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401164.1	ileS	NC_011748	isoleucyl-tRNA synthetase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401749.1	leuS	NC_011748	leucyl-tRNA synthetase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 18
+Escherichia coli 536	YP_667969.1	NA	NC_008253	ribonucleoside hydrolase RihC	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401168.1	rihC	NC_011748	ribonucleoside hydrolase RihC	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401758.1	rihA	NC_011748	ribonucleoside hydrolase 1	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 19
+Escherichia coli 536	YP_667981.1	NA	NC_008253	L-carnitine/gamma-butyrobetaine antiporter	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401179.1	caiT	NC_011748	L-carnitine/gamma-butyrobetaine antiporter	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401440.1	betT	NC_011748	choline transport protein BetT	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 20
+Escherichia coli 536	YP_667986.1	NA	NC_008253	metabolite transport protein YaaU	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401184.1	yaaU	NC_011748	transporter	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401484.1	mhpT	NC_011748	3-hydroxyphenylpropionic transporter MhpT	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 21
+Escherichia coli 536	YP_667988.1	NA	NC_008253	glutathione-regulated potassium-efflux system protein KefC	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401186.1	kefC	NC_011748	glutathione-regulated potassium-efflux system protein KefC	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401607.1	ybaL	NC_011748	cation:proton antiport protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 22
+Escherichia coli 536	YP_668011.1	NA	NC_008253	transcriptional regulator SgrR	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401206.1	sgrR	NC_011748	transcriptional regulator SgrR	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401575.1	ybaE	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 23
+Escherichia coli 536	YP_668018.1	NA	NC_008253	acetolactate synthase 3 catalytic subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401214.1	ilvI	NC_011748	acetolactate synthase 3 catalytic subunit	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401638.1	gcl	NC_011748	glyoxylate carboligase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 24
+Escherichia coli 536	YP_668021.1	NA	NC_008253	DNA-binding transcriptional regulator FruR	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401216.1	fruR	NC_011748	DNA-binding transcriptional regulator FruR	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401476.1	lacI	NC_011748	lac repressor	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 25
+Escherichia coli 536	YP_668025.1	NA	NC_008253	peptidoglycan synthetase FtsI	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401220.1	ftsI	NC_011748	transpeptidase involved in septal peptidoglycan synthesis (penicillin-binding protein 3)	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401742.1	mrdA	NC_011748	penicillin-binding protein 2	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 26
+Escherichia coli 536	YP_668030.1	NA	NC_008253	cell division protein FtsW	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401225.1	ftsW	NC_011748	cell division protein FtsW	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401741.1	mrdB	NC_011748	cell wall shape-determining protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 27
+Escherichia coli 536	YP_668033.1	ddl	NC_008253	D-alanine--D-alanine ligase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401228.1	ddl	NC_011748	D-alanine--D-alanine ligase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401507.1	ddl	NC_011748	D-alanyl-alanine synthetase A	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 28
+Escherichia coli 536	YP_668053.1	NA	NC_008253	colicin immunity protein	Escherichia coli 536, complete genome.
+Escherichia coli 536	YP_668055.1	NA	NC_008253	colicin immunity protein	Escherichia coli 536, complete genome.
+Escherichia coli 536	YP_668057.1	NA	NC_008253	colicin immunity protein	Escherichia coli 536, complete genome.
+
+Orthogroup 29
+Escherichia coli 536	YP_668062.1	NA	NC_008253	dihydrolipoamide dehydrogenase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401249.1	lpd	NC_011748	dihydrolipoamide dehydrogenase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401430.1	ykgC	NC_011748	pyridine nucleotide-disulfide oxidoreductase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 30
+Escherichia coli 536	YP_668073.1	NA	NC_008253	carbonic anhydrase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401259.1	can	NC_011748	carbonic anhydrase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401470.1	cynT	NC_011748	carbonic anhydrase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 31
+Escherichia coli 536	YP_668079.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401265.1	yadD	NC_011748	transposase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668080.1	NA	NC_008253	transposase, YhgA-like	Escherichia coli 536, complete genome.
+
+Orthogroup 32
+Escherichia coli 536	YP_668083.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401268.1	NA	NC_011748	fimbrial-like adhesin protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668084.2	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+
+Orthogroup 33
+Escherichia coli 536	YP_668133.1	NA	NC_008253	lysine decarboxylase, constitutive	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401318.1	ldcC	NC_011748	lysine decarboxylase 2, constitutive	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401786.1	speF	NC_011748	ornithine decarboxylase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 34
+Escherichia coli 536	YP_668150.1	dkgB	NC_008253	2,5-diketo-D-gluconate reductase B	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401335.1	dkgB	NC_011748	2,5-diketo-D-gluconate reductase B	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401546.1	yajO	NC_011748	aldoketo-oxidoreductase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 35
+Escherichia coli 536	YP_668176.1	NA	NC_008253	Vgr-like protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401365.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401676.1	NA	NC_011748	Rhs element Vgr protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 36
+Escherichia coli 536	YP_668184.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401370.1	yafV	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401733.1	ybeM	NC_011748	amidase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 37
+Escherichia coli 55989	YP_002401326.1	NA	NC_011748	transposase, IS110 family	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401466.1	NA	NC_011748	transposase, IS110 family	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401486.1	NA	NC_011748	transposase, IS110 family	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 38
+Escherichia coli 55989	YP_002401336.1	NA	NC_011748	transposase, IS4 family, IS10L	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401757.1	NA	NC_011748	transposase, IS4 family, IS10L	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401384.1	NA	NC_011748	transposase, IS4 family, IS10L	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 39
+Escherichia coli 55989	YP_002401456.1	yahK	NC_011748	oxidoreductase, Zn-dependent and NAD(P)-binding	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401488.1	frmA	NC_011748	alcohol dehydrogenase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401717.1	ybdR	NC_011748	oxidoreductase, Zn-dependent and NAD(P)-binding	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 40
+Escherichia coli 55989	YP_002401555.1	NA	NC_011748	zinc-dependent hydrolase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401751.1	ybeQ	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401754.1	ybeT	NC_011748	outer membrane protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 41
+Escherichia coli 55989	YP_002401626.1	rhsD	NC_011748	rhsD element protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401674.1	NA	NC_011748	Rhs core protein with extension	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401672.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 42
+Escherichia coli 536	YP_667942.1	NA	NC_008253	thr operon leader peptide	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401144.1	thrL	NC_011748	thr operon leader peptide	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 43
+Escherichia coli 536	YP_667943.1	thrA	NC_008253	bifunctional aspartokinase I/homoserine dehydrogenase I	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401145.1	thrA	NC_011748	bifunctional aspartokinase I/homoserine dehydrogenase I	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 44
+Escherichia coli 536	YP_667944.1	NA	NC_008253	homoserine kinase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401146.1	thrB	NC_011748	homoserine kinase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 45
+Escherichia coli 536	YP_667945.1	NA	NC_008253	threonine synthase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401147.1	thrC	NC_011748	threonine synthase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 46
+Escherichia coli 536	YP_667947.1	NA	NC_008253	periplasmic protein YaaX	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401148.1	yaaX	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 47
+Escherichia coli 536	YP_667948.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401149.1	yaaA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 48
+Escherichia coli 536	YP_667949.1	NA	NC_008253	transporter YaaJ	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401150.1	yaaJ	NC_011748	amino acid sodium/proton transporter	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 49
+Escherichia coli 536	YP_667950.1	NA	NC_008253	transaldolase B	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401151.1	talB	NC_011748	transaldolase B	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 50
+Escherichia coli 536	YP_667951.1	mogA	NC_008253	molybdenum cofactor biosynthesis protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401152.1	mogA	NC_011748	molybdenum cofactor biosynthesis protein MogA	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 51
+Escherichia coli 536	YP_667952.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401153.1	yaaH	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 52
+Escherichia coli 536	YP_667953.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401154.1	htpY	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 53
+Escherichia coli 536	YP_667954.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401155.1	yaaI	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 54
+Escherichia coli 536	YP_667955.1	dnaK	NC_008253	molecular chaperone DnaK	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401156.1	dnaK	NC_011748	molecular chaperone DnaK	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 55
+Escherichia coli 536	YP_667956.2	NA	NC_008253	molecular chaperone DnaJ	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401157.1	dnaJ	NC_011748	molecular chaperone DnaJ	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 56
+Escherichia coli 536	YP_667961.1	nhaA	NC_008253	pH-dependent sodium/proton antiporter	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401158.1	nhaA	NC_011748	pH-dependent sodium/proton antiporter	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 57
+Escherichia coli 536	YP_667962.1	nhaR	NC_008253	transcriptional activator NhaR	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401159.1	nhaR	NC_011748	transcriptional activator NhaR	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 58
+Escherichia coli 536	YP_667963.1	rpsT	NC_008253	30S ribosomal protein S20	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401161.1	rpsT	NC_011748	30S ribosomal protein S20	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 59
+Escherichia coli 536	YP_667964.1	NA	NC_008253	bifunctional riboflavin kinase/FMN adenylyltransferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401163.1	ribF	NC_011748	bifunctional riboflavin kinase/FMN adenylyltransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 60
+Escherichia coli 536	YP_667966.1	lspA	NC_008253	lipoprotein signal peptidase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401165.1	lspA	NC_011748	lipoprotein signal peptidase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 61
+Escherichia coli 536	YP_667967.1	NA	NC_008253	FKBP-type peptidylprolyl isomerase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401166.1	fkpB	NC_011748	FKBP-type peptidylprolyl isomerase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 62
+Escherichia coli 536	YP_667968.1	NA	NC_008253	LytB protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401167.1	ispH	NC_011748	4-hydroxy-3-methylbut-2-enyl diphosphate reductase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 63
+Escherichia coli 536	YP_667970.1	NA	NC_008253	dihydrodipicolinate reductase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401169.1	dapB	NC_011748	dihydrodipicolinate reductase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 64
+Escherichia coli 536	YP_667972.1	NA	NC_008253	carbamoyl phosphate synthase small subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401170.1	carA	NC_011748	carbamoyl phosphate synthase small subunit	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 65
+Escherichia coli 536	YP_667973.1	carB	NC_008253	carbamoyl phosphate synthase large subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401171.1	carB	NC_011748	carbamoyl phosphate synthase large subunit	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 66
+Escherichia coli 536	YP_667974.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401172.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 67
+Escherichia coli 536	YP_667975.1	NA	NC_008253	DNA-binding transcriptional activator CaiF	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401173.1	caiF	NC_011748	DNA-binding transcriptional activator CaiF	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 68
+Escherichia coli 536	YP_667976.1	NA	NC_008253	carnitine operon protein CaiE	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401174.1	caiE	NC_011748	carnitine operon protein CaiE	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 69
+Escherichia coli 536	YP_667977.1	NA	NC_008253	carnitinyl-CoA dehydratase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401175.2	caiD	NC_011748	carnitinyl-CoA dehydratase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 70
+Escherichia coli 536	YP_667979.1	NA	NC_008253	crotonobetainyl-CoA:carnitine CoA-transferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401177.1	caiB	NC_011748	crotonobetainyl-CoA:carnitine CoA-transferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 71
+Escherichia coli 536	YP_667980.1	NA	NC_008253	crotonobetainyl-CoA dehydrogenase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401178.1	caiA	NC_011748	crotonobetainyl-CoA dehydrogenase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 72
+Escherichia coli 536	YP_667982.1	NA	NC_008253	electron transfer flavoprotein FixA	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401180.1	fixA	NC_011748	electron transfer flavoprotein FixA	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 73
+Escherichia coli 536	YP_667983.1	fixB	NC_008253	electron transfer flavoprotein FixB	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401181.1	fixB	NC_011748	electron transfer flavoprotein FixB	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 74
+Escherichia coli 536	YP_667984.1	NA	NC_008253	oxidoreductase FixC	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401182.1	fixC	NC_011748	oxidoreductase FixC	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 75
+Escherichia coli 536	YP_667985.1	NA	NC_008253	ferredoxin-like protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401183.1	fixX	NC_011748	4Fe-4S ferredoxin	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 76
+Escherichia coli 536	YP_667987.1	NA	NC_008253	glutathione-regulated potassium-efflux system ancillary protein KefF	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401185.1	kefF	NC_011748	glutathione-regulated potassium-efflux system ancillary protein KefF	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 77
+Escherichia coli 536	YP_667989.1	folA	NC_008253	dihydrofolate reductase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401187.1	folA	NC_011748	dihydrofolate reductase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 78
+Escherichia coli 536	YP_667992.1	apaH	NC_008253	diadenosine tetraphosphatase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401188.1	apaH	NC_011748	diadenosine tetraphosphatase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 79
+Escherichia coli 536	YP_667993.1	apaG	NC_008253	ApaG protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401189.1	apaG	NC_011748	ApaG protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 80
+Escherichia coli 536	YP_667994.1	ksgA	NC_008253	dimethyladenosine transferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401190.1	ksgA	NC_011748	dimethyladenosine transferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 81
+Escherichia coli 536	YP_667995.1	pdxA	NC_008253	4-hydroxythreonine-4-phosphate dehydrogenase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401191.1	pdxA	NC_011748	4-hydroxythreonine-4-phosphate dehydrogenase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 82
+Escherichia coli 536	YP_667996.1	NA	NC_008253	organic solvent tolerance protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401193.1	imp	NC_011748	organic solvent tolerance protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 83
+Escherichia coli 536	YP_667997.1	djlA	NC_008253	Dna-J like membrane chaperone protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401194.1	djlA	NC_011748	Dna-J like membrane chaperone protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 84
+Escherichia coli 536	YP_667998.1	NA	NC_008253	23S rRNA/tRNA pseudouridine synthase A	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401195.1	rluA	NC_011748	23S rRNA/tRNA pseudouridine synthase A	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 85
+Escherichia coli 536	YP_667999.1	NA	NC_008253	ATP-dependent helicase HepA	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401196.1	hepA	NC_011748	ATP-dependent helicase HepA	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 86
+Escherichia coli 536	YP_668000.1	NA	NC_008253	DNA polymerase II	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401197.1	polB	NC_011748	DNA polymerase II	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 87
+Escherichia coli 536	YP_668001.1	araD	NC_008253	L-ribulose-5-phosphate 4-epimerase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401198.1	araD	NC_011748	L-ribulose-5-phosphate 4-epimerase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 88
+Escherichia coli 536	YP_668002.1	NA	NC_008253	L-arabinose isomerase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401199.1	araA	NC_011748	L-arabinose isomerase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 89
+Escherichia coli 536	YP_668003.1	NA	NC_008253	ribulokinase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401200.1	araB	NC_011748	ribulokinase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 90
+Escherichia coli 536	YP_668004.1	NA	NC_008253	DNA-binding transcriptional regulator AraC	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401201.1	araC	NC_011748	DNA-binding transcriptional regulator AraC	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 91
+Escherichia coli 536	YP_668007.1	NA	NC_008253	DedA family integral membrane protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401202.1	yabI	NC_011748	inner membrane protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 92
+Escherichia coli 536	YP_668009.1	thiP	NC_008253	thiamine transporter membrane protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401204.1	thiP	NC_011748	thiamine transporter membrane protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 93
+Escherichia coli 536	YP_668010.1	tbpA	NC_008253	thiamine transporter substrate binding subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401205.1	tbpA	NC_011748	thiamine transporter substrate binding subunit	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 94
+Escherichia coli 536	YP_668012.1	leuD	NC_008253	isopropylmalate isomerase small subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401208.1	leuD	NC_011748	isopropylmalate isomerase small subunit	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 95
+Escherichia coli 536	YP_668013.1	NA	NC_008253	isopropylmalate isomerase large subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401209.1	leuC	NC_011748	isopropylmalate isomerase large subunit	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 96
+Escherichia coli 55989	YP_002401251.1	acnB	NC_011748	bifunctional aconitate hydratase 2/2-methylisocitrate dehydratase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668064.1	NA	NC_008253	bifunctional aconitate hydratase 2/2-methylisocitrate dehydratase	Escherichia coli 536, complete genome.
+
+Orthogroup 97
+Escherichia coli 536	YP_668014.1	NA	NC_008253	3-isopropylmalate dehydrogenase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401210.1	leuB	NC_011748	3-isopropylmalate dehydrogenase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 98
+Escherichia coli 536	YP_668015.1	NA	NC_008253	2-isopropylmalate synthase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401211.1	leuA	NC_011748	2-isopropylmalate synthase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 99
+Escherichia coli 536	YP_668016.1	NA	NC_008253	leu operon leader peptide	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401212.1	leuL	NC_011748	leu operon leader peptide	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 100
+Escherichia coli 536	YP_668019.1	ilvH	NC_008253	acetolactate synthase 3 regulatory subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401215.1	ilvH	NC_011748	acetolactate synthase 3 regulatory subunit	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 101
+Escherichia coli 536	YP_668022.1	NA	NC_008253	cell division protein MraZ	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401217.1	mraZ	NC_011748	cell division protein MraZ	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 102
+Escherichia coli 536	YP_668023.1	mraW	NC_008253	S-adenosyl-methyltransferase MraW	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401218.1	mraW	NC_011748	S-adenosyl-methyltransferase MraW	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 103
+Escherichia coli 536	YP_668024.1	NA	NC_008253	cell division protein FtsL	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401219.1	ftsL	NC_011748	cell division protein FtsL	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 104
+Escherichia coli 536	YP_668026.1	murE	NC_008253	UDP-N-acetylmuramoylalanyl-D-glutamate--2, 6-diaminopimelate ligase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401221.1	murE	NC_011748	UDP-N-acetylmuramoylalanyl-D-glutamate--2, 6-diaminopimelate ligase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 105
+Escherichia coli 536	YP_668027.1	murF	NC_008253	UDP-N-acetylmuramoyl-tripeptide--D-alanyl-D- alanine ligase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401222.1	murF	NC_011748	UDP-N-acetylmuramoyl-tripeptide--D-alanyl-D- alanine ligase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 106
+Escherichia coli 536	YP_668028.1	mraY	NC_008253	phospho-N-acetylmuramoyl-pentapeptide- transferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401223.1	mraY	NC_011748	phospho-N-acetylmuramoyl-pentapeptide- transferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 107
+Escherichia coli 536	YP_668029.1	murD	NC_008253	UDP-N-acetylmuramoyl-L-alanyl-D-glutamate synthetase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401224.1	murD	NC_011748	UDP-N-acetylmuramoyl-L-alanyl-D-glutamate synthetase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 108
+Escherichia coli 536	YP_668032.1	murC	NC_008253	UDP-N-acetylmuramate--L-alanine ligase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401227.1	murC	NC_011748	UDP-N-acetylmuramate--L-alanine ligase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 109
+Escherichia coli 536	YP_668031.1	murG	NC_008253	undecaprenyldiphospho-muramoylpentapeptide beta-N- acetylglucosaminyltransferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401226.1	murG	NC_011748	undecaprenyldiphospho-muramoylpentapeptide beta-N- acetylglucosaminyltransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 110
+Escherichia coli 536	YP_668034.1	NA	NC_008253	cell division protein FtsQ	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401229.1	ftsQ	NC_011748	cell division protein FtsQ	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 111
+Escherichia coli 536	YP_668035.1	ftsA	NC_008253	cell division protein FtsA	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401230.1	ftsA	NC_011748	cell division protein FtsA	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 112
+Escherichia coli 536	YP_668036.1	NA	NC_008253	cell division protein FtsZ	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401231.1	ftsZ	NC_011748	cell division protein FtsZ	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 113
+Escherichia coli 536	YP_668037.1	lpxC	NC_008253	UDP-3-O-[3-hydroxymyristoyl] N-acetylglucosamine deacetylase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401232.1	lpxC	NC_011748	UDP-3-O-[3-hydroxymyristoyl] N-acetylglucosamine deacetylase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 114
+Escherichia coli 536	YP_668038.1	NA	NC_008253	SecA regulator SecM	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401233.1	secM	NC_011748	SecA regulator SecM	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 115
+Escherichia coli 536	YP_668039.1	secA	NC_008253	preprotein translocase subunit SecA	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401234.1	secA	NC_011748	preprotein translocase subunit SecA	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 116
+Escherichia coli 536	YP_668040.1	NA	NC_008253	nucleoside triphosphate pyrophosphohydrolase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401235.1	mutT	NC_011748	nucleoside triphosphate pyrophosphohydrolase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 117
+Escherichia coli 536	YP_668042.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401236.1	yacF	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 118
+Escherichia coli 536	YP_668043.1	coaE	NC_008253	dephospho-CoA kinase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401237.1	coaE	NC_011748	dephospho-CoA kinase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 119
+Escherichia coli 536	YP_668044.1	NA	NC_008253	guanosine 5'-monophosphate oxidoreductase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401238.1	guaC	NC_011748	guanosine 5'-monophosphate oxidoreductase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 120
+Escherichia coli 536	YP_668045.1	NA	NC_008253	type IV pilin biogenesis protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401239.1	hofC	NC_011748	type IV pilin biogenesis protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 121
+Escherichia coli 536	YP_668046.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401240.1	hofB	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 122
+Escherichia coli 536	YP_668047.1	NA	NC_008253	major pilin subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401241.1	ppdD	NC_011748	major pilin subunit	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 123
+Escherichia coli 536	YP_668048.1	NA	NC_008253	quinolinate phosphoribosyltransferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401242.1	nadC	NC_011748	quinolinate phosphoribosyltransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 124
+Escherichia coli 536	YP_668049.1	NA	NC_008253	N-acetyl-anhydromuranmyl-L-alanine amidase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401243.1	ampD	NC_011748	N-acetyl-anhydromuranmyl-L-alanine amidase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 125
+Escherichia coli 536	YP_668050.1	NA	NC_008253	regulatory protein AmpE	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401244.1	ampE	NC_011748	regulatory protein AmpE	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 126
+Escherichia coli 536	YP_668058.1	pdhR	NC_008253	transcriptional regulator PdhR	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401246.1	pdhR	NC_011748	transcriptional regulator PdhR	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 127
+Escherichia coli 536	YP_668060.1	aceE	NC_008253	pyruvate dehydrogenase subunit E1	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401247.1	aceE	NC_011748	pyruvate dehydrogenase subunit E1	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 128
+Escherichia coli 536	YP_668061.1	aceF	NC_008253	dihydrolipoamide acetyltransferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401248.1	aceF	NC_011748	dihydrolipoamide acetyltransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 129
+Escherichia coli 536	YP_668063.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401250.1	yacH	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 130
+Escherichia coli 536	YP_668065.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401252.1	yacL	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 131
+Escherichia coli 536	YP_668066.1	NA	NC_008253	S-adenosylmethionine decarboxylase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401253.1	speD	NC_011748	S-adenosylmethionine decarboxylase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 132
+Escherichia coli 536	YP_668067.1	NA	NC_008253	spermidine synthase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401254.1	speE	NC_011748	spermidine synthase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 133
+Escherichia coli 536	YP_668068.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401255.1	yacC	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 134
+Escherichia coli 536	YP_668069.1	NA	NC_008253	multicopper oxidase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401256.1	cueO	NC_011748	multicopper oxidase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 135
+Escherichia coli 536	YP_668071.1	NA	NC_008253	glucose dehydrogenase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401257.1	gcd	NC_011748	glucose dehydrogenase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 136
+Escherichia coli 536	YP_668072.1	NA	NC_008253	hypoxanthine phosphoribosyltransferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401258.1	hpt	NC_011748	hypoxanthine phosphoribosyltransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 137
+Escherichia coli 536	YP_668202.1	NA	NC_008253	xanthine-guanine phosphoribosyltransferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401388.1	gpt	NC_011748	xanthine-guanine phosphoribosyltransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 138
+Escherichia coli 536	YP_668075.1	NA	NC_008253	ABC transporter membrane protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401261.1	yadH	NC_011748	transporter subunit: membrane component of ABC superfamily	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 139
+Escherichia coli 536	YP_668076.1	NA	NC_008253	PTS system IIA component Yadi	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401262.1	yadI	NC_011748	PTS Enzyme IIA	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 140
+Escherichia coli 536	YP_668077.1	NA	NC_008253	YadE protein, polysaccharide deacetylase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401263.1	yadE	NC_011748	polysaccharide deacetylase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 141
+Escherichia coli 536	YP_668078.1	NA	NC_008253	aspartate alpha-decarboxylase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401264.1	panD	NC_011748	aspartate alpha-decarboxylase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 142
+Escherichia coli 536	YP_668081.1	panC	NC_008253	pantoate--beta-alanine ligase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401266.1	panC	NC_011748	pantoate--beta-alanine ligase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 143
+Escherichia coli 536	YP_668082.1	panB	NC_008253	3-methyl-2-oxobutanoate hydroxymethyltransferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401267.1	panB	NC_011748	3-methyl-2-oxobutanoate hydroxymethyltransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 144
+Escherichia coli 536	YP_668085.1	NA	NC_008253	protein YadK	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401269.1	yadK	NC_011748	fimbrial-like adhesin protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 145
+Escherichia coli 536	YP_668086.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401270.1	yadL	NC_011748	fimbrial-like adhesin protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 146
+Escherichia coli 536	YP_668087.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401271.1	yadM	NC_011748	fimbrial-like adhesin protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 147
+Escherichia coli 536	YP_668090.1	NA	NC_008253	fimbrial-like protein YadN	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401274.1	yadN	NC_011748	fimbrial-like adhesin protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 148
+Escherichia coli 536	YP_668091.1	NA	NC_008253	2-amino-4-hydroxy-6- hydroxymethyldihydropteridine pyrophosphokinase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401275.1	folK	NC_011748	2-amino-4-hydroxy-6- hydroxymethyldihydropteridine pyrophosphokinase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 149
+Escherichia coli 536	YP_668092.1	pcnB	NC_008253	poly(A) polymerase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401276.1	pcnB	NC_011748	poly(A) polymerase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 150
+Escherichia coli 536	YP_668093.2	NA	NC_008253	glutamyl-Q tRNA(Asp) synthetase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401277.1	yadB	NC_011748	glutamyl-Q tRNA(Asp) synthetase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 151
+Escherichia coli 536	YP_668094.1	NA	NC_008253	DnaK transcriptional regulator DksA	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401278.1	dksA	NC_011748	RNA polymerase-binding transcription factor	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 152
+Escherichia coli 536	YP_668095.1	NA	NC_008253	sugar fermentation stimulation protein A	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401279.1	sfsA	NC_011748	sugar fermentation stimulation protein A	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 153
+Escherichia coli 536	YP_668096.1	NA	NC_008253	2'-5' RNA ligase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401280.1	ligT	NC_011748	2'-5' RNA ligase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 154
+Escherichia coli 536	YP_668097.1	NA	NC_008253	ATP-dependent RNA helicase HrpB	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401281.1	hrpB	NC_011748	ATP-dependent RNA helicase HrpB	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 155
+Escherichia coli 536	YP_668098.1	mrcB	NC_008253	penicillin-binding protein 1b	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401282.1	mrcB	NC_011748	penicillin-binding protein 1b	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 156
+Escherichia coli 536	YP_668099.1	NA	NC_008253	ferrichrome outer membrane transporter	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401283.1	fhuA	NC_011748	ferrichrome outer membrane transporter	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 157
+Escherichia coli 536	YP_668101.1	NA	NC_008253	iron-hydroxamate transporter substrate-binding subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401285.1	fhuD	NC_011748	iron-hydroxamate transporter substrate-binding subunit	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 158
+Escherichia coli 536	YP_668103.1	NA	NC_008253	glutamate-1-semialdehyde aminotransferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401287.1	hemL	NC_011748	glutamate-1-semialdehyde aminotransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 159
+Escherichia coli 536	YP_668104.1	NA	NC_008253	chloride channel protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401288.1	clcA	NC_011748	chloride channel protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 160
+Escherichia coli 536	YP_668105.1	NA	NC_008253	iron-sulfur cluster insertion protein ErpA	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401289.1	yadR	NC_011748	iron-sulfur cluster insertion protein ErpA	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 161
+Escherichia coli 536	YP_668106.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401290.1	yadS	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 162
+Escherichia coli 536	YP_668107.1	NA	NC_008253	periplasmic binding protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401291.1	btuF	NC_011748	vitamin B12-transporter protein BtuF	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 163
+Escherichia coli 536	YP_668108.1	NA	NC_008253	5'-methylthioadenosine/S-adenosylhomocysteine nucleosidase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401292.1	pfs	NC_011748	5'-methylthioadenosine/S-adenosylhomocysteine nucleosidase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 164
+Escherichia coli 536	YP_668109.1	dgt	NC_008253	deoxyguanosinetriphosphate triphosphohydrolase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401293.1	dgt	NC_011748	deoxyguanosinetriphosphate triphosphohydrolase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 165
+Escherichia coli 536	YP_668110.1	NA	NC_008253	serine endoprotease	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401294.1	degP	NC_011748	serine endoprotease	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 166
+Escherichia coli 536	YP_668111.1	NA	NC_008253	carbohydrate diacid transcriptional activator CdaR	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401295.1	cdaR	NC_011748	carbohydrate diacid transcriptional activator CdaR	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 167
+Escherichia coli 536	YP_668112.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401296.1	yaeH	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 168
+Escherichia coli 536	YP_668113.1	dapD	NC_008253	2,3,4,5-tetrahydropyridine-2,6-carboxylate N-succinyltransferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401297.1	dapD	NC_011748	2,3,4,5-tetrahydropyridine-2,6-carboxylate N-succinyltransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 169
+Escherichia coli 536	YP_668114.1	NA	NC_008253	PII uridylyl-transferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401298.1	glnD	NC_011748	PII uridylyl-transferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 170
+Escherichia coli 536	YP_668115.1	NA	NC_008253	methionine aminopeptidase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401299.1	map	NC_011748	methionine aminopeptidase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 171
+Escherichia coli 536	YP_668116.1	rpsB	NC_008253	30S ribosomal protein S2	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401301.1	rpsB	NC_011748	30S ribosomal protein S2	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 172
+Escherichia coli 536	YP_668117.1	tsf	NC_008253	elongation factor Ts	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401302.1	tsf	NC_011748	elongation factor Ts	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 173
+Escherichia coli 536	YP_668118.1	pyrH	NC_008253	uridylate kinase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401303.1	pyrH	NC_011748	uridylate kinase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 174
+Escherichia coli 536	YP_668119.1	frr	NC_008253	ribosome recycling factor	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401304.1	frr	NC_011748	ribosome recycling factor	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 175
+Escherichia coli 536	YP_668120.1	NA	NC_008253	1-deoxy-D-xylulose 5-phosphate reductoisomerase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401305.1	dxr	NC_011748	1-deoxy-D-xylulose 5-phosphate reductoisomerase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 176
+Escherichia coli 536	YP_668121.1	NA	NC_008253	undecaprenyl pyrophosphate synthase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401306.1	ispU	NC_011748	undecaprenyl pyrophosphate synthase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 177
+Escherichia coli 536	YP_668122.1	cdsA	NC_008253	CDP-diglyceride synthase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401307.1	cdsA	NC_011748	CDP-diglyceride synthase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 178
+Escherichia coli 536	YP_668123.1	NA	NC_008253	zinc metallopeptidase RseP	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401308.1	yaeL	NC_011748	zinc metallopeptidase RseP	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 179
+Escherichia coli 536	YP_668124.1	NA	NC_008253	outer membrane protein assembly factor YaeT	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401309.1	yaeT	NC_011748	outer membrane protein assembly factor YaeT	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 180
+Escherichia coli 536	YP_668125.1	NA	NC_008253	periplasmic chaperone	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401310.1	hlpA	NC_011748	periplasmic chaperone	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 181
+Escherichia coli 536	YP_668126.1	lpxD	NC_008253	UDP-3-O-[3-hydroxymyristoyl] glucosamine N-acyltransferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401311.1	lpxD	NC_011748	UDP-3-O-[3-hydroxymyristoyl] glucosamine N-acyltransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 182
+Escherichia coli 55989	YP_002401313.1	lpxA	NC_011748	UDP-N-acetylglucosamine acyltransferase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 536	YP_668128.1	NA	NC_008253	UDP-N-acetylglucosamine acyltransferase	Escherichia coli 536, complete genome.
+
+Orthogroup 183
+Escherichia coli 536	YP_668127.1	fabZ	NC_008253	(3R)-hydroxymyristoyl-ACP dehydratase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401312.1	fabZ	NC_011748	(3R)-hydroxymyristoyl-ACP dehydratase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 184
+Escherichia coli 536	YP_668129.1	lpxB	NC_008253	lipid-A-disaccharide synthase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401314.1	lpxB	NC_011748	lipid-A-disaccharide synthase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 185
+Escherichia coli 536	YP_668130.1	rnhB	NC_008253	ribonuclease HII	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401315.1	rnhB	NC_011748	ribonuclease HII	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 186
+Escherichia coli 536	YP_668131.1	dnaE	NC_008253	DNA polymerase III subunit alpha	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401316.1	dnaE	NC_011748	DNA polymerase III subunit alpha	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 187
+Escherichia coli 536	YP_668132.1	NA	NC_008253	acetyl-CoA carboxylase carboxyltransferase subunit alpha	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401317.1	accA	NC_011748	acetyl-CoA carboxylase carboxyltransferase subunit alpha	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 188
+Escherichia coli 536	YP_668134.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401319.1	yaeR	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 189
+Escherichia coli 536	YP_668135.1	tilS	NC_008253	tRNA(Ile)-lysidine synthetase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401320.1	tilS	NC_011748	tRNA(Ile)-lysidine synthetase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 190
+Escherichia coli 536	YP_668136.1	NA	NC_008253	Rho-binding antiterminator	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401321.1	rof	NC_011748	Rho-binding antiterminator	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 191
+Escherichia coli 536	YP_668137.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401322.1	yaeP	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 192
+Escherichia coli 536	YP_668138.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401323.1	yaeQ	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 193
+Escherichia coli 536	YP_668139.1	NA	NC_008253	peptidyl-tRNA hydrolase domain-containing protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401324.1	yaeJ	NC_011748	peptidyl-tRNA hydrolase domain-containing protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 194
+Escherichia coli 536	YP_668140.1	NA	NC_008253	lipoprotein involved with copper homeostasis and adhesion	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401325.1	nlpE	NC_011748	lipoprotein involved with copper homeostasis and adhesion	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 195
+Escherichia coli 536	YP_668143.1	NA	NC_008253	prolyl-tRNA synthetase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401327.1	proS	NC_011748	prolyl-tRNA synthetase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 196
+Escherichia coli 536	YP_668144.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401328.1	yaeB	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 197
+Escherichia coli 536	YP_668145.1	rcsF	NC_008253	outer membrane lipoprotein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401329.1	rcsF	NC_011748	outer membrane lipoprotein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 198
+Escherichia coli 536	YP_668146.1	metQ	NC_008253	DL-methionine transporter substrate-binding subunit	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401330.1	metQ	NC_011748	DL-methionine transporter substrate-binding subunit	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 199
+Escherichia coli 536	YP_668149.1	NA	NC_008253	D,D-heptose 1,7-bisphosphate phosphatase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401333.1	gmhB	NC_011748	D,D-heptose 1,7-bisphosphate phosphatase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 200
+Escherichia coli 536	YP_668152.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401338.1	yafD	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 201
+Escherichia coli 536	YP_668153.1	NA	NC_008253	methyltransferase YafE	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401339.1	yafE	NC_011748	S-adenosyl-L-methionine-dependent methyltransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 202
+Escherichia coli 536	YP_668154.1	mltD	NC_008253	membrane-bound lytic murein transglycosylase D	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401340.1	mltD	NC_011748	membrane-bound lytic murein transglycosylase D	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 203
+Escherichia coli 536	YP_668155.1	NA	NC_008253	hydroxyacylglutathione hydrolase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401341.1	gloB	NC_011748	hydroxyacylglutathione hydrolase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 204
+Escherichia coli 536	YP_668156.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401342.1	yafS	NC_011748	S-adenosyl-L-methionine-dependent methyltransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 205
+Escherichia coli 536	YP_668157.1	rnhA	NC_008253	ribonuclease H	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401343.1	rnhA	NC_011748	ribonuclease H	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 206
+Escherichia coli 536	YP_668158.1	NA	NC_008253	DNA polymerase III subunit epsilon	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401344.1	dnaQ	NC_011748	DNA polymerase III subunit epsilon	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 207
+Escherichia coli 536	YP_668159.1	NA	NC_008253	lipoprotein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401345.1	yafT	NC_011748	aminopeptidase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 208
+Escherichia coli 536	YP_668161.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401348.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 209
+Escherichia coli 536	YP_668162.1	NA	NC_008253	IcmF-like protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401349.1	NA	NC_011748	IcmF-like protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 210
+Escherichia coli 536	YP_668163.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401350.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 211
+Escherichia coli 536	YP_668164.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401351.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 212
+Escherichia coli 536	YP_668165.1	NA	NC_008253	Clp ATPase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401352.1	NA	NC_011748	ATP-dependent Clp proteinase Aec27 ATP-binding chain, with chaperone activity	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 213
+Escherichia coli 536	YP_668166.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401353.1	NA	NC_011748	membrane protein Aec26	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 214
+Escherichia coli 536	YP_668167.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401354.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 215
+Escherichia coli 536	YP_668168.1	NA	NC_008253	lipoprotein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401355.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 216
+Escherichia coli 536	YP_668169.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401356.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 217
+Escherichia coli 536	YP_668170.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401357.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 218
+Escherichia coli 536	YP_668171.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401358.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 219
+Escherichia coli 536	YP_668172.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401359.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 220
+Escherichia coli 536	YP_668173.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401360.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 221
+Escherichia coli 536	YP_668174.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401362.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 222
+Escherichia coli 536	YP_668185.1	NA	NC_008253	C-lysozyme inhibitor	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401371.1	ivy	NC_011748	C-lysozyme inhibitor	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 223
+Escherichia coli 536	YP_668186.1	fadE	NC_008253	acyl-CoA dehydrogenase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401372.1	fadE	NC_011748	acyl-CoA dehydrogenase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 224
+Escherichia coli 536	YP_668187.1	gmhA	NC_008253	phosphoheptose isomerase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401373.1	gmhA	NC_011748	phosphoheptose isomerase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 225
+Escherichia coli 536	YP_668188.1	NA	NC_008253	glutamine amidotransferase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401374.1	yafJ	NC_011748	class-II glutamine amidotransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 226
+Escherichia coli 536	YP_668189.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401375.1	yafK	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 227
+Escherichia coli 536	YP_668190.1	NA	NC_008253	lipoprotein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401378.1	yafL	NC_011748	hydrolase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 228
+Escherichia coli 536	YP_668193.1	NA	NC_008253	flagellar biosynthetic protein FlhA	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401381.1	fhiA	NC_011748	flagellar system protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 229
+Escherichia coli 536	YP_668194.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401382.1	mbhA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 230
+Escherichia coli 536	YP_668195.1	NA	NC_008253	DNA polymerase IV	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401383.1	dinB	NC_011748	DNA polymerase IV	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 231
+Escherichia coli 536	YP_668199.1	NA	NC_008253	hypothetical protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401385.1	NA	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 232
+Escherichia coli 536	YP_668200.2	prfH	NC_008253	peptide chain release factor-like protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401386.1	prfH	NC_011748	peptide chain release factor-like protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 233
+Escherichia coli 536	YP_668201.1	NA	NC_008253	aminoacyl-histidine dipeptidase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401387.1	pepD	NC_011748	aminoacyl-histidine dipeptidase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 234
+Escherichia coli 536	YP_668203.1	frsA	NC_008253	fermentation/respiration switch protein	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401389.1	frsA	NC_011748	fermentation/respiration switch protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 235
+Escherichia coli 536	YP_668204.1	NA	NC_008253	DNA-binding transcriptional regulator Crl	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401390.1	crl	NC_011748	DNA-binding transcriptional regulator Crl	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 236
+Escherichia coli 536	YP_668205.1	NA	NC_008253	outer membrane phosphoporin protein E	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401391.1	phoE	NC_011748	outer membrane phosphoporin protein E	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 237
+Escherichia coli 536	YP_668206.1	NA	NC_008253	gamma-glutamyl kinase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401392.1	proB	NC_011748	gamma-glutamyl kinase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 238
+Escherichia coli 536	YP_668207.1	proA	NC_008253	gamma-glutamyl phosphate reductase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401393.1	proA	NC_011748	gamma-glutamyl phosphate reductase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 239
+Escherichia coli 536	YP_668236.1	NA	NC_008253	outer membrane receptor FepA	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401691.1	fepA	NC_011748	outer membrane receptor FepA	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 240
+Escherichia coli 536	YP_668238.1	NA	NC_008253	esterase	Escherichia coli 536, complete genome.
+Escherichia coli 55989	YP_002401692.1	fes	NC_011748	enterobactin/ferric enterobactin esterase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 241
+Escherichia coli 55989	YP_002401192.1	surA	NC_011748	peptidyl-prolyl cis-trans isomerase SurA	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401571.1	ppiD	NC_011748	peptidyl-prolyl cis-trans isomerase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 242
+Escherichia coli 55989	YP_002401443.1	yahB	NC_011748	DNA-binding transcriptional regulator	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401635.1	ybbS	NC_011748	DNA-binding transcriptional activator AllS	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 243
+Escherichia coli 55989	YP_002401418.1	yagV	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401421.1	yagY	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 244
+Escherichia coli 55989	YP_002401427.1	ykgA	NC_011748	Putatve transcriptional regulator ykgA	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002405899.1	rob	NC_011748	DNA-binding transcriptional activator	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 245
+Escherichia coli 55989	YP_002401442.1	yahA	NC_011748	cyclic di-GMP phosphodiesterase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401586.1	ylaB	NC_011748	inner membrane protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 246
+Escherichia coli 55989	YP_002401446.1	yahE	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401650.1	ylbF	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 247
+Escherichia coli 55989	YP_002401447.1	yahF	NC_011748	enzyme with acyl-CoA domain	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401648.1	fdrA	NC_011748	membrane protein FdrA	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 248
+Escherichia coli 55989	YP_002401448.1	yahG	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401649.1	ylbE	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 249
+Escherichia coli 55989	YP_002401449.1	yahI	NC_011748	carbamate kinase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401651.1	ybcF	NC_011748	carbamate kinase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 250
+Escherichia coli 55989	YP_002401450.1	yahJ	NC_011748	deaminase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401468.1	codA	NC_011748	cytosine deaminase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 251
+Escherichia coli 55989	YP_002401454.1	NA	NC_011748	permease component of sugar ABC transport system	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401455.1	NA	NC_011748	permease component of sugar ABC transport system	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 252
+Escherichia coli 55989	YP_002401473.1	lacA	NC_011748	galactoside O-acetyltransferase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401588.1	maa	NC_011748	maltose O-acetyltransferase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 253
+Escherichia coli 55989	YP_002401510.1	insB	NC_011748	IS1 transposase InsAB'	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401628.1	insB	NC_011748	IS1 transposase InsAB'	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 254
+Escherichia coli 55989	YP_002401511.1	insA	NC_011748	IS1 repressor protein InsA	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401627.1	insA	NC_011748	IS1 repressor protein InsA	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 255
+Escherichia coli 55989	YP_002401522.1	mak	NC_011748	fructokinase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401771.1	nagC	NC_011748	DNA-binding transcriptional dual regulator	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 256
+Escherichia coli 55989	YP_002401591.1	acrB	NC_011748	multidrug efflux system protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401682.1	cusA	NC_011748	copper/silver efflux system, membrane component	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 257
+Escherichia coli 55989	YP_002401622.1	ybbO	NC_011748	short chain dehydrogenase	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401704.1	entA	NC_011748	2,3-dihydroxybenzoate-2,3-dehydrogenase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 258
+Escherichia coli 55989	YP_002401745.1	phpB	NC_011748	phosphatase with phosphoglycerate mutase domain	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002405898.1	ytjC	NC_011748	phosphoglycerate mutase	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 259
+Escherichia coli 55989	YP_002401752.1	ybeR	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401755.1	ybeU	NC_011748	hypothetical protein	Escherichia coli 55989 chromosome, complete genome.
+
+Orthogroup 260
+Escherichia coli 55989	YP_002401753.1	djlB	NC_011748	DnaJ-class chaperone	Escherichia coli 55989 chromosome, complete genome.
+Escherichia coli 55989	YP_002401756.1	djlC	NC_011748	Hsc56 co-chaperone of HscC	Escherichia coli 55989 chromosome, complete genome.
+

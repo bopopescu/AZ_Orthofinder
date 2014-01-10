@@ -43,7 +43,8 @@ def make_proteomes(annotations, out_dir):
     elif isdir(annotations) and listdir(annotations):
         annotations_dir = annotations
         gb_files = [join(annotations_dir, fname)
-                    for fname in listdir(annotations_dir) if fname[0] != '.']
+                    for fname in listdir(annotations_dir)
+                    if fname and fname[0] != '.']
 
     if not gb_files: log.error('   No references provided.')
 

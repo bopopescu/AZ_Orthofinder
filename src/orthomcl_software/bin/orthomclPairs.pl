@@ -24,7 +24,7 @@ map {
 
 my $suffix = $optArgs{'suffix'};
 
-die "Error: Suffix '$suffix' is greater than 11 characters." if length($suffix) > 11;
+#die "Error: Suffix '$suffix' is greater than 11 characters." if length($suffix) > 11;
 
 my $base = OrthoMCLEngine::Main::Base->new($configFile, *LOGFILE);
 my $inParalogTable = $base->getConfig("inParalogTable");

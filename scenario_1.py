@@ -22,7 +22,7 @@ script_path = dirname(realpath(__file__))
 
 def run_workflow(working_dir,
                  species_list, ids_list, annotations, proteomes, prot_id_field,
-                 min_length, max_percent_stop,
+                 min_length, max_percent_stop, evalue,
                  ask_before=False,
                  start_after=None, start_from=None, overwrite=True,
                  threads=1,
@@ -72,7 +72,7 @@ def run_workflow(working_dir,
     workflow.extend([
         steps.filter_proteomes(min_length, max_percent_stop),
         steps.make_blast_db(),
-        steps.blast(threads),
+        steps.blast(threads, evalue),
         steps.parse_blast_results(),
         steps.clean_database(suffix),
         steps.install_schema(suffix),
@@ -221,6 +221,7 @@ def main(args):
         annotations=annotations, proteomes=proteomes,
         prot_id_field=int(p.prot_id_field),
         min_length=int(p.min_length), max_percent_stop=int(p.max_percent_stop),
+        evalue=float(p.evalue),
 
         ask_before=p.ask_each_step,
         start_after=start_after, start_from=start_from, overwrite=True,

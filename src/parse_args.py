@@ -63,6 +63,8 @@ def add_common_arguments(op):
 
     op.add_argument('--max-percent-stop', dest='max_percent_stop', default=20)
 
+    op.add_argument('--evalue', dest='evalue', default=1e-5)
+
     op.add_argument('-d', '--debug', dest='debug', action='store_true', default=False)
 
     # op.add_argument('-w', '--overwrite', dest='overwrite', action='store_true', default=False,
@@ -82,6 +84,8 @@ def add_common_arguments(op):
     --min-length           Minimum allowed length of proteins (default: 10)
 
     --max-percent_stop     Maximum percent stop codons (default: 20)
+
+    --evalue               Blast e-value (default: 1e-5)
 
     -t  --threads          Number of threads to run Blast. Default 30.
     '''

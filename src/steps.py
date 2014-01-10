@@ -109,7 +109,7 @@ def make_blast_db():
          req_files=[good_proteins],
          prod_files=[blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']])
 
-def blast(threads):
+def blast(threads, evalue=1e-5):
     parameters = [
         '-query', good_proteins,
         '-db', blast_db,
@@ -117,7 +117,7 @@ def blast(threads):
         '-outfmt', 6,  # tabular
         '-seg', 'yes',
         '-soft_masking', 'true',
-        '-evalue', 1e-5,
+        '-evalue', evalue,
         '-dbsize', BLAST_DBSIZE]
 
     def run():

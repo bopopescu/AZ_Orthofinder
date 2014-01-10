@@ -4,7 +4,7 @@ from genericpath import isfile
 import sys
 import logging
 from os import chdir, mkdir, getcwd, listdir
-from os.path import join, exists, isdir, dirname, realpath, basename, relpath
+from os.path import join, exists, isdir, dirname, realpath, basename, relpath, splitext
 from Bio import SeqIO
 from src import steps
 from src.argparse import ArgumentParser
@@ -175,19 +175,25 @@ def main(args):
         if not files: interrupt('Directory contains no files.')
 
         for f in (join(p.directory, f) for f in files if isfile(join(p.directory, f))):
-            try:
-                log.debug('Checking if %s is fasta.' % f)
-                next(SeqIO.parse(f, 'fasta'))
-            except Exception, e:
+            if '.' in f and splitext(f)[1] in ['.fasta', '.faa', '.fa', '.fsa']:
                 try:
-                    log.debug('Checking if %s is genbank.' % f)
+                    log.debug('   Checking if %s is fasta.' % f)
+                    next(SeqIO.parse(f, 'fasta'))
+                except Exception, e:
+                    pass
+                else:
+                    proteomes.append(relpath(f, p.directory))
+                    continue
+            if '.' in f and splitext(f)[1] in ['.gb', '.genbank', '.gbk']:
+                try:
+                    log.debug('   Checking if %s is genbank.' % f)
                     SeqIO.read(f, 'genbank')
                 except Exception, e:
                     log.debug(str(e) + ', ' + f)
                 else:
                     annotations.append(relpath(f, p.directory))
-            else:
-                proteomes.append(relpath(f, p.directory))
+        log.debug('')
+
 
         if not proteomes and not annotations:
             interrupt('Directory must contain fasta or genbank files.')

@@ -76,21 +76,22 @@ def cmdline(command, parameters=None, stdin=None,
 
         stdout_f = None
         stderr_f = None
+
         if stdout:
-            if stdout in ['log', 'pipe']:
+            if stdout in ['pipe', 'log']:
                 stdout_f = subprocess.PIPE
             else:
                 stdout_f = open(stdout, 'w')
                 commandline += ' > ' + stdout
 
-                if stderr in ['log', 'pipe']:
-                    stderr_f = subprocess.STDOUT
-
         if stderr:
-            if stderr in ['log', 'pipe'] and stderr_f != subprocess.STDOUT:
+            if stderr == stdout:
+                stderr_f = subprocess.STDOUT
+            elif stderr in ['pipe', 'log']:
                 stderr_f = subprocess.PIPE
             else:
                 stderr_f = open(stderr, 'w')
+                commandline += ' 2> ' + stderr
 
         log.info('   ' + commandline)
         try:
@@ -102,6 +103,7 @@ def cmdline(command, parameters=None, stdin=None,
                         log.info('   ' + line.strip())
                     if stdout == 'log':
                         log.debug('   ' + line.strip())
+
             if stderr_f == subprocess.PIPE:
                 for line in iter(p.stderr.readline, ''):
                     if stderr == 'pipe':

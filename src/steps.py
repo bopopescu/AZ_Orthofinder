@@ -105,7 +105,7 @@ def make_blast_db():
                 '-input_type', 'fasta',
                 '-out', blast_db,
                 '-dbtype', 'prot'],
-              stderr='log',),
+              stderr='log'),
          req_files=[good_proteins],
          prod_files=[blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']])
 

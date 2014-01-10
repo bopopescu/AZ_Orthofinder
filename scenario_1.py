@@ -162,7 +162,7 @@ def main(args):
         interrupt('No such directory: ' + p.directory)
 
     set_up_logging(p.debug, p.directory)
-    log.info(' '.join(args) + '\n')
+    log.info(basename(__file__) + ' ' + ' '.join(args) + '\n')
     set_up_config()
     start_from, start_after = get_start_after_from(p.start_from, join(p.directory, log_fname))
 
@@ -176,9 +176,11 @@ def main(args):
 
         for f in (join(p.directory, f) for f in files if isfile(join(p.directory, f))):
             try:
+                log.debug('Checking if %s is fasta.' % f)
                 next(SeqIO.parse(f, 'fasta'))
             except Exception, e:
                 try:
+                    log.debug('Checking if %s is genbank.' % f)
                     SeqIO.read(f, 'genbank')
                 except Exception, e:
                     log.debug(str(e) + ', ' + f)

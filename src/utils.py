@@ -81,6 +81,16 @@ def read_list(file, where_to_save=None):
     return results
 
 
+def internet_on():
+    import urllib2
+    try:
+        response = urllib2.urlopen('http://74.125.228.100', timeout=1)
+    except urllib2.URLError as err:
+        return False
+    else:
+        return True
+
+
 def set_up_config():
     with open(config_file) as cf:
         conf = dict(l.strip().split('=', 1) for l

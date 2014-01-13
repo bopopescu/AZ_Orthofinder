@@ -28,7 +28,7 @@ def adjust_proteomes(proteomes, proteomes_dir, prot_id_field):
             prot_id = fields[prot_id_field]
             if len(prot_id) > 30:
                 prot_id = prot_id[:17] + '...' + prot_id[-10:]
-            if prot_ids in prot_ids:
+            if prot_id in prot_ids:
                 log.error('Fasta %s contains duplicate id: %s' % (proteome, prot_id))
                 return 1
             prot_ids.add(prot_id)

@@ -64,6 +64,8 @@ printPreviousSubject($subject);
 
 ########################################################################################
 
+use File::Basename;
+
 sub getGenesFromFasta {
     my $fastaFilesDir = shift(@_);
     my (@fastaFiles) = @_;
@@ -72,8 +74,11 @@ sub getGenesFromFasta {
     foreach my $fastaFile (@fastaFiles) {
 	next if $fastaFile =~ /^\./;
 	print STDERR "acquiring genes from $fastaFile\n";
-	$fastaFile =~ /(\w+).fasta/ || die "'$fastaFile' is not in 'taxon.fasta' format\n";
-	my $taxon = $1;
+	my @exts = qw(.faa .fasta);
+	my ($taxon, $dir, $ext) = fileparse($fastaFile, @exts);
+#	$fastaFile =~ /(\w+).fasta/ || die "'$fastaFile' is not in 'taxon.fasta' format\n";
+#	my $taxon = $1;
+#    print $dir, " ", $fastaFile, " ", $ext, " ";
 	open(FF,"$fastaFilesDir/$fastaFile") || die "can't open fasta file '$fastaFilesDir/$fastaFile'";
 	my $gene;
 	my $length;

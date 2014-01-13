@@ -13,7 +13,7 @@ from src import steps
 from src.argparse import ArgumentParser
 
 from src.utils import make_workflow_id, read_list, set_up_config, \
-    get_starting_step, check_installed_tools, interrupt, register_ctrl_c
+    get_starting_step, check_installed_tools, interrupt, register_ctrl_c, internet_on
 from src.parse_args import arg_parse_error, check_file, check_dir, \
     add_common_arguments, check_common_args
 from src.logger import set_up_logging
@@ -126,7 +126,7 @@ def collect_proteomes_and_annotaitons(directory):
     return proteomes, annotations
 
 
-def step_produce_proteomes_and_annotations(p, internet_is_on):
+def step_prepare_proteomes_and_annotations(p, internet_is_on):
     def run():
         if p.species_list:
             if not internet_is_on:
@@ -187,16 +187,6 @@ def step_produce_proteomes_and_annotations(p, internet_is_on):
         prod_files=['proteomes', 'annotations'])
 
 
-def internet_on():
-    import urllib2
-    try:
-        response = urllib2.urlopen('http://74.125.228.100', timeout=1)
-    except urllib2.URLError as err:
-        return False
-    else:
-        return True
-
-
 def main(args):
     register_ctrl_c()
 
@@ -206,15 +196,6 @@ def main(args):
     check_installed_tools(['blastp', 'mcl'])
     set_up_config()
     start_from, start_after = get_starting_step(p.start_from, join(p.directory, log_fname))
-
-    #if 'proteomes' in listdir(p.directory):
-    #    proteomes = [relpath(join('proteomes', f))
-    #                 for f in listdir(join(p.directory, 'proteomes'))
-    #                 if f and f[0] != '.']
-    #elif 'annotations' in listdir(p.directory):
-    #        annotations = [relpath(join('annotations', f))
-    #                       for f in listdir(join(p.directory, 'annotations'))
-    #                       if f and f[0] != '.']
 
     working_dir = p.directory
     log.info('Changing to %s' % working_dir)
@@ -234,10 +215,12 @@ def main(args):
     internet_is_on = internet_on()
 
     workflow.extend([
-        step_produce_proteomes_and_annotations(p, internet_is_on),
-        steps.filter_proteomes(p.min_length, p.max_percent_stop),
+        step_prepare_proteomes_and_annotations(p, internet_is_on),
+
+        steps.filter_proteomes(min_length=int(p.min_length),
+                               max_percent_stop=int(p.max_percent_stop)),
         steps.make_blast_db(),
-        steps.blast(p.threads, evalue=p.evalue),
+        steps.blast(p.threads, evalue=float(p.evalue)),
         steps.parse_blast_results(),
         steps.clean_database(suffix),
         steps.install_schema(suffix),

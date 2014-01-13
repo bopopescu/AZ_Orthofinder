@@ -90,36 +90,6 @@ with open(orthomcl_config) as f:
 #         prod_files=[proteomes_dir])
 
 
-######################################################################
-def step_filter_assembly(assembly, assembly_name):
-    return Step(
-        'Filtering assembly',
-         run=lambda: filter_assembly(assembly, join(intermediate_dir, assembly_name + '.fna')),
-         req_files=[assembly],
-         prod_files=[join(intermediate_dir, assembly_name + '.fna')])
-
-def finding_genes(assembly_name):
-    return Step(
-        'Finding genes',
-         run=cmdline('prodigal',
-             parameters=[
-                 '-a', join(proteomes_dir, assembly_name + '.fasta'),
-                 '-o', join(annotations_dir, assembly_name + '.gbk'),
-                 '-i', join(intermediate_dir, assembly_name + '.fna')]),
-         req_files=[proteomes_dir,
-                    join(intermediate_dir, assembly_name + '.fna')],
-         prod_files=[join(proteomes_dir, assembly_name + '.fasta')])
-
-def step_adjust_new_proteome(assembly_name, id_field=0):
-    return Step(
-        'Adjusting proteome',
-         run=lambda: adjust_proteomes(
-             [join(proteomes_dir, assembly_name + '.fasta')],
-             proteomes_dir,
-             id_field),
-         req_files=[proteomes_dir,
-                    join(proteomes_dir, assembly_name + '.fasta')])
-
 #def filter_new_proteome(assembly_name, min_length=10, max_percent_stop=20):
 #    return Step(
 #        'Filtering proteome',
@@ -261,8 +231,7 @@ def find_pairs(suffix):
              parameters=[orthomcl_config,
                          pairs_log,
                          'cleanup=yes',
-                         'suffix=' + suffix],
-             stderr='log'),
+                         'suffix=' + suffix]),
          req_files=[orthomcl_config],
          req_tables=[in_paralog_table + suffix,
                      ortholog_table + suffix,
@@ -301,9 +270,9 @@ def mcl(inflation=1.5):
          req_files=[mcl_input],
          prod_files=[mcl_output])
 
-def step_save_orthogroups(annotations=None, internet_on=True):
+def step_save_orthogroups(assembly_proteomes=None, annotations=None, internet_on=True):
     run = lambda: save_orthogroups(
-        annotations or annotations_dir, mcl_output,
+        assembly_proteomes, annotations or annotations_dir, mcl_output,
         orthogroups_file, nice_orthogroups_file, short_orthogroups_file)
 
     prod_files = [orthogroups_file, nice_orthogroups_file, short_orthogroups_file]

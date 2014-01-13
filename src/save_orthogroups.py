@@ -1,6 +1,6 @@
 from itertools import count, izip, repeat
 from os import listdir, mkdir, rmdir
-from os.path import join, isdir, splitext
+from os.path import join, isdir, splitext, basename
 from shutil import rmtree
 
 from Bio import SeqIO, Entrez
@@ -36,7 +36,7 @@ def save_compact(mcl_output, out):
     return 0
 
 
-def save_orthogroups(annotations, mcl_output, out, out_nice, out_short):
+def save_orthogroups(assembly_proteins, annotations, mcl_output, out, out_nice, out_short):
     strains = dict()
     max_lengths = count(0)
 
@@ -54,12 +54,65 @@ def save_orthogroups(annotations, mcl_output, out, out_nice, out_short):
     if not gb_files:
         return save_compact(mcl_output, out)
 
+
+    # Assembly genes
+    if assembly_proteins:
+        log.debug('   Reading ' + assembly_proteins)
+        assembly_name = splitext(basename(assembly_proteins))[0]
+        strain_id = assembly_name
+        strain = assembly_name
+
+        genes_by_protid = dict()
+        for rec in SeqIO.parse(assembly_proteins, 'fasta'):
+            prot_id = rec.id.split('|')[1]
+            locus = 'NA'
+            description = rec.description
+            gene_id = 'NA'
+            product = 'NA'
+
+            genes_by_protid[prot_id] = \
+                [strain, prot_id, gene_id, locus, product, description]
+
+            max_lengths = map(max, zip(max_lengths, map(len, genes_by_protid[prot_id][:-1])))
+
+        strains[strain_id] = genes_by_protid
+
+
+    # Other genes
     for fname in gb_files:
         log.debug('   Reading ' + fname)
 
-        #if splitext(fname)
+        #if assembly_name and '.' in fname and splitext(basename(fname))[0] == assembly_name:
+        #    strain_id = assembly_name
+        #    strain = assembly_name
+        #
+        #    a = SeqIO.parse(fname, 'genbank')
+        #    b = list(a)
+        #
+        #    for rec in SeqIO.parse(fname, 'genbank'):
+        #        locus = rec.name
+        #        description = rec.definition
+        #
+                #        genes_by_protid = dict()
+        #
+        #        for feature in rec.features:
+        #            if feature.type == 'CDS':
+        #                qs = feature.qualifiers
+        #                prot_id = qs.get('protein_id', ['NA'])[0]
+        #                gene_id = qs.get('gene', ['NA'])[0]
+        #                product = qs.get('product', ['NA'])[0]
+        #
+        #                genes_by_protid[prot_id] = \
+        #                    [strain, prot_id, gene_id, locus, product, description]
+        #
+        #                max_lengths = map(max, zip(max_lengths, map(len, genes_by_protid[prot_id][:-1])))
+        #
+        #        strains[strain_id] = genes_by_protid
+
+        #else:
         try:
             rec = SeqIO.read(fname, 'genbank')
+            strain_id = rec.id
         except ValueError:
             log.error('   Could not read annotations from ' + fname)
             return 1
@@ -89,8 +142,10 @@ def save_orthogroups(annotations, mcl_output, out, out_nice, out_short):
 
                 max_lengths = map(max, zip(max_lengths, map(len, genes_by_protid[prot_id][:-1])))
 
-        strains[rec.id] = genes_by_protid
+        strains[strain_id] = genes_by_protid
 
+
+    # Writing result files
     with open(mcl_output) as mcl_f:
         with open(out, 'w') as out_f:
             with open(out_nice, 'w') as nice_f:

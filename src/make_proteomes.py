@@ -1,8 +1,9 @@
+from genericpath import isfile
 from itertools import izip, count
 from shutil import rmtree, copy, copyfile
 import subprocess
 from sys import stderr
-from os import makedirs, chdir, mkdir, listdir
+from os import makedirs, chdir, mkdir, listdir, remove
 from os.path import join, isdir, basename, splitext
 from Bio import SeqIO, Entrez
 from Bio.Seq import Seq
@@ -24,12 +25,17 @@ def adjust_proteomes(proteomes, out_dir, id_field):
         for seq in SeqIO.parse(proteome, 'fasta'):
             fields = seq.id.replace('|', ' ').split()
             prot_id = fields[id_field]
+            if len(prot_id) > 30:
+                prot_id = prot_id[:17] + '...' + prot_id[-10:]
             if prot_ids in prot_ids:
                 log.error('Fasta %s contains duplicate id: %s' % (proteome, prot_id))
                 return 1
             prot_ids.add(prot_id)
             seq.id = taxon_id + '|' + prot_id
             records.append(seq)
+        out = join(out_dir, taxon_id + '.fasta')
+        if isfile(out):
+            remove(out)
         SeqIO.write(records, join(out_dir, taxon_id + '.fasta'), 'fasta')
 
     return 0

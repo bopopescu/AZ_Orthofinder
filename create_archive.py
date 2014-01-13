@@ -3,7 +3,7 @@
 from genericpath import isfile, exists
 from os import walk, remove, mkdir, symlink, unlink
 from os.path import isdir, join, relpath, abspath
-from shutil import copytree, ignore_patterns, copy2, rmtree
+from shutil import copytree, ignore_patterns, copy2, rmtree, copy
 from zipfile import ZipFile, ZIP_DEFLATED
 from datetime import datetime
 from time import strftime, strptime
@@ -80,9 +80,12 @@ if __name__ == '__main__':
 
     rmtree(archive_dir)
 
-    symlink_fpath = join(dropbox_folder, archive_dir + '.zip')
-    try:
-        unlink(symlink_fpath)
-    except:
-        pass
-    symlink(archive_file, symlink_fpath)
+    copy_fpath = join(dropbox_folder, archive_dir + '.zip')
+    if isfile(copy_fpath):
+        remove(copy_fpath)
+    copy(archive_file, copy_fpath)
+    #try:
+    #    unlink(symlink_fpath)
+    #except:
+    #    pass
+    #symlink(archive_file, symlink_fpath)

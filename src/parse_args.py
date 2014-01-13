@@ -1,5 +1,5 @@
 from collections import namedtuple
-from genericpath import isfile, isdir
+from genericpath import isfile, isdir, exists
 from os.path import join
 import sys
 from src import config
@@ -49,8 +49,6 @@ from src import config
 
 
 def add_common_arguments(op):
-    op.add_argument('-o', dest='out_dir')
-
     op.add_argument('--start-from', dest='start_from', default=0)
 
     op.add_argument('--ask', '--ask-each-step',
@@ -106,6 +104,9 @@ def check_file(fpath):
         interrupt('File ' + fpath + ' does not exist or is a directory.')
 
 def check_dir(dirpath):
-    if dirpath and not isdir(dirpath):
-        interrupt('Directory ' + dirpath + ' does not exist or is a file.')
+    if dirpath:
+        if not exists(dirpath):
+            interrupt('Directory ' + dirpath + ' does not exist.')
+        if not isdir(dirpath):
+            interrupt(dirpath + ' is a file.')
 

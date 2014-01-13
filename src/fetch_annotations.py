@@ -60,21 +60,26 @@ def fetch_annotations_for_ids(save_dir, ref_ids):
 
     log.info('   IDs: %s' % ', '.join(ref_ids))
 
+
     for i, id in enumerate(ref_ids):
         log.info('   Fetching %s...' % id)
 
-        fetch_handle = Entrez.efetch(db='nucleotide', id=id,
-                                     retmode='text', rettype='gbwithparts')
-        gb_fpath = join(save_dir, id + '.gb')
-        with open(gb_fpath, 'w') as file:
-            file.write(fetch_handle.read())
+        try:
+            fetch_handle = Entrez.efetch(db='nucleotide', id=id,
+                                         retmode='text', rettype='gbwithparts')
+            gb_fpath = join(save_dir, id + '.gb')
+            with open(gb_fpath, 'w') as file:
+                file.write(fetch_handle.read())
 
-        rec = SeqIO.read(gb_fpath, 'genbank')
-        genes_number = len([f for f in rec.features if f.type == 'CDS'])
-        log.info('       ' + rec.description)
-        log.info('       %d genes found.' % genes_number)
-        log.info('       saved %s' % gb_fpath)
-        log.info('')
+            rec = SeqIO.read(gb_fpath, 'genbank')
+            genes_number = len([f for f in rec.features if f.type == 'CDS'])
+            log.info('       ' + rec.description)
+            log.info('       %d genes found.' % genes_number)
+            log.info('       saved %s' % gb_fpath)
+            log.info('')
+
+        except KeyboardInterrupt, e:
+            return 1
 
     return 0
 

@@ -1,6 +1,7 @@
-from itertools import count, izip
-from os import listdir, mkdir
-from os.path import join, isdir
+from itertools import count, izip, repeat
+from os import listdir, mkdir, rmdir
+from os.path import join, isdir, splitext
+from shutil import rmtree
 
 from Bio import SeqIO, Entrez
 from fetch_annotations import fetch_annotations_for_ids
@@ -12,29 +13,33 @@ log = logging.getLogger(config.log_fname)
 
 #Gene = namedtuple('Gene', 'protein strain gi gene locus product description')
 
+def __download(annotations, mcl_output):
+    log.info('   Fetching annotations from Genbank.')
+
+    ids = set()
+    with open(mcl_output) as mcl_f:
+        for line in mcl_f:
+            for gene in line.split():
+                taxon_id, prot_id = gene.split('|')
+                #h = Entrez.efetch(db='protein', id=id,
+                #                  retmode='text', rettype='gbwithparts')
+                ids.add(taxon_id)
+
+    return fetch_annotations_for_ids(annotations, ids)
+
 def save_orthogroups(annotations, mcl_output, out, out_nice):
     strains = dict()
     max_lengths = count(0)
 
     if isinstance(annotations, (list, tuple)):
         gb_files = annotations
-
-    elif isdir(annotations) and listdir(annotations):
-        annotations_dir = annotations
-        gb_files = [join(annotations_dir, fname)
-                    for fname in listdir(annotations_dir) if fname[0] != '.']
     else:
-        if not isdir(annotations): mkdir(annotations)
-        log.info('   Fetching annotations from Genbank.')
-
-        ids = set()
-        with open(mcl_output) as mcl_f:
-            for line in mcl_f:
-                for gene in line.split():
-                    taxon_id, _ = gene.split('|')
-                    ids.add(taxon_id)
-
-        fetch_annotations_for_ids(annotations, ids)
+        if isdir(annotations) and listdir(annotations):
+            pass
+        else:
+            if not isdir(annotations): mkdir(annotations)
+            if __download(annotations, mcl_output) != 0:
+                return 1
 
         gb_files = [join(annotations, fname)
                     for fname in listdir(annotations) if fname[0] != '.']
@@ -42,7 +47,17 @@ def save_orthogroups(annotations, mcl_output, out, out_nice):
     for fname in gb_files:
         log.debug('   Reading ' + fname)
 
-        rec = SeqIO.read(fname, 'genbank')
+        #if splitext(fname)
+        try:
+            rec = SeqIO.read(fname, 'genbank')
+        except ValueError:
+            if isdir(annotations):
+                rmtree(annotations)
+                mkdir(annotations)
+            if __download(annotations, mcl_output) != 0:
+                return 1
+            rec = SeqIO.read(fname, 'genbank')
+
         strain = rec.annotations['source'] or rec.name
         #gi = rec.annotations['gi'] or rec.id or 'NA'
         locus = rec.name
@@ -78,15 +93,19 @@ def save_orthogroups(annotations, mcl_output, out, out_nice):
                         genes_number += 1
                         taxon_id, prot_id = gene.split('|')
                         if taxon_id not in strains:
-                            log.error('   No annotations for ' + taxon_id)
+                            log.warn('   No annotations for "' + taxon_id + '"')
                             return 1
+                            #vals = repeat('NA')
+                        else:
+                            vals = iter(strains[taxon_id][prot_id])
 
-                        for l, val in zip(max_lengths, strains[taxon_id][prot_id][:-1]):
+                        for l, val in izip(max_lengths, vals):
                             print >> out_f, str(val) + '\t',
                             print >> nice_f, str(val) + ' ' * (l - len(str(val))) + '\t',
 
-                        print >> out_f, str(strains[taxon_id][prot_id][-1])
-                        print >> nice_f, str(strains[taxon_id][prot_id][-1])
+                        val = next(vals)
+                        print >> out_f, val
+                        print >> nice_f, val
 
                     print >> out_f
                     print >> nice_f

@@ -1,10 +1,8 @@
 #!/usr/bin/env python
-from genericpath import isfile
-
 import sys
 import logging
 from os import chdir, mkdir, getcwd, listdir
-from os.path import join, exists, isdir, dirname, realpath, basename, relpath, splitext
+from os.path import join, exists, isdir, isfile, dirname, realpath, basename, relpath, splitext
 from Bio import SeqIO
 from src import steps
 from src.argparse import ArgumentParser
@@ -72,7 +70,7 @@ def run_workflow(working_dir,
     workflow.extend([
         steps.filter_proteomes(min_length, max_percent_stop),
         steps.make_blast_db(),
-        steps.blast(threads, evalue),
+        steps.blast(threads, evalue=evalue),
         steps.parse_blast_results(),
         steps.clean_database(suffix),
         steps.install_schema(suffix),
@@ -133,79 +131,86 @@ def parse_args(args):
     #    indent + '[--species-file FILE]\n'
 
     add_common_arguments(op)
+    p = op.parse_args(args)
 
-    params = op.parse_args(args)
+    check_common_args(p)
 
-    check_common_args(params)
-
-    if params.species_list or params.ids_list:
-        if not isdir(params.directory): mkdir(params.directory)
-        if params.species_list: check_file(params.species_list)
-        if params.ids_list: check_file(params.ids_list)
-        return params
-
+    if p.species_list or p.ids_list:
+        if not isdir(p.directory):
+            mkdir(p.directory)
+        #if p.species_list:
+        #    check_file(p.species_list)
+        #if p.ids_list:
+        #    check_file(p.ids_list)
     else:
-        if not params.directory:
+        if not p.directory:
             interrupt('Directory or file must be specified.')
-        return params
+            check_dir(p.directory)
+    return p
+
+
+def collect_proteomes_and_annotaitons(directory):
+    proteomes = []
+    annotations = []
+
+    files = listdir(directory)
+    if not files:
+        interrupt('Directory contains no files.')
+
+    for f in (join(directory, f) for f in files if isfile(join(directory, f))):
+        if '.' in f and splitext(f)[1] in ['.fasta', '.faa', '.fa', '.fsa']:
+            try:
+                log.debug('   Checking if %s is fasta.' % f)
+                next(SeqIO.parse(f, 'fasta'))
+            except ValueError, e:
+                pass
+            else:
+                proteomes.append(relpath(f, directory))
+                continue
+
+        if '.' in f and splitext(f)[1] in ['.gb', '.genbank', '.gbk']:
+            try:
+                log.debug('   Checking if %s is genbank.' % f)
+                SeqIO.read(f, 'genbank')
+            except Exception, e:
+                log.debug(str(e) + ', ' + f)
+            else:
+                annotations.append(relpath(f, directory))
+
+    log.debug('')
+    return proteomes, annotations
 
 
 def main(args):
-    p = parse_args(args)
-
     annotations = []
     proteomes = []
     species_list = []
-    ref_id_list = []
+    ids_list = []
 
-    if not isdir(p.directory):
-        interrupt('No such directory: ' + p.directory)
-
+    p = parse_args(args)
     set_up_logging(p.debug, p.directory)
     log.info(basename(__file__) + ' ' + ' '.join(args) + '\n')
     set_up_config()
-    start_from, start_after = get_start_after_from(p.start_from, join(p.directory, log_fname))
+    start_from, start_after = get_start_after_from(
+        p.start_from, join(p.directory, log_fname))
 
     if p.species_list or p.ids_list:
         species_list = read_list(p.species_list, p.directory)
-        ref_id_list = read_list(p.ids_list, p.directory)
+        ids_list = read_list(p.ids_list, p.directory)
 
     else:
-        if 'proteomes' in listdir(p.directory):
-            proteomes = [relpath(join('proteomes', f))
-                         for f in listdir(join(p.directory, 'proteomes'))
-                         if f and f[0] != '.']
+        #if 'proteomes' in listdir(p.directory):
+        #    proteomes = [relpath(join('proteomes', f))
+        #                 for f in listdir(join(p.directory, 'proteomes'))
+        #                 if f and f[0] != '.']
+        #elif 'annotations' in listdir(p.directory):
+        #        annotations = [relpath(join('annotations', f))
+        #                       for f in listdir(join(p.directory, 'annotations'))
+        #                       if f and f[0] != '.']
 
-        if 'annotations' in listdir(p.directory):
-            annotations = [relpath(join('annotations', f))
-                           for f in listdir(join(p.directory, 'annotations'))
-                           if f and f[0] != '.']
+        proteomes, annotations = collect_proteomes_and_annotaitons(p.directory)
 
-        if not proteomes and not annotations:
-            files = listdir(p.directory)
-            if not files: interrupt('Directory contains no files.')
-
-            for f in (join(p.directory, f) for f in files if isfile(join(p.directory, f))):
-                if '.' in f and splitext(f)[1] in ['.fasta', '.faa', '.fa', '.fsa']:
-                    try:
-                        log.debug('   Checking if %s is fasta.' % f)
-                        next(SeqIO.parse(f, 'fasta'))
-                    except Exception, e:
-                        pass
-                    else:
-                        proteomes.append(relpath(f, p.directory))
-                        continue
-                if '.' in f and splitext(f)[1] in ['.gb', '.genbank', '.gbk']:
-                    try:
-                        log.debug('   Checking if %s is genbank.' % f)
-                        SeqIO.read(f, 'genbank')
-                    except Exception, e:
-                        log.debug(str(e) + ', ' + f)
-                    else:
-                        annotations.append(relpath(f, p.directory))
-            log.debug('')
-
-        if not proteomes and not annotations:
+        if not proteomes and not annotations and not start_from and not start_after:
             interrupt('Directory must contain fasta or genbank files.')
 
         if proteomes and annotations:
@@ -214,13 +219,16 @@ def main(args):
         #if annotations: annotations = [join(getcwd(), path) for path in annotations]
         #if proteomes: proteomes = [join(getcwd(), path) for path in proteomes]
 
+
     return run_workflow(
         working_dir=p.directory,
 
-        species_list=species_list, ids_list=ref_id_list,
+        species_list=species_list, ids_list=ids_list,
         annotations=annotations, proteomes=proteomes,
         prot_id_field=int(p.prot_id_field),
-        min_length=int(p.min_length), max_percent_stop=int(p.max_percent_stop),
+
+        min_length=int(p.min_length),
+        max_percent_stop=int(p.max_percent_stop),
         evalue=float(p.evalue),
 
         ask_before=p.ask_each_step,

@@ -1,5 +1,5 @@
 from os import environ, access, X_OK, remove
-from os.path import basename, split, join, pathsep, isfile
+from os.path import basename, split, join, pathsep, isfile, dirname
 from random import randint
 from shutil import copy
 from config import config_file, orthomcl_config, log_fname
@@ -23,7 +23,8 @@ def make_workflow_id(working_dir=None):
     if not working_dir:
         return str(randint(1000, 9999))
 
-    return basename(working_dir)
+    return (basename(working_dir) or basename(dirname(working_dir))).\
+        replace(' ', '_').replace('/', '_')
 
 
 def which(program):

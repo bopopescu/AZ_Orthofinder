@@ -1,6 +1,7 @@
 from os.path import basename, join, relpath
 
 from Workflow import Step, cmdline
+from process_assembly import filter_assembly
 from save_orthogroups import save_orthogroups
 from make_proteomes import make_proteomes, adjust_proteomes
 from fetch_annotations import fetch_annotations_for_species_from_ftp, fetch_annotations_for_ids
@@ -15,7 +16,8 @@ proteomes_dir         = 'proteomes'
 annotations_dir       = 'annotations'
 intermediate_dir      = 'intermediate'
 sql_log               = 'intermediate/log.sql'
-predicted_proteins    = 'intermediate/predicted_proteins.fasta'
+#filtered_assembly     = 'intermediate/filtered_assembly.fasta'
+#predicted_proteins    = 'intermediate/predicted_proteins.fasta'
 good_proteins         = 'intermediate/good_proteins.fasta'
 poor_proteins         = 'intermediate/poor_proteins.fasta'
 blast_db              = 'intermediate/blastdb'
@@ -45,17 +47,6 @@ with open(orthomcl_config) as f:
     best_hit_taxon_score_table = 'BestQueryTaxonScore'
 
 
-def find_genes(assembly):
-    return Step(
-        'Finding genes',
-         run=cmdline('prodigal',
-             parameters=[
-                 '-a', predicted_proteins,
-                 '-o', 'intermediate/predicted.gbk',
-                 '-i', assembly]),
-         req_files=assembly,
-         prod_files=[predicted_proteins])
-
 def step_fetching_annotations_for_species(specied_list, proxy):
     return Step(
         'Fetching annotations',
@@ -75,6 +66,50 @@ def step_make_proteomes(annotations=None):
          run=lambda: make_proteomes(annotations or annotations_dir, proteomes_dir),
          prod_files=[proteomes_dir])
 
+
+######################################################################
+def step_filter_assembly(assembly, assembly_name):
+    return Step(
+        'Filtering assembly',
+         run=lambda: filter_assembly(assembly, join(intermediate_dir, assembly_name + '.fna')),
+         req_files=[assembly],
+         prod_files=[join(intermediate_dir, assembly_name + '.fna')])
+
+def finding_genes(assembly_name):
+    return Step(
+        'Finding genes',
+         run=cmdline('prodigal',
+             parameters=[
+                 '-a', join(proteomes_dir, assembly_name + '.fasta'),
+                 '-o', join(annotations_dir, assembly_name + '.gbk'),
+                 '-i', join(intermediate_dir, assembly_name + '.fna')]),
+         req_files=[proteomes_dir,
+                    join(intermediate_dir, assembly_name + '.fna')],
+         prod_files=[join(proteomes_dir, assembly_name + '.fasta')])
+
+def step_adjust_new_proteome(assembly_name, id_field=0):
+    return Step(
+        'Adjusting proteome',
+         run=lambda: adjust_proteomes(
+             [join(proteomes_dir, assembly_name + '.fasta')],
+             proteomes_dir,
+             id_field),
+         req_files=[proteomes_dir,
+                    join(proteomes_dir, assembly_name + '.fasta')])
+
+#def filter_new_proteome(assembly_name, min_length=10, max_percent_stop=20):
+#    return Step(
+#        'Filtering proteome',
+#         run=cmdline(join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
+#             parameters=[join(proteomes_dir, assembly_name + '.faa'),
+#                         min_length, max_percent_stop,
+#                         good_proteins,
+#                         poor_proteins]),
+#         req_files=[proteomes_dir, join(proteomes_dir, assembly_name + '.faa')],
+#         prod_files=[good_proteins, poor_proteins])
+
+
+######################################################################
 def step_adjust_proteomes(proteomes_files, id_field=1):
     return Step(
         'Adjusting proteomes',
@@ -109,16 +144,27 @@ def make_blast_db():
          req_files=[good_proteins],
          prod_files=[blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']])
 
-def blast(threads, evalue=1e-5):
-    parameters = [
-        '-query', good_proteins,
-        '-db', blast_db,
-        '-out', blast_out,
-        '-outfmt', 6,  # tabular
-        '-seg', 'yes',
-        '-soft_masking', 'true',
-        '-evalue', evalue,
-        '-dbsize', BLAST_DBSIZE]
+def blast(threads, assembly_name=None, evalue=1e-5):
+    if assembly_name is None:
+        parameters = [
+            '-query', good_proteins,
+            '-db', blast_db,
+            '-out', blast_out,
+            '-outfmt', 6,  # tabular
+            '-seg', 'yes',
+            '-soft_masking', 'true',
+            '-evalue', evalue,
+            '-dbsize', BLAST_DBSIZE]
+    else:
+        parameters = [
+            '-query', join(proteomes_dir, assembly_name + '.fasta'),
+            '-db', blast_db,
+            '-out', blast_out + '_2',
+            '-outfmt', 6,  # tabular
+            '-seg', 'yes',
+            '-soft_masking', 'true',
+            '-evalue', evalue,
+            '-dbsize', BLAST_DBSIZE]
 
     def run():
         res = cmdline('blastp',
@@ -128,13 +174,17 @@ def blast(threads, evalue=1e-5):
             log.info('')
             log.warn('Warning: blast refused to run multithreaded, running single-threaded instead.')
             res = cmdline('blastp', parameters)()
+
+        if assembly_name:
+            with open(blast_out, 'a') as b_out:
+                with open(blast_out + '_2') as b_out_2:
+                    b_out.write(b_out_2.read())
         return res
 
     return Step(
         'Blasting',
          run=run,
-         req_files=[good_proteins],
-         prod_files=[blast_out])
+         req_files=[good_proteins])
 
 def parse_blast_results():
     return Step(
@@ -236,16 +286,17 @@ def step_save_orthogroups(annotations=None):
         req_files=[mcl_output],
         prod_files=[orthogroups_file, nice_orthogroups_file])
 
-#def groups_to_files(prefix, start_id):
-#    return Step(
-#        'MCL groups to files',
-#         cmd=join(orthomcl_bin_dir, 'orthomclMclToGroups.pl'),
-#         req_files=[mcl_output],
-#         prod_files=[groups_file],
-#         parameters=[prefix + '_', start_id],
-#         stdin=mcl_output,
-#         stdout=groups_file)
-#
+def groups_to_files(prefix, start_id=0):
+    return Step(
+        'MCL groups to files',
+         run=cmdline(
+             join(orthomcl_bin_dir, 'orthomclMclToGroups.pl'),
+             parameters=[prefix + '_', start_id],
+             stdin=mcl_output,
+             stdout=groups_file),
+         req_files=[mcl_output],
+         prod_files=[groups_file],)
+
 #def signletones_to_files():
 #    return Step(
 #        'MCL singletones to files',

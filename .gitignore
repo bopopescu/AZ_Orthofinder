@@ -38,3 +38,5 @@ nosetests.xml
 
 # Custom
 cache
+
+proteins_copy

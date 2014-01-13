@@ -1,16 +1,23 @@
 #!/usr/bin/env python
+from shutil import move
 import sys
 import logging
 from os import chdir, mkdir, getcwd, listdir
-from os.path import join, exists, isdir, isfile, dirname, realpath, basename, relpath, splitext
+from os.path import join, exists, isdir, isfile, dirname, realpath, \
+    basename, relpath, splitext, abspath
 from Bio import SeqIO
+from src.fetch_annotations import fetch_annotations_for_species_from_ftp, fetch_annotations_for_ids
+from src.make_proteomes import adjust_proteomes, make_proteomes
+from src.steps import check_results_existence
 from src import steps
 from src.argparse import ArgumentParser
 
-from src.utils import which, make_workflow_id, read_list, set_up_config, get_start_after_from
-from src.parse_args import interrupt, check_file, check_dir, add_common_arguments, check_common_args
+from src.utils import make_workflow_id, read_list, set_up_config, \
+    get_starting_step, check_installed_tools, interrupt, register_ctrl_c
+from src.parse_args import arg_parse_error, check_file, check_dir, \
+    add_common_arguments, check_common_args
 from src.logger import set_up_logging
-from src.Workflow import Workflow
+from src.Workflow import Workflow, Step
 
 from src.config import log_fname
 log = logging.getLogger(log_fname)
@@ -18,76 +25,14 @@ log = logging.getLogger(log_fname)
 script_path = dirname(realpath(__file__))
 
 
-def run_workflow(working_dir,
-                 species_list, ids_list, annotations, proteomes, prot_id_field,
-                 min_length, max_percent_stop, evalue,
-                 ask_before=False,
-                 start_after=None, start_from=None, overwrite=True,
-                 threads=1,
-                 proxy=None,
-                 **kwargs):
-
-    if not which('blastp') or not which('mcl'):
-        if not which('blastp'):
-            log.error('blastp installation required.')
-        if not which('mcl'):
-            log.error('mcl installation required.')
-        return 3
-
-    log.info('Changing to %s' % working_dir)
-    chdir(working_dir)
-
-    if not exists('intermediate'): mkdir('intermediate')
-
-    workflow = Workflow(working_dir, id=make_workflow_id(working_dir))
-    log.info('Workflow id is "' + workflow.id + '"')
-    log.info('')
-    suffix = '_' + workflow.id
-
-    if species_list:
-        log.debug('Using species list: ' + str(species_list))
-        workflow.add(steps.step_fetching_annotations_for_species(species_list, proxy))
-        workflow.add(steps.step_make_proteomes())
-
-    elif ids_list:
-        log.debug('Using ref ids: ' + str(ids_list))
-        workflow.add(steps.step_fetch_annotations_for_ids(ids_list))
-        workflow.add(steps.step_make_proteomes())
-
-    elif annotations:
-        log.debug('Using genbank files.')
-        workflow.add(steps.step_make_proteomes(annotations))
-
-    elif proteomes:
-        log.debug('Using proteomes_files.')
-        workflow.add(steps.step_adjust_proteomes(proteomes, prot_id_field))
-
-    elif start_from == 0:
-        log.error('Either species names, reference ids, annotations, proteomes, '
-                  'or step to start from has to be be speciefied.')
-        exit(1)
-
-    workflow.extend([
-        steps.filter_proteomes(min_length, max_percent_stop),
-        steps.make_blast_db(),
-        steps.blast(threads, evalue=evalue),
-        steps.parse_blast_results(),
-        steps.clean_database(suffix),
-        steps.install_schema(suffix),
-        steps.load_blast_results(suffix),
-        steps.find_pairs(suffix),
-        steps.dump_pairs_to_files(suffix),
-        steps.mcl(),
-        steps.step_save_orthogroups(annotations or None)])
-
-    result = workflow.run(start_after, start_from, overwrite, ask_before)
-    if result == 0:
-        log.info('Done.')
-        log.info('Log is in ' + join(working_dir, log_fname))
-        log.info('Groups are in ' + join(working_dir, steps.orthogroups_file))
-        log.info('Groups with aligned columns are in ' + join(working_dir, steps.nice_orthogroups_file))
-    return result
-
+#def run_workflow(working_dir,
+#                 species_list, ids_list, annotations, proteomes, prot_id_field,
+#                 min_length, max_percent_stop, evalue,
+#                 ask_before=False,
+#                 start_after=None, start_from=None, overwrite=True,
+#                 threads=1,
+#                 proxy=None,
+#                 **kwargs):
 
 def parse_args(args):
     op = ArgumentParser(description='Find groups of orthologous genes.')
@@ -135,16 +80,16 @@ def parse_args(args):
 
     check_common_args(p)
 
+    if p.species_list: p.species_list = abspath(p.species_list)
+    if p.ids_list: p.ids_list = abspath(p.ids_list)
+    if p.directory: p.directory = abspath(p.directory)
+
     if p.species_list or p.ids_list:
         if not isdir(p.directory):
             mkdir(p.directory)
-        #if p.species_list:
-        #    check_file(p.species_list)
-        #if p.ids_list:
-        #    check_file(p.ids_list)
     else:
         if not p.directory:
-            interrupt('Directory or file must be specified.')
+            arg_parse_error('Directory or file must be specified.')
             check_dir(p.directory)
     return p
 
@@ -181,61 +126,136 @@ def collect_proteomes_and_annotaitons(directory):
     return proteomes, annotations
 
 
+def step_produce_proteomes_and_annotations(p, internet_is_on):
+    def run():
+        if p.species_list:
+            if not internet_is_on:
+                log.error('No internet connection: cannot fetch annotations.')
+                return 4
+
+            log.debug('Using species list: ' + str(p.species_list))
+            species_list = read_list(p.species_list)
+            res = fetch_annotations_for_species_from_ftp(species_list, p.proxy)
+            if res != 0: return res
+            return make_proteomes(steps.annotations_dir, steps.proteomes_dir)
+
+        elif p.ids_list:
+            if not internet_is_on:
+                log.error('No internet connection: cannot fetch annotations.')
+                return 4
+
+            log.debug('Using ref ids: ' + str(p.ids_list))
+            ref_ids = read_list(p.ids_list)
+            res = fetch_annotations_for_ids(steps.annotations_dir, ref_ids)
+            if res != 0: return res
+            return make_proteomes(steps.annotations_dir, steps.proteomes_dir)
+
+        else:
+            proteomes, annotations = collect_proteomes_and_annotaitons(p.directory)
+
+            if not proteomes and not annotations:
+                interrupt('Directory must contain fasta or genbank files.')
+
+            if proteomes and annotations:
+                log.warn('Directory %s contains both fasta and genbank files, using fasta.')
+
+            if annotations:
+                if not isdir(steps.annotations_dir):
+                    mkdir(steps.annotations_dir)
+
+                for annotation in annotations:
+                    move(annotation, steps.annotations_dir)
+
+                return make_proteomes(steps.annotations_dir, steps.proteomes_dir)
+
+            elif proteomes:
+                if not isdir(steps.proteomes_dir):
+                    mkdir(steps.proteomes_dir)
+
+                if not internet_is_on:
+                    log.warn('   Warning: no internet connection, cannot fetch annotations. '
+                             'A reduced version of orthogroups.txt with no annotations will be produced.')
+                else:
+                    ref_ids = [splitext(basename(prot_file))[0] for prot_file in proteomes]
+                    fetch_annotations_for_ids(steps.annotations_dir, ref_ids)
+
+                return adjust_proteomes(proteomes, steps.proteomes_dir, p.prot_id_field)
+
+    return Step(
+       'Preparing proteomes and annotations',
+        run=run,
+        prod_files=['proteomes', 'annotations'])
+
+
+def internet_on():
+    import urllib2
+    try:
+        response = urllib2.urlopen('http://74.125.228.100', timeout=1)
+    except urllib2.URLError as err:
+        return False
+    else:
+        return True
+
+
 def main(args):
-    annotations = []
-    proteomes = []
-    species_list = []
-    ids_list = []
+    register_ctrl_c()
 
     p = parse_args(args)
     set_up_logging(p.debug, p.directory)
-    log.info(basename(__file__) + ' ' + ' '.join(args) + '\n')
+    log.info('python ' + basename(__file__) + ' ' + ' '.join(args) + '\n')
+    check_installed_tools(['blastp', 'mcl'])
     set_up_config()
-    start_from, start_after = get_start_after_from(
-        p.start_from, join(p.directory, log_fname))
+    start_from, start_after = get_starting_step(p.start_from, join(p.directory, log_fname))
 
-    if p.species_list or p.ids_list:
-        species_list = read_list(p.species_list, p.directory)
-        ids_list = read_list(p.ids_list, p.directory)
+    #if 'proteomes' in listdir(p.directory):
+    #    proteomes = [relpath(join('proteomes', f))
+    #                 for f in listdir(join(p.directory, 'proteomes'))
+    #                 if f and f[0] != '.']
+    #elif 'annotations' in listdir(p.directory):
+    #        annotations = [relpath(join('annotations', f))
+    #                       for f in listdir(join(p.directory, 'annotations'))
+    #                       if f and f[0] != '.']
 
-    else:
-        #if 'proteomes' in listdir(p.directory):
-        #    proteomes = [relpath(join('proteomes', f))
-        #                 for f in listdir(join(p.directory, 'proteomes'))
-        #                 if f and f[0] != '.']
-        #elif 'annotations' in listdir(p.directory):
-        #        annotations = [relpath(join('annotations', f))
-        #                       for f in listdir(join(p.directory, 'annotations'))
-        #                       if f and f[0] != '.']
+    working_dir = p.directory
+    log.info('Changing to %s' % working_dir)
+    chdir(working_dir)
 
-        proteomes, annotations = collect_proteomes_and_annotaitons(p.directory)
+    workflow = Workflow(working_dir, id=make_workflow_id(working_dir))
+    log.info('Workflow id is "' + workflow.id + '"')
+    log.info('')
+    suffix = '_' + workflow.id
 
-        if not proteomes and not annotations and not start_from and not start_after:
-            interrupt('Directory must contain fasta or genbank files.')
+    if not p.overwrite:
+        check_results_existence()
 
-        if proteomes and annotations:
-            log.warn('Directory %s contains both fasta and genbank files, using fasta.')
+    if not exists(steps.intermediate_dir):
+        mkdir(steps.intermediate_dir)
 
-        #if annotations: annotations = [join(getcwd(), path) for path in annotations]
-        #if proteomes: proteomes = [join(getcwd(), path) for path in proteomes]
+    internet_is_on = internet_on()
 
+    workflow.extend([
+        step_produce_proteomes_and_annotations(p, internet_is_on),
+        steps.filter_proteomes(p.min_length, p.max_percent_stop),
+        steps.make_blast_db(),
+        steps.blast(p.threads, evalue=p.evalue),
+        steps.parse_blast_results(),
+        steps.clean_database(suffix),
+        steps.install_schema(suffix),
+        steps.load_blast_results(suffix),
+        steps.find_pairs(suffix),
+        steps.dump_pairs_to_files(suffix),
+        steps.mcl(),
+        steps.step_save_orthogroups()])
 
-    return run_workflow(
-        working_dir=p.directory,
-
-        species_list=species_list, ids_list=ids_list,
-        annotations=annotations, proteomes=proteomes,
-        prot_id_field=int(p.prot_id_field),
-
-        min_length=int(p.min_length),
-        max_percent_stop=int(p.max_percent_stop),
-        evalue=float(p.evalue),
-
-        ask_before=p.ask_each_step,
-        start_after=start_after, start_from=start_from, overwrite=True,
-        threads=p.threads,
-        proxy=p.proxy)
+    result = workflow.run(start_after, start_from, overwrite=True, ask_before=p.ask_each_step)
+    if result == 0:
+        log.info('Done.')
+        log.info('Log is in ' + join(working_dir, log_fname))
+        log.info('Groups are in ' + join(working_dir, steps.orthogroups_file))
+        if isfile(steps.nice_orthogroups_file):
+            log.info('Groups with aligned columns are in ' + join(working_dir, steps.nice_orthogroups_file))
+    return result
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    exit(main(sys.argv[1:]))

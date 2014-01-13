@@ -15,8 +15,9 @@ import logging
 log = logging.getLogger(config.log_fname)
 
 
-def adjust_proteomes(proteomes, out_dir, id_field):
-    if not isdir(out_dir): mkdir(out_dir)
+def adjust_proteomes(proteomes, proteomes_dir, prot_id_field):
+    if not isdir(proteomes_dir):
+        mkdir(proteomes_dir)
 
     prot_ids = set()
     for proteome in proteomes:
@@ -24,7 +25,7 @@ def adjust_proteomes(proteomes, out_dir, id_field):
         taxon_id = splitext(basename(proteome))[0]
         for seq in SeqIO.parse(proteome, 'fasta'):
             fields = seq.id.replace('|', ' ').split()
-            prot_id = fields[id_field]
+            prot_id = fields[prot_id_field]
             if len(prot_id) > 30:
                 prot_id = prot_id[:17] + '...' + prot_id[-10:]
             if prot_ids in prot_ids:
@@ -33,15 +34,15 @@ def adjust_proteomes(proteomes, out_dir, id_field):
             prot_ids.add(prot_id)
             seq.id = taxon_id + '|' + prot_id
             records.append(seq)
-        out = join(out_dir, taxon_id + '.fasta')
+        out = join(proteomes_dir, taxon_id + '.fasta')
         if isfile(out):
             remove(out)
-        SeqIO.write(records, join(out_dir, taxon_id + '.fasta'), 'fasta')
+        SeqIO.write(records, join(proteomes_dir, taxon_id + '.fasta'), 'fasta')
 
     return 0
 
 
-def make_proteomes(annotations, out_dir):
+def make_proteomes(annotations, proteomes_dir):
     gb_files = None
     if isinstance(annotations, (list, tuple)):
         gb_files = annotations
@@ -54,7 +55,7 @@ def make_proteomes(annotations, out_dir):
 
     if not gb_files: log.error('   No references provided.')
 
-    if not isdir(out_dir): makedirs(out_dir)
+    if not isdir(proteomes_dir): makedirs(proteomes_dir)
 
     #words = ' '.join(species_names).split()
     #speciescode = workflow_id[:4]  # ''.join(w[0].lower() for w in words[:3 - int(math.log10(ref_num))])
@@ -113,7 +114,7 @@ def make_proteomes(annotations, out_dir):
             #log.debug('')
 
         if proteins:
-            fpath = join(out_dir, taxoncode + '.fasta')
+            fpath = join(proteomes_dir, taxoncode + '.fasta')
             SeqIO.write(proteins, fpath, 'fasta')
             log.info('   Written to ' + fpath)
             i += 1

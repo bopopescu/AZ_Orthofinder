@@ -13,36 +13,46 @@ log = logging.getLogger(config.log_fname)
 
 #Gene = namedtuple('Gene', 'protein strain gi gene locus product description')
 
-def __download(annotations, mcl_output):
-    log.info('   Fetching annotations from Genbank.')
+#def __download(annotations, mcl_output):
+#    log.info('   Fetching annotations from Genbank.')
+#
+#    ids = set()
+#    with open(mcl_output) as mcl_f:
+#        for line in mcl_f:
+#            for gene in line.split():
+#                taxon_id, prot_id = gene.split('|')
+#                #h = Entrez.efetch(db='protein', id=id,
+#                #                  retmode='text', rettype='gbwithparts')
+#                ids.add(taxon_id)
+#
+#    return fetch_annotations_for_ids(annotations, ids)
 
-    ids = set()
+
+def save_compact(mcl_output, out):
     with open(mcl_output) as mcl_f:
-        for line in mcl_f:
-            for gene in line.split():
-                taxon_id, prot_id = gene.split('|')
-                #h = Entrez.efetch(db='protein', id=id,
-                #                  retmode='text', rettype='gbwithparts')
-                ids.add(taxon_id)
+        with open(out, 'w') as out_f:
+            for i, line in enumerate(mcl_f):
+                out_f.write(str(i) + ' ' + line + '\n')
+    return 0
 
-    return fetch_annotations_for_ids(annotations, ids)
 
-def save_orthogroups(annotations, mcl_output, out, out_nice):
+def save_orthogroups(annotations, mcl_output, out, out_nice, out_short):
     strains = dict()
     max_lengths = count(0)
 
+    gb_files = []
     if isinstance(annotations, (list, tuple)):
         gb_files = annotations
     else:
         if isdir(annotations) and listdir(annotations):
-            pass
-        else:
-            if not isdir(annotations): mkdir(annotations)
-            if __download(annotations, mcl_output) != 0:
-                return 1
+            gb_files = [join(annotations, fname)
+                        for fname in listdir(annotations) if fname[0] != '.']
+        #    if not isdir(annotations): mkdir(annotations)
+        #    if __download(annotations, mcl_output) != 0:
+        #        return 1
 
-        gb_files = [join(annotations, fname)
-                    for fname in listdir(annotations) if fname[0] != '.']
+    if not gb_files:
+        return save_compact(mcl_output, out)
 
     for fname in gb_files:
         log.debug('   Reading ' + fname)
@@ -51,12 +61,14 @@ def save_orthogroups(annotations, mcl_output, out, out_nice):
         try:
             rec = SeqIO.read(fname, 'genbank')
         except ValueError:
-            if isdir(annotations):
-                rmtree(annotations)
-                mkdir(annotations)
-            if __download(annotations, mcl_output) != 0:
-                return 1
-            rec = SeqIO.read(fname, 'genbank')
+            log.error('   Could not read annotations from ' + fname)
+            return 1
+            #if isdir(annotations):
+            #    rmtree(annotations)
+            #    mkdir(annotations)
+            #if __download(annotations, mcl_output) != 0:
+            #    return 1
+            #rec = SeqIO.read(fname, 'genbank')
 
         strain = rec.annotations['source'] or rec.name
         #gi = rec.annotations['gi'] or rec.id or 'NA'
@@ -110,7 +122,6 @@ def save_orthogroups(annotations, mcl_output, out, out_nice):
                     print >> out_f
                     print >> nice_f
 
-                log.info('')
                 log.info('   Saved %d groups, totally contating %d genes.' % (i, genes_number))
 
     return 0

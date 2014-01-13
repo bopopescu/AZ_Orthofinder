@@ -57,6 +57,8 @@ def add_common_arguments(op):
 
     op.add_argument('-t', '--threads', dest='threads', default=30)
 
+    op.add_argument('-w', '--overwrite', dest='overwrite', action='store_true', default=False)
+
     op.add_argument('--min-length', dest='min_length', default=10)
 
     op.add_argument('--max-percent-stop', dest='max_percent_stop', default=20)
@@ -65,48 +67,52 @@ def add_common_arguments(op):
 
     op.add_argument('-d', '--debug', dest='debug', action='store_true', default=False)
 
-    # op.add_argument('-w', '--overwrite', dest='overwrite', action='store_true', default=False,
-    #                 help='By default, the tool reuses existing intermediate results.'
-    #                      'This option makes the tool overwrite any existing data.')
-
     op.add_argument('--proxy', dest='proxy', default=None,
                     help='Proxy for FTP, for example: --proxy 198.260.1.1:3333')
 
-    #-o                     The directory that will contain the groups,
-    #                       as well as intermediate results.
     op.usage += '''
     --start-from           Start from the specified step.
                            Either name or number (see log.txt) or "uselog".
                            If "uselog", the last "Done" record in log.txt will be searched.
 
+    --overwrite            Force to overwrite previous results and intermediate files in working directory.
+
+    -t  --threads          Number of threads to run Blast. Default 30.
+
+    Fine tuning parameters:
     --min-length           Minimum allowed length of proteins (default: 10)
 
     --max-percent_stop     Maximum percent stop codons (default: 20)
 
     --evalue               Blast e-value (default: 1e-5)
-
-    -t  --threads          Number of threads to run Blast. Default 30.
     '''
 
 def check_common_args(params):
     if params.start_from == 'uselog':
         if not isfile(join(params.out_dir, config.log_fname)):
-            interrupt('No %s in %s. Either check your path, or '
-                      'change the --start-from option' %
-                      (config.log_fname, params.out_dir))
+            arg_parse_error(
+                'No %s in %s. Either check your path, or '
+                'change the --start-from option' %
+                (config.log_fname, params.out_dir))
 
-def interrupt(msg):
+    if params.start_from:
+        params.overwrite = True
+
+
+def arg_parse_error(msg, code=1):
     print >> sys.stderr, msg
-    exit(1)
+    exit(code)
+
 
 def check_file(fpath):
     if fpath and not isfile(fpath):
-        interrupt('File ' + fpath + ' does not exist or is a directory.')
+        arg_parse_error('File ' + fpath + ' does not exist or is a directory.')
+
 
 def check_dir(dirpath):
     if dirpath:
         if not exists(dirpath):
-            interrupt('Directory ' + dirpath + ' does not exist.')
+            arg_parse_error('Directory ' + dirpath + ' does not exist.')
         if not isdir(dirpath):
-            interrupt(dirpath + ' is a file.')
+            arg_parse_error(dirpath + ' is a file.')
 

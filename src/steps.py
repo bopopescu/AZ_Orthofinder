@@ -1,4 +1,7 @@
-from os.path import basename, join, relpath
+from genericpath import isfile
+from os import remove
+from os.path import basename, join, relpath, exists, isdir
+from shutil import rmtree
 
 from Workflow import Step, cmdline
 from process_assembly import filter_assembly
@@ -12,28 +15,48 @@ import config
 import logging
 log = logging.getLogger(config.log_fname)
 
-proteomes_dir         = 'proteomes'
-annotations_dir       = 'annotations'
-intermediate_dir      = 'intermediate'
-sql_log               = 'intermediate/log.sql'
-#filtered_assembly     = 'intermediate/filtered_assembly.fasta'
-#predicted_proteins    = 'intermediate/predicted_proteins.fasta'
-good_proteins         = 'intermediate/good_proteins.fasta'
-poor_proteins         = 'intermediate/poor_proteins.fasta'
-blast_db              = 'intermediate/blastdb'
-blast_out             = 'intermediate/blasted.tsv'
-similar_sequences     = 'intermediate/similar_sequences.txt'
-pairs_log             = 'intermediate/orthomclpairs.log'
-mcl_input             = 'intermediate/mcl_input'
-mcl_output            = 'intermediate/mcl_output'
-pairs_dir             = 'intermediate/pairs'
-pairs_orthologs       = 'intermediate/pairs/potentialOrthologs.txt'
-pairs_inparalogs      = 'intermediate/pairs/potentialInparalogs.txt'
-pairs_coorthologs     = 'intermediate/pairs/potentialCoorthologs.txt'
-groups_file           = 'groups.txt'
-singletons_file       = 'singletons.txt'
-orthogroups_file      = 'orthogroups.tsv'
-nice_orthogroups_file = 'orthogroups_nice.txt'
+proteomes_dir          = 'proteomes'
+annotations_dir        = 'annotations'
+intermediate_dir       = 'intermediate'
+sql_log                = 'intermediate/log.sql'
+good_proteins          = 'intermediate/good_proteins.fasta'
+poor_proteins          = 'intermediate/poor_proteins.fasta'
+blast_db               = 'intermediate/blastdb'
+blast_out              = 'intermediate/blasted.tsv'
+similar_sequences      = 'intermediate/similar_sequences.txt'
+pairs_log              = 'intermediate/orthomclpairs.log'
+mcl_input              = 'intermediate/mcl_input'
+mcl_output             = 'intermediate/mcl_output'
+pairs_dir              = 'intermediate/pairs'
+pairs_orthologs        = 'intermediate/pairs/potentialOrthologs.txt'
+pairs_inparalogs       = 'intermediate/pairs/potentialInparalogs.txt'
+pairs_coorthologs      = 'intermediate/pairs/potentialCoorthologs.txt'
+groups_file            = 'groups.txt'
+singletons_file        = 'singletons.txt'
+orthogroups_file       = 'orthogroups.tsv'
+nice_orthogroups_file  = 'orthogroups_nice.txt'
+short_orthogroups_file = 'orthogroups.txt'
+
+
+def check_results_existence():
+    existing = [obj for obj in [
+        proteomes_dir,
+        annotations_dir,
+        intermediate_dir,
+        groups_file,
+        orthogroups_file,
+        nice_orthogroups_file] if exists(obj)]
+
+    if existing:
+        log.warn('The directory contains previous results. Do you want to overwrite it? '
+                 '(You can run with the --overwrite option to avoid this warning.)')
+        raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
+
+    for obj in existing:
+        if isfile(obj):
+            remove(obj)
+        if isdir(obj):
+            rmtree(obj)
 
 
 with open(orthomcl_config) as f:
@@ -47,24 +70,24 @@ with open(orthomcl_config) as f:
     best_hit_taxon_score_table = 'BestQueryTaxonScore'
 
 
-def step_fetching_annotations_for_species(specied_list, proxy):
-    return Step(
-        'Fetching annotations',
-         run=lambda: fetch_annotations_for_species_from_ftp(
-             annotations_dir, specied_list, proxy),
-         prod_files=[annotations_dir])
-
-def step_fetch_annotations_for_ids(ids_list):
-    return Step(
-        'Fetching annotations',
-         run=lambda: fetch_annotations_for_ids(annotations_dir, ids_list),
-         prod_files=[annotations_dir])
-
-def step_make_proteomes(annotations=None):
-    return Step(
-        'Preparing proteomes',
-         run=lambda: make_proteomes(annotations or annotations_dir, proteomes_dir),
-         prod_files=[proteomes_dir])
+#def step_fetching_annotations_for_species(specied_list, proxy):
+#    return Step(
+#        'Fetching annotations',
+#         run=lambda: fetch_annotations_for_species_from_ftp(
+#             annotations_dir, specied_list, proxy),
+#         prod_files=[annotations_dir])
+#
+#def step_fetch_annotations_for_ids(ids_list):
+#    return Step(
+#        'Fetching annotations',
+#         run=lambda: fetch_annotations_for_ids(annotations_dir, ids_list),
+#         prod_files=[annotations_dir])
+#
+#def step_make_proteomes(annotations=None):
+#    return Step(
+#        'Preparing proteomes',
+#         run=lambda: make_proteomes(annotations or annotations_dir, proteomes_dir),
+#         prod_files=[proteomes_dir])
 
 
 ######################################################################
@@ -110,13 +133,13 @@ def step_adjust_new_proteome(assembly_name, id_field=0):
 
 
 ######################################################################
-def step_adjust_proteomes(proteomes_files, id_field=1):
-    return Step(
-        'Adjusting proteomes',
-         run=lambda: adjust_proteomes(proteomes_files, proteomes_dir,
-                                      id_field),
-         req_files=proteomes_files,
-         prod_files=[proteomes_dir])
+#def step_adjust_proteomes(proteomes_files, id_field=1):
+#    return Step(
+#        'Adjusting proteomes',
+#         run=lambda: adjust_proteomes(proteomes_files, proteomes_dir,
+#                                      id_field),
+#         req_files=proteomes_files,
+#         prod_files=[proteomes_dir])
 
 def filter_proteomes(min_length=10, max_percent_stop=20):
     return Step(
@@ -278,13 +301,18 @@ def mcl(inflation=1.5):
          req_files=[mcl_input],
          prod_files=[mcl_output])
 
-def step_save_orthogroups(annotations=None):
+def step_save_orthogroups(annotations=None, internet_on=True):
+    run = lambda: save_orthogroups(
+        annotations or annotations_dir, mcl_output,
+        orthogroups_file, nice_orthogroups_file, short_orthogroups_file)
+
+    prod_files = [orthogroups_file, nice_orthogroups_file, short_orthogroups_file]
+
     return Step(
-        'Saving orthogroups',
-        run=lambda: save_orthogroups(
-            annotations or annotations_dir, mcl_output, orthogroups_file, nice_orthogroups_file),
+       'Saving orthogroups',
+        run=run,
         req_files=[mcl_output],
-        prod_files=[orthogroups_file, nice_orthogroups_file])
+        prod_files=prod_files)
 
 def groups_to_files(prefix, start_id=0):
     return Step(

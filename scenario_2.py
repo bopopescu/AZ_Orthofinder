@@ -7,8 +7,8 @@ from os import chdir, mkdir, getcwd
 from os.path import join, exists, isdir, dirname, realpath, basename, splitext
 from src import steps
 
-from src.utils import which, make_workflow_id, read_list, set_up_config, get_start_after_from
-from src.parse_args import interrupt, check_file, check_dir, add_common_arguments, check_common_args
+from src.utils import which, make_workflow_id, read_list, set_up_config, get_starting_step
+from src.parse_args import arg_parse_error, check_file, check_dir, add_common_arguments, check_common_args
 from src.logger import set_up_logging
 from src.Workflow import Workflow
 
@@ -37,7 +37,7 @@ def run_workflow(working_dir, assembly,
     chdir(working_dir)
 
     if not exists('intermediate'):
-        interrupt('You need to run scenario_1 on this directory first.')
+        arg_parse_error('You need to run scenario_1 on this directory first.')
 
     workflow = Workflow(working_dir, id=make_workflow_id(working_dir))
     log.info('Workflow id is "' + workflow.id + '"')
@@ -103,7 +103,7 @@ def parse_args(args):
     params = op.parse_args(args)
 
     if not isdir(params.directory):
-        interrupt('Directory %s does not exist.' % params.directory)
+        arg_parse_error('Directory %s does not exist.' % params.directory)
 
     check_common_args(params)
 
@@ -116,7 +116,7 @@ def main(args):
     set_up_logging(p.debug, p.directory)
     log.info(basename(__file__) + ' ' + ' '.join(args) + '\n')
     set_up_config()
-    start_from, start_after = get_start_after_from(p.start_from, join(p.directory, log_fname))
+    start_from, start_after = get_starting_step(p.start_from, join(p.directory, log_fname))
 
     p.assembly = join(getcwd(), p.assembly)
 

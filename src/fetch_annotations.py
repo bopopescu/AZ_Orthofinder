@@ -1,6 +1,7 @@
 from os import mkdir, remove
 from os.path import join, isdir, basename
 from ftplib import FTP
+from utils import read_list
 from ftp_proxy import setup_http_proxy
 from Bio import Entrez, SeqIO
 Entrez.email = 'vladislav.sav@gmail.com'
@@ -48,8 +49,9 @@ def fetch_annotations_for_species_from_ftp(save_dir, species_names, proxy=None, 
     return 0
 
 
-def fetch_annotations_for_ids(save_dir, ref_ids):
-    if not isdir(save_dir): mkdir(save_dir)
+def fetch_annotations_for_ids(annotations_dir, ref_ids):
+    if not isdir(annotations_dir):
+        mkdir(annotations_dir)
 
     if ref_ids == []:
         log.info('   No references have been found.')
@@ -60,14 +62,13 @@ def fetch_annotations_for_ids(save_dir, ref_ids):
 
     log.info('   IDs: %s' % ', '.join(ref_ids))
 
-
     for i, id in enumerate(ref_ids):
-        log.info('   Fetching %s...' % id)
+        log.info('   Fetching annotations for %s...' % id)
 
         try:
             fetch_handle = Entrez.efetch(db='nucleotide', id=id,
                                          retmode='text', rettype='gbwithparts')
-            gb_fpath = join(save_dir, id + '.gb')
+            gb_fpath = join(annotations_dir, id + '.gb')
             with open(gb_fpath, 'w') as file:
                 file.write(fetch_handle.read())
 
@@ -120,7 +121,7 @@ def fetch_annotations_species_name_entrez(save_dir, species_names, clip=None):
             with open(gb_fpath, 'w') as file:
                 file.write(fetch_handle.read())
 
-            rec = SeqIO.read(gb_fpath, genbank_ext)
+            rec = SeqIO.read(gb_fpath, 'gb')
             log.info('       Organism: ' + rec.annotations['organism'])
             log.info('       Definition: ' + rec.description)
             if 'plasmid' in rec.description:

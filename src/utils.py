@@ -27,6 +27,21 @@ def make_workflow_id(working_dir=None):
         replace(' ', '_').replace('/', '_')
 
 
+def interrupt(msg, code=1):
+    log.error(msg)
+    exit(code)
+
+
+def register_ctrl_c():
+    import signal
+
+    def signal_handler(signal, frame):
+        print ''
+        exit(0)
+
+    signal.signal(signal.SIGINT, signal_handler)
+
+
 def which(program):
     def is_exe(fpath_):
         return isfile(fpath_) and access(fpath_, X_OK)
@@ -44,14 +59,25 @@ def which(program):
     return None
 
 
-def read_list(file, out_dir):
+def check_installed_tools(tools):
+    ok = True
+    for tool in tools:
+        if not which(tool):
+            log.error(tool + ' installation required.')
+            ok = False
+    if not ok:
+        exit(3)
+
+
+def read_list(file, where_to_save=None):
     if not file:
         return None
     with open(file) as f:
         results = [l.strip() for l in f.readlines() if l.strip()]
-    if isfile(join(out_dir, basename(file))):
-        remove(join(out_dir, basename(file)))
-    copy(file, out_dir)
+    if where_to_save:
+        if isfile(join(where_to_save, basename(file))):
+            remove(join(where_to_save, basename(file)))
+        copy(file, where_to_save)
     return results
 
 
@@ -75,7 +101,7 @@ def set_up_config():
         ocf.writelines('='.join(item) + '\n' for item in omcl_conf.items())
 
 
-def get_start_after_from(start_from, log_file):
+def get_starting_step(start_from, log_file):
     if start_from == 'uselog':
         with log_file as f:
             for l in f.readlines():

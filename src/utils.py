@@ -63,10 +63,10 @@ def check_installed_tools(tools):
     ok = True
     for tool in tools:
         if not which(tool):
-            log.error(tool + ' installation required.')
+            log.warn('"' + tool + '" might not be installed.')
             ok = False
-    if not ok:
-        exit(3)
+    #if not ok:
+    #    exit(3)
 
 
 def read_list(file, where_to_save=None):

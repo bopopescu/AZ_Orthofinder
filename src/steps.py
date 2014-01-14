@@ -36,6 +36,7 @@ singletons_file        = 'singletons.txt'
 orthogroups_file       = 'orthogroups.tsv'
 nice_orthogroups_file  = 'orthogroups_nice.txt'
 short_orthogroups_file = 'orthogroups.txt'
+assembly_singletones   = 'intermediate/assembly_singletones.txt'
 
 
 def check_results_existence():
@@ -240,7 +241,7 @@ def find_pairs(suffix):
 
 def dump_pairs_to_files(suffix):
     return Step(
-        'Dump pairs files',
+        'Dumping pairs files',
          run=cmdline(join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
              parameters=[orthomcl_config,
                          relpath(mcl_input, intermediate_dir),
@@ -273,9 +274,9 @@ def mcl(inflation=1.5):
 def step_save_orthogroups(assembly_proteomes=None, annotations=None, internet_on=True):
     run = lambda: save_orthogroups(
         assembly_proteomes, annotations or annotations_dir, mcl_output,
-        orthogroups_file, nice_orthogroups_file, short_orthogroups_file)
+        orthogroups_file, nice_orthogroups_file, short_orthogroups_file, assembly_singletones)
 
-    prod_files = [orthogroups_file, nice_orthogroups_file, short_orthogroups_file]
+    prod_files = [orthogroups_file, nice_orthogroups_file, short_orthogroups_file, assembly_singletones]
 
     return Step(
        'Saving orthogroups',

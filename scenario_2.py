@@ -85,6 +85,20 @@ def step_adjust_new_proteome(assembly_name, id_field=0):
                     join(steps.proteomes_dir, assembly_name + '.fasta')])
 
 
+def step_blast_singletones():
+    def blast_singletones(singletones_file, assembly_proteome):
+        with open(singletones_file) as f:
+            for line in f:
+                strain, prot_id, gene_id, locus, product, description = line.split()
+                # TODO: Blast!
+
+
+    return Step(
+        'Blasting singletones',
+         run=lambda: blast_singletones(steps.assembly_singletones),
+         req_files=[steps.assembly_singletones])
+
+
 def main(args):
     register_ctrl_c()
 
@@ -127,7 +141,8 @@ def main(args):
         steps.find_pairs(suffix),
         steps.dump_pairs_to_files(suffix),
         steps.mcl(),
-        steps.step_save_orthogroups(join(steps.proteomes_dir, assembly_name + '.fasta'))
+        steps.step_save_orthogroups(join(steps.proteomes_dir, assembly_name + '.fasta')),
+        step_blast_singletones(),
     ])
 
     result = workflow.run(start_after, start_from, overwrite=True, ask_before=p.ask_each_step)

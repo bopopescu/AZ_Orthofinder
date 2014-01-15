@@ -10,7 +10,7 @@ from src.steps import check_results_existence
 from src import steps
 
 from src.utils import which, make_workflow_id, read_list, set_up_config, get_starting_step, register_ctrl_c, \
-    check_installed_tools, internet_on
+    check_installed_tools, test_internet_conn
 from src.parse_args import arg_parse_error, check_file, check_dir, add_common_arguments, check_common_args
 from src.logger import set_up_logging
 from src.Workflow import Workflow, Step, cmdline
@@ -121,7 +121,7 @@ def main(args):
     log.info('')
     suffix = '_' + workflow.id
 
-    internet_is_on = internet_on()
+    internet_is_on = test_internet_conn()
 
     assembly_name = splitext(basename(p.assembly))[0]
 

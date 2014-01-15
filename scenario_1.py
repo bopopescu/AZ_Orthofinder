@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from shutil import move
+from shutil import move, copy
 import sys
 import logging
 from os import chdir, mkdir, getcwd, listdir
@@ -13,7 +13,7 @@ from src import steps
 from src.argparse import ArgumentParser
 
 from src.utils import make_workflow_id, read_list, set_up_config, \
-    get_starting_step, check_installed_tools, interrupt, register_ctrl_c, internet_on
+    get_starting_step, check_installed_tools, interrupt, register_ctrl_c, test_internet_conn, check_and_install_mcl
 from src.parse_args import arg_parse_error, check_file, check_dir, \
     add_common_arguments, check_common_args
 from src.logger import set_up_logging
@@ -37,29 +37,38 @@ script_path = dirname(realpath(__file__))
 def parse_args(args):
     op = ArgumentParser(description='Find groups of orthologous genes.')
 
-    op.add_argument(dest='directory')
+    #op.add_argument(dest='directory')
+    op.add_argument('-o', '--out', dest='out', required=True)
+    op.add_argument('-a', '--annotations', dest='annotations')
+    op.add_argument('-p', '--proteomes', dest='proteomes')
     op.add_argument('-s', '--species-list', dest='species_list')
     op.add_argument('-i', '--ids-list', dest='ids_list')
-    op.add_argument('--annotations-files', dest='annotations_files')
-    op.add_argument('--proteomes-files', dest='proteomes_files')
     op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
 
     op.usage = '''Finding orthogroups for a list of annotations / proteomes / ref ids / species.
 
-    usage: %s directory [-t num] [--start-from step] [-i file] [-s file]
+    usage: %s [--proteomes dir] [--annotations dir] [--ids-list file] [--species-list file]
+                        [-o] [-t num] [--start-from step]
 
     Directory contains fasta files with proteomes.
-    The directory can alternatively contain .gb files, or you can pass
+    The directory can alternatively contain , or you can pass
     a file instead with list of reference ids or species: annotations
     will be fetched from Genbank instead.
 
     Optional arguments:
-    -s:                File with a list of organism names as in Genbank.
+    -a --annotations:    Directory with .gb files
 
-    -i:                File with reference ids (will be fetched from Genbank).
+    -p --proteomes:      Directory with fasta protein files, named by their reference ids
+                         (i.e. NC_005816.1.fasta)
 
-    --prot-id-field:   When specifying proteomes, use this fasta id field number
-                       to retrieve protein ids (default if 1, like >NC_005816.1|NP_995567.1 ...).
+    -s --species-list:   File with a list of organism names as in Genbank.
+
+    -i --ids-list:       File with reference ids (will be fetched from Genbank).
+
+    -o:                  Output directory.
+
+    --prot-id-field:     When specifying proteomes, use this fasta id field number
+                         to retrieve protein ids (default if 1, like >NC_005816.1|NP_995567.1 ...).
     ''' % basename(__file__)
 
     #-a  --annotations-dir  Directory with .gb files.
@@ -80,29 +89,49 @@ def parse_args(args):
 
     check_common_args(p)
 
-    if p.species_list: p.species_list = abspath(p.species_list)
-    if p.ids_list: p.ids_list = abspath(p.ids_list)
-    if p.directory: p.directory = abspath(p.directory)
+    if not p.out:
+        arg_parse_error('Specify output directory with -o.')
+    if isfile(p.out):
+        arg_parse_error('%s is a file' % p.out)
+    p.out = abspath(p.out)
+    if not isdir(p.out):
+        mkdir(p.out)
 
-    if p.species_list or p.ids_list:
-        if not isdir(p.directory):
-            mkdir(p.directory)
-    else:
-        if not p.directory:
-            arg_parse_error('Directory or file must be specified.')
-            check_dir(p.directory)
+    if p.species_list:
+        check_file(p.species_list)
+        p.species_list = abspath(p.species_list)
+
+    if p.ids_list:
+        check_file(p.ids_list)
+        p.ids_list = abspath(p.ids_list)
+
+    if p.proteomes:
+        check_dir(p.species_list)
+        p.proteomes = abspath(p.proteomes)
+
+    if p.annotations:
+        check_dir(p.species_list)
+        p.annotations = abspath(p.annotations)
+
+    #if p.species_list or p.ids_list:
+    #    if not isdir(p.out):
+    #        mkdir(p.out)
+    #else:
+    #    if not p.directory:
+    #        arg_parse_error('Directory or file must be specified.')
+    #        check_dir(p.directory)
     return p
 
 
-def collect_proteomes_and_annotaitons(directory):
+def collect_proteomes_and_annotaitons(input_dir):
     proteomes = []
     annotations = []
 
-    files = listdir(directory)
+    files = listdir(input_dir)
     if not files:
         interrupt('Directory contains no files.')
 
-    for f in (join(directory, f) for f in files if isfile(join(directory, f))):
+    for f in (join(input_dir, f) for f in files if isfile(join(input_dir, f))):
         if '.' in f and splitext(f)[1] in ['.fasta', '.faa', '.fa', '.fsa']:
             try:
                 log.debug('   Checking if %s is fasta.' % f)
@@ -110,7 +139,7 @@ def collect_proteomes_and_annotaitons(directory):
             except ValueError, e:
                 pass
             else:
-                proteomes.append(relpath(f, directory))
+                proteomes.append(f)
                 continue
 
         if '.' in f and splitext(f)[1] in ['.gb', '.genbank', '.gbk']:
@@ -120,7 +149,7 @@ def collect_proteomes_and_annotaitons(directory):
             except Exception, e:
                 log.debug(str(e) + ', ' + f)
             else:
-                annotations.append(relpath(f, directory))
+                annotations.append(f)
 
     log.debug('')
     return proteomes, annotations
@@ -151,20 +180,30 @@ def step_prepare_proteomes_and_annotations(p, internet_is_on):
             return make_proteomes(steps.annotations_dir, steps.proteomes_dir)
 
         else:
-            proteomes, annotations = collect_proteomes_and_annotaitons(p.directory)
+            proteomes, annotations = [], []
 
-            if not proteomes and not annotations:
-                interrupt('Directory must contain fasta or genbank files.')
+            if p.proteomes:
+                proteomes, annotations = collect_proteomes_and_annotaitons(p.proteomes)
+                if proteomes == []:
+                    interrupt('No fasta found in ' + p.proteomes)
 
-            if proteomes and annotations:
-                log.warn('Directory %s contains both fasta and genbank files, using fasta.')
+            if p.annotations:
+                proteomes, annotations = collect_proteomes_and_annotaitons(p.annotations)
+                if annotations == []:
+                    interrupt('No gb files found in ' + p.annotations)
+
+            #if not proteomes and not annotations:
+            #    interrupt('Directory must contain fasta or genbank files.')
+            #
+            #if proteomes and annotations:
+            #    log.warn('Directory %s contains both fasta and genbank files, using fasta.')
 
             if annotations:
                 if not isdir(steps.annotations_dir):
                     mkdir(steps.annotations_dir)
 
                 for annotation in annotations:
-                    move(annotation, steps.annotations_dir)
+                    copy(annotation, steps.annotations_dir)
 
                 return make_proteomes(steps.annotations_dir, steps.proteomes_dir)
 
@@ -191,13 +230,15 @@ def main(args):
     register_ctrl_c()
 
     p = parse_args(args)
-    set_up_logging(p.debug, p.directory)
+    set_up_logging(p.debug, p.out)
     log.info('python ' + basename(__file__) + ' ' + ' '.join(args) + '\n')
-    check_installed_tools(['blastp', 'mcl'])
+    check_installed_tools(['blastp'])
+    mcl_path = join(getcwd(), 'src', 'mcl')
+    check_and_install_mcl(mcl_path, join(p.out, log_fname))
     set_up_config()
-    start_from, start_after = get_starting_step(p.start_from, join(p.directory, log_fname))
+    start_from, start_after = get_starting_step(p.start_from, join(p.out, log_fname))
 
-    working_dir = p.directory
+    working_dir = p.out
     log.info('Changing to %s' % working_dir)
     chdir(working_dir)
 
@@ -212,7 +253,7 @@ def main(args):
     if not exists(steps.intermediate_dir):
         mkdir(steps.intermediate_dir)
 
-    internet_is_on = internet_on()
+    internet_is_on = test_internet_conn()
 
     workflow.extend([
         step_prepare_proteomes_and_annotations(p, internet_is_on),
@@ -227,7 +268,7 @@ def main(args):
         steps.load_blast_results(suffix),
         steps.find_pairs(suffix),
         steps.dump_pairs_to_files(suffix),
-        steps.mcl(),
+        steps.mcl(mcl_path),
         steps.step_save_orthogroups()])
 
     result = workflow.run(start_after, start_from, overwrite=True, ask_before=p.ask_each_step)

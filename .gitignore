@@ -40,3 +40,9 @@ nosetests.xml
 cache
 
 proteins_copy
+
+src/mcl/bin
+src/mcl/doc
+*.o
+src/mcl/src/*.o
+src/mcl/util/*.o

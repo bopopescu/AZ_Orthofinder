@@ -4,6 +4,7 @@ from os.path import basename, join, relpath, exists, isdir
 from shutil import rmtree
 
 from Workflow import Step, cmdline
+from src.utils import check_and_install_mcl
 from process_assembly import filter_assembly
 from save_orthogroups import save_orthogroups
 from make_proteomes import make_proteomes, adjust_proteomes
@@ -258,16 +259,22 @@ def dump_pairs_to_files(suffix):
                      pairs_inparalogs,
                      pairs_coorthologs])
 
-def mcl(inflation=1.5):
+def mcl(mcl_path, inflation=1.5):
+    def run():
+        mcl_bin_path = check_and_install_mcl(mcl_path, config.log_fname)
+
+        return cmdline(
+            mcl_bin_path,
+            parameters=[mcl_input,
+                        '--abc',
+                        '-I', str(inflation),
+                        '-o', mcl_output],
+            stderr='log',
+            stdout='log')()
+
     return Step(
         'MCL',
-         run=cmdline('mcl',
-             parameters=[mcl_input,
-                         '--abc',
-                         '-I', str(inflation),
-                         '-o', mcl_output],
-             stderr='log',
-             stdout='log'),
+         run=run,
          req_files=[mcl_input],
          prod_files=[mcl_output])
 
@@ -293,7 +300,7 @@ def groups_to_files(prefix, start_id=0):
              stdin=mcl_output,
              stdout=groups_file),
          req_files=[mcl_output],
-         prod_files=[groups_file],)
+         prod_files=[groups_file])
 
 #def signletones_to_files():
 #    return Step(

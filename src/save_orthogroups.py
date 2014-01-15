@@ -157,16 +157,19 @@ def save_orthogroups(assembly_proteins, annotations, mcl_output,
          open(out_nice, 'w') as nice_f, \
          open(assembly_singletones, 'w') as singletones_f:
 
-        genes_number = 0
-        i = 0
+        gene_number = 0
+        group_nunber = 0
+        singletone_gene_number = 0
+        singletone_group_number = 0
+
         for line in mcl_f:
-            i += 1
-            print >> out_f, 'Orthogroup %d' % i
-            print >> nice_f, 'Orthogroup %d' % i
+            group_nunber += 1
+            print >> out_f, 'Orthogroup %d' % group_nunber
+            print >> nice_f, 'Orthogroup %d' % group_nunber
 
             known_genes_in_group = []
             for gene in line.split():
-                genes_number += 1
+                gene_number += 1
                 taxon_id, prot_id = gene.split('|')
 
                 if taxon_id != assembly_name:
@@ -175,7 +178,7 @@ def save_orthogroups(assembly_proteins, annotations, mcl_output,
                 if taxon_id not in strains:
                     log.warn('   No annotations for "' + taxon_id + '"')
                     return 1
-                    #vals = repeat('NA')
+                    # vals = repeat('NA')
                 else:
                     vals = iter(strains[taxon_id][prot_id])
 
@@ -192,18 +195,22 @@ def save_orthogroups(assembly_proteins, annotations, mcl_output,
 
             if assembly_name and known_genes_in_group == []:
                 group = []
+                singletone_group_number += 1
                 for gene in line.split():
+                    singletone_gene_number += 1
                     taxon_id, prot_id = gene.split('|')
-                    group.append((i, assembly_proteins_recs[prot_id]))
+                    group.append((group_nunber, assembly_proteins_recs[prot_id]))
                     #print >> singletones_f, '\t'.join(iter(strains[taxon_id][prot_id]))
+
                 singletone_assembly_recs.append(group)
+                SeqIO.write(group, splitext(assembly_singletones)[0] + '_group_' +
+                                   str(singletone_group_number) + '.fasta', 'fasta')
 
-    log.info('   Saved %d groups, totally containing %d genes.' % (i, genes_number))
+    log.info('   Saved %d groups, totally containing %d genes.' % (group_nunber, gene_number))
 
-    for i, group in singletone_assembly_recs:
-        SeqIO.write(group, splitext(assembly_singletones)[0] + '_group_' + str(i) + '.fasta', 'fasta')
-
-    log.info('   Saved %d proteins, totally containing %d genes.' % (i, genes_number))
+    if singletone_assembly_recs:
+        log.info('   Saved %d singletone groups for the assembly, totally containing %d genes.' %
+                 (singletone_group_number, singletone_gene_number))
 
     return 0
 

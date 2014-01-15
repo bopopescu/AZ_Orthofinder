@@ -1,7 +1,8 @@
-from os import environ, access, X_OK, remove
-from os.path import basename, split, join, pathsep, isfile, dirname
+from os import environ, access, X_OK, remove, getcwd, chdir
+from os.path import basename, split, join, pathsep, isfile, dirname, exists, devnull
 from random import randint
 from shutil import copy
+import subprocess
 from config import config_file, orthomcl_config, log_fname
 import logging
 
@@ -65,9 +66,36 @@ def check_installed_tools(tools):
         if not which(tool):
             log.warn('"' + tool + '" might not be installed.')
             ok = False
-    #if not ok:
-    #    exit(3)
+    if not ok:
+        exit(3)
 
+
+def check_and_install_mcl(mcl_src_path, log_file_path):
+    if which('mcl'):
+        return 'mcl'
+
+    mcl_bin_path = join(mcl_src_path, 'bin', 'bin', 'mcl')
+    if not exists(mcl_bin_path):
+        with open(log_file_path) as h:
+            log.info('Compiling MCL...')
+            cur_dir = getcwd()
+            chdir(mcl_src_path)
+            mcl_path = join(mcl_src_path, 'bin')
+
+            def call(command, exit_code=1):
+                log.info('   ' + command)
+                if subprocess.call(command.split(), stderr=h, stdout=open(devnull, 'w')) != 0:
+                    log.error('Cannot install mcl :( Try manually.')
+                    exit(2)
+
+            call('./configure -q --prefix=' + mcl_path, 1)
+            call('make', 2)
+            call('make check', 3)
+            call('make install', 4)
+
+        chdir(cur_dir)
+    return mcl_bin_path
+        
 
 def read_list(file, where_to_save=None):
     if not file:
@@ -81,7 +109,7 @@ def read_list(file, where_to_save=None):
     return results
 
 
-def internet_on():
+def test_internet_conn():
     import urllib2
     try:
         response = urllib2.urlopen('http://74.125.228.100', timeout=1)

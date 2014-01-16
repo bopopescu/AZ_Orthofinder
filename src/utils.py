@@ -1,4 +1,3 @@
-from macostools import mkdirs
 from os import environ, access, X_OK, remove, getcwd, chdir, mkdir
 from os.path import basename, isdir, split, join, pathsep, isfile, dirname, exists, devnull
 from random import randint
@@ -125,8 +124,9 @@ def check_perl_modules(src_path, log_file_path, debug):
     if not isdir(perl_modules_path):
         mkdir(perl_modules_path)
         mkdir(lib_path)
-        mkdirs(join(man_path, 'man1'))
-        mkdirs(join(man_path, 'man3'))
+        mkdir(man_path)
+        mkdir(join(man_path, 'man1'))
+        mkdir(join(man_path, 'man3'))
     if not isdir(cpan_path): mkdir(cpan_path)
     if not isdir(cpan_cpan_path): mkdir(cpan_cpan_path)
 

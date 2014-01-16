@@ -13,7 +13,8 @@ from src import steps
 from src.argparse import ArgumentParser
 
 from src.utils import make_workflow_id, read_list, set_up_config, \
-    get_starting_step, check_installed_tools, interrupt, register_ctrl_c, test_internet_conn, check_and_install_mcl
+    get_starting_step, check_installed_tools, interrupt, register_ctrl_c, test_internet_conn, check_and_install_mcl, \
+    check_perl_modules
 from src.parse_args import arg_parse_error, check_file, check_dir, \
     add_common_arguments, check_common_args
 from src.logger import set_up_logging
@@ -235,6 +236,7 @@ def main(args):
     check_installed_tools(['blastp'])
     mcl_path = join(getcwd(), 'src', 'mcl')
     check_and_install_mcl(mcl_path, join(p.out, log_fname))
+    check_perl_modules(getcwd(), join(p.out, log_fname), p.debug)
     set_up_config()
     start_from, start_after = get_starting_step(p.start_from, join(p.out, log_fname))
 

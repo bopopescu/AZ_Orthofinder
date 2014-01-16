@@ -16,6 +16,7 @@ structure = [
     'scenario_2.py',
     'clean_db.py',
     'src',
+    '.cpan',
     'test_input',
     'config.txt',
     ]
@@ -37,6 +38,7 @@ def compress(source_dir, dest_file):
                 fname = join(root, f)
                 if isfile(fname):
                     arcname = join(relpath(root, relroot), f)
+                    #if '.cpan' not in fname and 'perl_modules' not in fname:
                     print '  ' + arcname  # join(relpath(root, directory), f)
                     zf.write(fname, arcname)
 

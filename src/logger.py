@@ -14,7 +14,7 @@ def set_up_logging(debug, working_dir):
             return rec.levelno in (logging.DEBUG, logging.INFO)
 
     console_formatter = logging.Formatter(
-        '%(asctime)-15s  %(message)s' if debug else '%(message)s',
+        '%(asctime)-15s  %(message)s',
         datefmt='%c')
 
     std = logging.StreamHandler(sys.stdout)

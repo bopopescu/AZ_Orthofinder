@@ -4,7 +4,7 @@ from os.path import basename, join, relpath, exists, isdir
 from shutil import rmtree
 
 from Workflow import Step, cmdline
-from src.utils import check_and_install_mcl
+from utils import check_and_install_mcl
 from process_assembly import filter_assembly
 from save_orthogroups import save_orthogroups
 from make_proteomes import make_proteomes, adjust_proteomes

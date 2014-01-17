@@ -1,4 +1,4 @@
-from itertools import count, izip, repeat
+from itertools import count, izip, repeat, chain
 from os import listdir, mkdir, rmdir
 from os.path import join, isdir, splitext, basename
 from shutil import rmtree
@@ -36,10 +36,71 @@ def save_compact(mcl_output, out):
     return 0
 
 
-def save_orthogroups(assembly_proteins, annotations, mcl_output,
+def get_assembly_genes(assembly_proteins_fpath, max_lengths):
+    assembly_proteins_recs = dict()
+    log.debug('   Reading ' + assembly_proteins_fpath)
+    assembly_name = splitext(basename(assembly_proteins_fpath))[0]
+    strain = assembly_name
+
+    genes_by_protid = dict()
+    for rec in SeqIO.parse(assembly_proteins_fpath, 'fasta'):
+        prot_id = rec.id.split('|')[1]
+        locus_tag = 'NA'
+        description = rec.description
+        gene_id = 'NA'
+        product = 'NA'
+        strain_id = assembly_name
+        assembly_proteins_recs[prot_id].append(rec)
+
+        genes_by_protid[prot_id] = \
+            [strain, strain_id, prot_id, locus_tag, gene_id, product, description]
+
+        max_lengths = map(max, zip(max_lengths, map(len, genes_by_protid[prot_id][:-1])))
+
+    return genes_by_protid, assembly_proteins_recs, max_lengths
+
+
+def get_reference_genes(fname, max_lengths):
+    log.debug('   Reading ' + fname)
+    try:
+        rec = SeqIO.read(fname, 'genbank')
+        strain_id = rec.id
+    except ValueError:
+        log.error('   Could not read annotations from ' + fname)
+        return 1
+        #if isdir(annotations):
+        #    rmtree(annotations)
+        #    mkdir(annotations)
+        #if __download(annotations, mcl_output) != 0:
+        #    return 1
+        #rec = SeqIO.read(fname, 'genbank')
+
+    strain = rec.annotations['source'] or rec.name
+    #gi = rec.annotations['gi'] or rec.id or 'NA'
+    description = rec.description
+
+    genes_by_protid = dict()
+
+    for feature in rec.features:
+        if feature.type == 'CDS':
+            qs = feature.qualifiers
+            prot_id = qs.get('protein_id', ['NA'])[0]
+            gene_id = qs.get('gene', ['NA'])[0]
+            product = qs.get('product', ['NA'])[0]
+            locus_tag = qs.get('locus_tag', ['NA'])[0]
+
+            genes_by_protid[prot_id] = \
+                [strain, strain_id, prot_id, locus_tag, gene_id, product, description]
+
+            max_lengths = map(max, zip(max_lengths, map(len, genes_by_protid[prot_id][:-1])))
+
+    return strain_id, genes_by_protid, max_lengths
+
+
+def save_orthogroups(assembly_proteins_fpath, annotations, mcl_output,
                      out, out_nice, out_short, assembly_singletones):
     strains = dict()
-    max_lengths = count(0)
+    max_lengths = repeat(0)
 
     gb_files = []
     if isinstance(annotations, (list, tuple)):
@@ -55,107 +116,27 @@ def save_orthogroups(assembly_proteins, annotations, mcl_output,
     if not gb_files:
         return save_compact(mcl_output, out)
 
-
-    # Assembly genes
     assembly_name = None
-    assembly_proteins_recs = dict()
-    if assembly_proteins:
-        log.debug('   Reading ' + assembly_proteins)
-        assembly_name = splitext(basename(assembly_proteins))[0]
-        strain_id = assembly_name
-        strain = assembly_name
+    assembly_proteins_recs = None
+    if assembly_proteins_fpath:
+        assembly_name = splitext(basename(assembly_proteins_fpath))[0]
 
-        genes_by_protid = dict()
-        for rec in SeqIO.parse(assembly_proteins, 'fasta'):
-            prot_id = rec.id.split('|')[1]
-            locus = 'NA'
-            description = rec.description
-            gene_id = 'NA'
-            product = 'NA'
-            assembly_proteins_recs[prot_id].append(rec)
+        genes, assembly_genes, max_lengths = \
+            get_assembly_genes(assembly_proteins_fpath, max_lengths)
+        strains[assembly_name] = assembly_genes
 
-            genes_by_protid[prot_id] = \
-                [strain, prot_id, gene_id, locus, product, description]
-
-            max_lengths = map(max, zip(max_lengths, map(len, genes_by_protid[prot_id][:-1])))
-
-        strains[strain_id] = genes_by_protid
-
-
-    # Other genes
     for fname in gb_files:
-        log.debug('   Reading ' + fname)
+        strain_id, genes, max_lengths = get_reference_genes(fname, max_lengths)
+        strains[strain_id] = genes
 
-        #if assembly_name and '.' in fname and splitext(basename(fname))[0] == assembly_name:
-        #    strain_id = assembly_name
-        #    strain = assembly_name
-        #
-        #    a = SeqIO.parse(fname, 'genbank')
-        #    b = list(a)
-        #
-        #    for rec in SeqIO.parse(fname, 'genbank'):
-        #        locus = rec.name
-        #        description = rec.definition
-        #
-                #        genes_by_protid = dict()
-        #
-        #        for feature in rec.features:
-        #            if feature.type == 'CDS':
-        #                qs = feature.qualifiers
-        #                prot_id = qs.get('protein_id', ['NA'])[0]
-        #                gene_id = qs.get('gene', ['NA'])[0]
-        #                product = qs.get('product', ['NA'])[0]
-        #
-        #                genes_by_protid[prot_id] = \
-        #                    [strain, prot_id, gene_id, locus, product, description]
-        #
-        #                max_lengths = map(max, zip(max_lengths, map(len, genes_by_protid[prot_id][:-1])))
-        #
-        #        strains[strain_id] = genes_by_protid
-
-        #else:
-        try:
-            rec = SeqIO.read(fname, 'genbank')
-            strain_id = rec.id
-        except ValueError:
-            log.error('   Could not read annotations from ' + fname)
-            return 1
-            #if isdir(annotations):
-            #    rmtree(annotations)
-            #    mkdir(annotations)
-            #if __download(annotations, mcl_output) != 0:
-            #    return 1
-            #rec = SeqIO.read(fname, 'genbank')
-
-        strain = rec.annotations['source'] or rec.name
-        #gi = rec.annotations['gi'] or rec.id or 'NA'
-        locus = rec.name
-        description = rec.description
-
-        genes_by_protid = dict()
-
-        for feature in rec.features:
-            if feature.type == 'CDS':
-                qs = feature.qualifiers
-                prot_id = qs.get('protein_id', ['NA'])[0]
-                gene_id = qs.get('gene', ['NA'])[0]
-                product = qs.get('product', ['NA'])[0]
-
-                genes_by_protid[prot_id] = \
-                    [strain, prot_id, gene_id, locus, product, description]
-
-                max_lengths = map(max, zip(max_lengths, map(len, genes_by_protid[prot_id][:-1])))
-
-        strains[strain_id] = genes_by_protid
-
-
-    # Writing result files
     singletone_assembly_recs = []
+
+    with open(mcl_output) as mcl_f:
+        groups_total = sum(1 for _ in mcl_f)
 
     with open(mcl_output) as mcl_f, \
          open(out, 'w') as out_f, \
-         open(out_nice, 'w') as nice_f, \
-         open(assembly_singletones, 'w') as singletones_f:
+         open(out_nice, 'w') as nice_f:
 
         gene_number = 0
         group_nunber = 0
@@ -164,36 +145,30 @@ def save_orthogroups(assembly_proteins, annotations, mcl_output,
 
         for line in mcl_f:
             group_nunber += 1
-            print >> out_f, 'Orthogroup %d' % group_nunber
-            print >> nice_f, 'Orthogroup %d' % group_nunber
 
             known_genes_in_group = []
             for gene in line.split():
                 gene_number += 1
                 taxon_id, prot_id = gene.split('|')
 
-                if taxon_id != assembly_name:
+                if assembly_name and taxon_id != assembly_name:
                     known_genes_in_group.append(prot_id)
 
                 if taxon_id not in strains:
                     log.warn('   No annotations for "' + taxon_id + '"')
                     return 1
-                    # vals = repeat('NA')
-                else:
-                    vals = iter(strains[taxon_id][prot_id])
 
-                for l, val in izip(max_lengths, vals):
-                    print >> out_f, str(val) + '\t',
-                    print >> nice_f, str(val) + ' ' * (l - len(str(val))) + '\t',
+                for l, val in izip(chain([len(str(groups_total))], max_lengths),
+                                   chain([gene_number], strains[taxon_id][prot_id])):
+                    out_f.write(str(val) + '\t')
+                    nice_f.write(str(val) + ' ' * (l - len(str(val))) + '\t')
+                out_f.write('\n')
+                nice_f.write('\n')
 
-                val = next(vals)
-                print >> out_f, val
-                print >> nice_f, val
+            out_f.write('\n')
+            nice_f.write('\n')
 
-            print >> out_f
-            print >> nice_f
-
-            if assembly_name and known_genes_in_group == []:
+            if assembly_proteins_recs and known_genes_in_group == []:
                 group = []
                 singletone_group_number += 1
                 for gene in line.split():

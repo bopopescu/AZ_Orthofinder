@@ -159,7 +159,7 @@ def save_orthogroups(assembly_proteins_fpath, annotations, mcl_output,
                     return 1
 
                 for l, val in izip(chain([len(str(groups_total))], max_lengths),
-                                   chain([gene_number], strains[taxon_id][prot_id])):
+                                   chain([group_nunber], strains[taxon_id][prot_id])):
                     out_f.write(str(val) + '\t')
                     nice_f.write(str(val) + ' ' * (l - len(str(val))) + '\t')
                 out_f.write('\n')

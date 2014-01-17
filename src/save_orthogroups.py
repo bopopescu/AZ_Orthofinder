@@ -165,7 +165,6 @@ def save_orthogroups(assembly_proteins_fpath, annotations, mcl_output,
                 out_f.write('\n')
                 nice_f.write('\n')
 
-            out_f.write('\n')
             nice_f.write('\n')
 
             if assembly_proteins_recs and known_genes_in_group == []:

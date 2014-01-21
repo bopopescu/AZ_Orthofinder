@@ -1,3 +1,4 @@
+from genericpath import exists
 from itertools import count, izip, repeat, chain
 from os import listdir, mkdir, rmdir
 from os.path import join, isdir, splitext, basename
@@ -50,7 +51,7 @@ def get_assembly_genes(assembly_proteins_fpath, max_lengths):
         gene_id = 'NA'
         product = 'NA'
         strain_id = assembly_name
-        assembly_proteins_recs[prot_id].append(rec)
+        assembly_proteins_recs[rec.id] = rec
 
         genes_by_protid[prot_id] = \
             [strain, strain_id, prot_id, locus_tag, gene_id, product, description]
@@ -97,7 +98,7 @@ def get_reference_genes(fname, max_lengths):
     return strain_id, genes_by_protid, max_lengths
 
 
-def save_orthogroups(assembly_proteins_fpath, annotations, mcl_output,
+def save_orthogroups(new_proteomes, annotations, mcl_output,
                      out, out_nice, out_short, assembly_singletones):
     strains = dict()
     max_lengths = repeat(0)
@@ -107,8 +108,9 @@ def save_orthogroups(assembly_proteins_fpath, annotations, mcl_output,
         gb_files = annotations
     else:
         if isdir(annotations) and listdir(annotations):
-            gb_files = [join(annotations, fname)
-                        for fname in listdir(annotations) if fname[0] != '.']
+            gb_files = [
+                join(annotations, fname)
+                for fname in listdir(annotations) if fname[0] != '.']
         #    if not isdir(annotations): mkdir(annotations)
         #    if __download(annotations, mcl_output) != 0:
         #        return 1
@@ -116,14 +118,18 @@ def save_orthogroups(assembly_proteins_fpath, annotations, mcl_output,
     if not gb_files:
         return save_compact(mcl_output, out)
 
-    assembly_name = None
-    assembly_proteins_recs = None
-    if assembly_proteins_fpath:
-        assembly_name = splitext(basename(assembly_proteins_fpath))[0]
+    assembly_names = []
+    new_proteins_recs = dict()
 
-        genes, assembly_genes, max_lengths = \
-            get_assembly_genes(assembly_proteins_fpath, max_lengths)
-        strains[assembly_name] = assembly_genes
+    for new_prot in new_proteomes:
+        assembly_name = splitext(basename(new_prot))[0]
+        assembly_names.append(assembly_name)
+
+        genes, assembly_recs, max_lengths = \
+            get_assembly_genes(new_prot, max_lengths)
+
+        new_proteins_recs.update(assembly_recs)
+        strains[assembly_name] = genes
 
     for fname in gb_files:
         strain_id, genes, max_lengths = get_reference_genes(fname, max_lengths)
@@ -151,7 +157,7 @@ def save_orthogroups(assembly_proteins_fpath, annotations, mcl_output,
                 gene_number += 1
                 taxon_id, prot_id = gene.split('|')
 
-                if assembly_name and taxon_id != assembly_name:
+                if assembly_names and taxon_id not in assembly_names:
                     known_genes_in_group.append(prot_id)
 
                 if taxon_id not in strains:
@@ -167,18 +173,30 @@ def save_orthogroups(assembly_proteins_fpath, annotations, mcl_output,
 
             nice_f.write('\n')
 
-            if assembly_proteins_recs and known_genes_in_group == []:
+            if new_proteins_recs and known_genes_in_group == []:
                 group = []
                 singletone_group_number += 1
-                for gene in line.split():
-                    singletone_gene_number += 1
-                    taxon_id, prot_id = gene.split('|')
-                    group.append((group_nunber, assembly_proteins_recs[prot_id]))
-                    #print >> singletones_f, '\t'.join(iter(strains[taxon_id][prot_id]))
+
+                with open(assembly_singletones, 'w') as singletones_f:
+                    for rec_id in line.split():
+                        singletone_gene_number += 1
+                        group.append(new_proteins_recs[rec_id])
+                        singletones_f.write(rec_id)
 
                 singletone_assembly_recs.append(group)
-                SeqIO.write(group, splitext(assembly_singletones)[0] + '_group_' +
-                                   str(singletone_group_number) + '.fasta', 'fasta')
+
+                singletone_dir = 'new_singletones'
+                if exists(singletone_dir):
+                    rmtree(singletone_dir)
+                if not isdir(singletone_dir):
+                    mkdir(singletone_dir)
+
+                SeqIO.write(
+                    group,
+                    join(singletone_dir,
+                         splitext(assembly_singletones)[0] + '_group_' +
+                         str(singletone_group_number) + '.fasta'),
+                    'fasta')
 
     log.info('   Saved %d groups, totally containing %d genes.' % (group_nunber, gene_number))
 

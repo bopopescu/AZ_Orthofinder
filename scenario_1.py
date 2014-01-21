@@ -40,10 +40,12 @@ def parse_args(args):
 
     #op.add_argument(dest='directory')
     op.add_argument('-o', '--out', dest='out', required=True)
-    op.add_argument('-a', '--annotations', dest='annotations')
+
+    op.add_argument('-g', '--gbs', dest='annotations')
     op.add_argument('-p', '--proteomes', dest='proteomes')
     op.add_argument('-s', '--species-list', dest='species_list')
     op.add_argument('-i', '--ids-list', dest='ids_list')
+
     op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
 
     op.usage = '''Finding orthogroups for a list of annotations / proteomes / ref ids / species.
@@ -51,22 +53,17 @@ def parse_args(args):
     usage: %s [--proteomes dir] [--annotations dir] [--ids-list file] [--species-list file]
                         [-o] [-t num] [--start-from step]
 
-    Directory contains fasta files with proteomes.
-    The directory can alternatively contain , or you can pass
-    a file instead with list of reference ids or species: annotations
-    will be fetched from Genbank instead.
+    -o:                  Output directory.
 
     Optional arguments:
-    -a --annotations:    Directory with .gb files
+    -g --gbs:            Directory with gb files.
 
-    -p --proteomes:      Directory with fasta protein files, named by their reference ids
-                         (i.e. NC_005816.1.fasta)
+    -p --proteomes:      Directory with fasta (or faa) protein files, named by their reference ids
+                         (i.e. NC_005816.1.fasta). Can contain annotations from Prodigal.
 
     -s --species-list:   File with a list of organism names as in Genbank.
 
     -i --ids-list:       File with reference ids (will be fetched from Genbank).
-
-    -o:                  Output directory.
 
     --prot-id-field:     When specifying proteomes, use this fasta id field number
                          to retrieve protein ids (default if 1, like >NC_005816.1|NP_995567.1 ...).
@@ -224,7 +221,7 @@ def step_prepare_proteomes_and_annotations(p, internet_is_on):
     return Step(
        'Preparing proteomes and annotations',
         run=run,
-        prod_files=['proteomes', 'annotations'])
+        prod_files=[steps.proteomes_dir, steps.annotations_dir])
 
 
 def main(args):
@@ -232,7 +229,8 @@ def main(args):
 
     p = parse_args(args)
     set_up_logging(p.debug, p.out)
-    log.info('python ' + basename(__file__) + ' ' + ' '.join(args) + '\n')
+    log.info('python ' + basename(__file__) + ' ' + ' '.join(args))
+    log.info('')
     check_installed_tools(['blastp'])
     mcl_path = join(getcwd(), 'src', 'mcl')
     check_and_install_mcl(mcl_path, join(p.out, log_fname))

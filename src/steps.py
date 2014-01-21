@@ -1,5 +1,5 @@
 from genericpath import isfile
-from os import remove
+from os import remove, listdir
 from os.path import basename, join, relpath, exists, isdir
 from shutil import rmtree
 
@@ -37,7 +37,7 @@ singletons_file        = 'singletons.txt'
 orthogroups_file       = 'orthogroups.tsv'
 nice_orthogroups_file  = 'orthogroups_nice.txt'
 short_orthogroups_file = 'orthogroups.txt'
-assembly_singletones   = 'intermediate/assembly_singletones.txt'
+assembly_singletones   = 'assembly_singletones.txt'
 
 
 def check_results_existence():
@@ -122,8 +122,7 @@ def filter_proteomes(min_length=10, max_percent_stop=20):
                          good_proteins,
                          poor_proteins]),
          req_files=[proteomes_dir],
-         prod_files=[good_proteins,
-                     poor_proteins])
+         prod_files=[good_proteins, poor_proteins])
 
 def make_blast_db():
     return Step(
@@ -139,12 +138,12 @@ def make_blast_db():
          req_files=[good_proteins],
          prod_files=[blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']])
 
-def blast(threads, assembly_name=None, evalue=1e-5):
-    if assembly_name is None:
+def blast(threads, new_good_proteomes=None, evalue=1e-5):
+    if new_good_proteomes:
         parameters = [
-            '-query', good_proteins,
+            '-query', new_good_proteomes,
             '-db', blast_db,
-            '-out', blast_out,
+            '-out', blast_out + '_2',
             '-outfmt', 6,  # tabular
             '-seg', 'yes',
             '-soft_masking', 'true',
@@ -152,9 +151,9 @@ def blast(threads, assembly_name=None, evalue=1e-5):
             '-dbsize', BLAST_DBSIZE]
     else:
         parameters = [
-            '-query', join(proteomes_dir, assembly_name + '.fasta'),
+            '-query', good_proteins,
             '-db', blast_db,
-            '-out', blast_out + '_2',
+            '-out', blast_out,
             '-outfmt', 6,  # tabular
             '-seg', 'yes',
             '-soft_masking', 'true',
@@ -167,10 +166,12 @@ def blast(threads, assembly_name=None, evalue=1e-5):
                       stderr=None)()
         if res == -6:
             log.info('')
-            log.warn('Warning: blast refused to run multithreaded, running single-threaded instead.')
+            log.warn('   WARNING: blast refused to run multithreaded, running single-threaded instead.')
             res = cmdline('blastp', parameters)()
 
-        if assembly_name:
+        if new_good_proteomes:
+            log.info('   Appending ' + blast_out + '_2 to ' + blast_out)
+
             with open(blast_out, 'a') as b_out:
                 with open(blast_out + '_2') as b_out_2:
                     b_out.write(b_out_2.read())
@@ -278,12 +279,30 @@ def mcl(mcl_path, inflation=1.5):
          req_files=[mcl_input],
          prod_files=[mcl_output])
 
-def step_save_orthogroups(assembly_proteomes=None, annotations=None, internet_on=True):
-    run = lambda: save_orthogroups(
-        assembly_proteomes, annotations or annotations_dir, mcl_output,
-        orthogroups_file, nice_orthogroups_file, short_orthogroups_file, assembly_singletones)
+def step_save_orthogroups(new_proteomes_dir=None, annotations=None, internet_on=True):
+    def run():
+        if new_proteomes_dir:
+            new_proteomes = [
+                join(new_proteomes_dir, prot)
+                for prot in listdir(new_proteomes_dir)
+                if prot and prot[0] != '.']
+        else:
+            new_proteomes = []
 
-    prod_files = [orthogroups_file, nice_orthogroups_file, short_orthogroups_file, assembly_singletones]
+        return save_orthogroups(
+            new_proteomes,
+            annotations or annotations_dir,
+            mcl_output,
+            orthogroups_file,
+            nice_orthogroups_file,
+            short_orthogroups_file,
+            assembly_singletones)
+
+    prod_files = [
+        orthogroups_file,
+        nice_orthogroups_file,
+        short_orthogroups_file,
+        assembly_singletones]
 
     return Step(
        'Saving orthogroups',

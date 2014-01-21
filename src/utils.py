@@ -34,13 +34,8 @@ def interrupt(msg, code=1):
 
 
 def register_ctrl_c():
-    import signal
-
-    def signal_handler(signal, frame):
-        print ''
-        exit(0)
-
-    signal.signal(signal.SIGINT, signal_handler)
+    from signal import signal, SIGINT
+    signal(SIGINT, lambda s, f: interrupt('', 0))
 
 
 def which(program):

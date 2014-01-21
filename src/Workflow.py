@@ -99,6 +99,8 @@ def cmdline(command, parameters=None, stdin=None,
                                  stdin=stdin_f, stdout=stdout_f, stderr=stderr_f)
             if stdout_f == subprocess.PIPE:
                 for line in iter(p.stdout.readline, ''):
+                    if line.strip().startswith('Please cite:'):
+                        break
                     if stdout == 'pipe':
                         log.info('   ' + line.strip())
                     if stdout == 'log':

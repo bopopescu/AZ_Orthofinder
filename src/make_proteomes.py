@@ -19,10 +19,11 @@ def adjust_proteomes(proteomes, proteomes_dir, prot_id_field):
     if not isdir(proteomes_dir):
         mkdir(proteomes_dir)
 
-    prot_ids = set()
     for proteome in proteomes:
+        prot_ids = set()
         records = []
-        taxon_id = splitext(basename(proteome))[0]
+        taxon_id, ext = splitext(basename(proteome))
+        ext = '.fasta'
         for seq in SeqIO.parse(proteome, 'fasta'):
             fields = seq.id.replace('|', ' ').split()
             prot_id = fields[prot_id_field]
@@ -34,10 +35,10 @@ def adjust_proteomes(proteomes, proteomes_dir, prot_id_field):
             prot_ids.add(prot_id)
             seq.id = taxon_id + '|' + prot_id
             records.append(seq)
-        out = join(proteomes_dir, taxon_id + '.fasta')
+        out = join(proteomes_dir, taxon_id + ext)
         if isfile(out):
             remove(out)
-        SeqIO.write(records, join(proteomes_dir, taxon_id + '.fasta'), 'fasta')
+        SeqIO.write(records, out, 'fasta')
 
     return 0
 
@@ -49,9 +50,10 @@ def make_proteomes(annotations, proteomes_dir):
 
     elif isdir(annotations) and listdir(annotations):
         annotations_dir = annotations
-        gb_files = [join(annotations_dir, fname)
-                    for fname in listdir(annotations_dir)
-                    if fname and fname[0] != '.']
+        gb_files = [
+            join(annotations_dir, fname)
+            for fname in listdir(annotations_dir)
+            if fname and fname[0] != '.']
 
     if not gb_files: log.error('   No references provided.')
 

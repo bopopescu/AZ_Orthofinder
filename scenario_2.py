@@ -15,7 +15,7 @@ from src import steps
 from src.utils import which, make_workflow_id, read_list, \
     set_up_config, get_starting_step, register_ctrl_c, \
     check_installed_tools, test_internet_conn, \
-    check_and_install_mcl, check_perl_modules
+    check_install_mcl, check_perl_modules, check_and_install_tools
 from src.parse_args import arg_parse_error, check_file,\
     check_dir, add_common_arguments, check_common_args
 from src.logger import set_up_logging
@@ -257,16 +257,14 @@ def main(args):
     register_ctrl_c()
 
     p = parse_args(args)
-    set_up_logging(p.debug, p.directory)
+    log_fpath = set_up_logging(p.debug, p.directory)
     log.info('python ' + basename(__file__) + ' ' + ' '.join(args))
     log.info('')
-    check_installed_tools(['blastp'])
-    mcl_path = join(getcwd(), 'src', 'mcl')
-    check_and_install_mcl(mcl_path, join(p.directory, log_fname))
-    check_perl_modules(getcwd(), join(p.directory, log_fname), p.debug)
+
+    check_and_install_tools(p.debug, log_fpath)
     set_up_config()
-    start_from, start_after = get_starting_step(
-        p.start_from, join(p.directory, log_fname))
+
+    start_from, start_after = get_starting_step(p.start_from, join(p.directory, log_fname))
 
     working_dir = p.directory
     log.info('Changing to %s' % working_dir)
@@ -279,8 +277,6 @@ def main(args):
     log.info('Workflow id is "' + workflow.id + '"')
     log.info('')
     suffix = '_' + workflow.id
-
-    internet_is_on = test_internet_conn()
 
     workflow.extend([
         step_prepare_input(p),
@@ -299,7 +295,7 @@ def main(args):
         steps.load_blast_results(suffix),
         steps.find_pairs(suffix),
         steps.dump_pairs_to_files(suffix),
-        steps.mcl(mcl_path),
+        steps.mcl(),
         steps.step_save_orthogroups(new_proteomes_dir),
         step_blast_singletones(),
     ])

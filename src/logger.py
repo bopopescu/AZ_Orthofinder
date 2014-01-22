@@ -28,10 +28,12 @@ def set_up_logging(debug, working_dir):
     err.setFormatter(console_formatter)
     logger.addHandler(err)
 
-    fh = logging.FileHandler(join(working_dir, log_fname), 'a')
+    log_fpath = join(working_dir, log_fname)
+    fh = logging.FileHandler(log_fpath, 'a')
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(logging.Formatter(
         '%(asctime)-15s  %(levelname)-8s  %(message)s',
         datefmt='%c'))
     logger.addHandler(fh)
 
+    return log_fpath

@@ -6,15 +6,17 @@ from os import chdir, mkdir, getcwd, listdir
 from os.path import join, exists, isdir, isfile, dirname, realpath, \
     basename, relpath, splitext, abspath
 from Bio import SeqIO
-from src.fetch_annotations import fetch_annotations_for_species_from_ftp, fetch_annotations_for_ids
+
+from src.fetch_annotations import fetch_annotations_for_species_from_ftp, \
+    fetch_annotations_for_ids
 from src.make_proteomes import adjust_proteomes, make_proteomes
 from src.steps import check_results_existence
 from src import steps
 from src.argparse import ArgumentParser
 
 from src.utils import make_workflow_id, read_list, set_up_config, \
-    get_starting_step, check_installed_tools, interrupt, register_ctrl_c, test_internet_conn, check_and_install_mcl, \
-    check_perl_modules
+    get_starting_step, interrupt, register_ctrl_c, test_internet_conn, \
+    check_and_install_tools
 from src.parse_args import arg_parse_error, check_file, check_dir, \
     add_common_arguments, check_common_args
 from src.logger import set_up_logging
@@ -228,14 +230,13 @@ def main(args):
     register_ctrl_c()
 
     p = parse_args(args)
-    set_up_logging(p.debug, p.out)
+    log_fpath = set_up_logging(p.debug, p.out)
     log.info('python ' + basename(__file__) + ' ' + ' '.join(args))
     log.info('')
-    check_installed_tools(['blastp'])
-    mcl_path = join(getcwd(), 'src', 'mcl')
-    check_and_install_mcl(mcl_path, join(p.out, log_fname))
-    check_perl_modules(getcwd(), join(p.out, log_fname), p.debug)
+
+    check_and_install_tools(p.debug, log_fpath)
     set_up_config()
+
     start_from, start_after = get_starting_step(p.start_from, join(p.out, log_fname))
 
     working_dir = p.out
@@ -268,7 +269,7 @@ def main(args):
         steps.load_blast_results(suffix),
         steps.find_pairs(suffix),
         steps.dump_pairs_to_files(suffix),
-        steps.mcl(mcl_path),
+        steps.mcl(),
         steps.step_save_orthogroups()])
 
     result = workflow.run(start_after, start_from, overwrite=True, ask_before=p.ask_each_step)

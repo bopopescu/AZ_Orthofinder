@@ -1,9 +1,10 @@
 from os import environ, access, X_OK, remove, getcwd, chdir, mkdir
-from os.path import basename, isdir, split, join, pathsep, isfile, dirname, exists, devnull
+from os.path import basename, isdir, split, join, pathsep, isfile, dirname, exists, devnull, realpath
 from random import randint
 from shutil import copy
 from subprocess import call, Popen, PIPE
-from config import config_file, orthomcl_config, log_fname
+from config import config_file, orthomcl_config, log_fname, mcl_dir, \
+    mysql_cnf, mysql_linux_tar, mysql_osx_tar, mysql_extracted_dir
 import logging
 
 log = logging.getLogger(log_fname)
@@ -38,6 +39,16 @@ def register_ctrl_c():
     signal(SIGINT, lambda s, f: interrupt('', 0))
 
 
+def check_and_install_tools(debug, log_fpath):
+    check_installed_tools(['blastp'])
+
+    check_install_mcl(log_fpath)
+
+    check_perl_modules(debug)
+
+    check_install_mysql()
+
+
 def which(program):
     def is_exe(fpath_):
         return isfile(fpath_) and access(fpath_, X_OK)
@@ -55,44 +66,94 @@ def which(program):
     return None
 
 
-def check_installed_tools(tools):
+def check_install_mysql(only_warn=False, internet_ok=False):
+    if which('mysqld'):
+        return 'mysqld'
+    else:
+        if only_warn:
+            log.warn('WARNING: MySQL is not installed. It is required for some steps.')
+            intenet_ok = test_internet_conn()
+            try:
+                if intenet_ok:
+                    raw_input('Install mysql manually? It will be downloaded from the Internet, '
+                              'about 230MB. '
+                              'Press any key for "yes", Ctrl-C for "no":')
+                else:
+                    log.error('We can install mysql for you, but Internet connection seems to be off, '
+                              'which is required to download mysql. '
+                              'Please, retry with a working Internet connection, '
+                              'or install mysql manually.')
+                    exit(1)
+            except KeyboardInterrupt:
+                print ''
+                exit(1)
+
+            import urllib
+            import tarfile
+            link = 'http://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.15-linux-glibc2.5-x86_64.tar.gz'
+            handle = urllib.urlopen(link)
+            with open('mysql.tar.gz', 'wb') as out:
+                while True:
+                    data = handle.read(1024)
+                    if len(data) == 0: break
+                    out.write(data)
+
+            with tarfile.open('mysql.tar.gz') as tar:
+                tar.extractall()
+
+        else:
+            log.error('ERROR: MySQL is not installed.')
+    pass
+
+
+def check_installed_tools(tools, only_warn=False):
     ok = True
     for tool in tools:
         if not which(tool):
-            log.warn('"' + tool + '" might not be installed.')
             ok = False
-    if not ok:
-        exit(3)
+            if only_warn:
+                log.warn('WARNING: "' + tool + '" might not be installed. '
+                         'It is required for following steps.')
+    if not ok and not only_warn:
+        exit(1)
+    return ok
 
 
-def check_and_install_mcl(mcl_src_path, log_file_path):
+def check_install_mcl(log_path=log_fname, only_warn=False):
     if which('mcl'):
         return 'mcl'
 
-    mcl_bin_path = join(mcl_src_path, 'bin', 'bin', 'mcl')
+    mcl_bin_path = join(mcl_dir, 'bin', 'bin', 'mcl')
     if not exists(mcl_bin_path):
-        with open(log_file_path) as h:
+        with open(log_path) as log_f:
             log.info('Compiling MCL...')
             cur_dir = getcwd()
-            chdir(mcl_src_path)
-            mcl_path = join(mcl_src_path, 'bin')
+            chdir(mcl_dir)
+            mcl_path = join(mcl_dir, 'bin')
 
             def run(command, exit_code=1):
                 log.info('   ' + command)
-                if call(command.split(), stderr=h, stdout=open(devnull, 'w')) != 0:
-                    log.error('Cannot install mcl :( Try manually.')
-                    exit(2)
+                if call(command.split(), stderr=log_f, stdout=open(devnull, 'w')) != 0:
+                    if only_warn:
+                        log.warning('WARNING: Cannot find or install mcl. '
+                                    'It required for some steps. '
+                                    'Try to install it manually: http://micans.org/mcl/src')
+                        return None
+                    else:
+                        log.error('ERROR: Cannot find or install mcl. '
+                                  'Try to install it manually: http://micans.org/mcl/src')
+                        exit(1)
 
-            run('./configure -q --prefix=' + mcl_path, 1)
-            run('make', 2)
-            run('make check', 3)
-            run('make install', 4)
+            run('./configure -q --prefix=' + mcl_path, 2)
+            run('make', 3)
+            run('make check', 4)
+            run('make install', 5)
 
         chdir(cur_dir)
     return mcl_bin_path
 
 
-def check_perl_modules(src_path, log_file_path, debug):
+def check_perl_modules(debug, only_warn=False):
     def check(env):
         dbimysql = call('perl -MDBD::mysql -e 1'.split(),
                          stderr=open(devnull, 'w'),
@@ -110,10 +171,12 @@ def check_perl_modules(src_path, log_file_path, debug):
 
         return dbimysql and dbd
 
-    perl_modules_path = join(src_path, 'perl_modules')
+    tool_patb = join(dirname(realpath(__file__)), '../')
+    assert isdir(tool_patb)
+    perl_modules_path = join(tool_patb, 'perl_modules')
     lib_path = join(perl_modules_path, 'lib')
     man_path = join(perl_modules_path, 'man')
-    cpan_path = join(src_path, '.cpan')
+    cpan_path = join(tool_patb, '.cpan')
     cpan_cpan_path = join(cpan_path, 'CPAN')
 
     if not isdir(perl_modules_path):
@@ -127,7 +190,7 @@ def check_perl_modules(src_path, log_file_path, debug):
 
     with open(join(cpan_cpan_path, 'MyConfig.pm'), 'w') as cpan_f, \
          open(join(cpan_cpan_path, 'MyConfig_template.pm')) as cpan_tmpl_f:
-        cpan_f.write(cpan_tmpl_f.read().replace('{PATH}', src_path))
+        cpan_f.write(cpan_tmpl_f.read().replace('{PATH}', tool_patb))
 
     if 'PERL5LIB' not in environ:
         environ['PERL5LIB'] = lib_path
@@ -193,14 +256,18 @@ def check_perl_modules(src_path, log_file_path, debug):
     #    log.error('Cannot install DBD::mysql for your system.')
 
     if not check(env):
-        log.error('Could not install Perl modules. ')
+        if only_warn:
+            log.warning('WARNING: Could not find or install Perl modules.')
+        else:
+            log.error('ERROR: Could not find or install Perl modules. ')
+
         print '''Pleasy, try the following manually:
     $ perl -MCPAN -e shell
-    cpan> o conf makepl_arg "mysql_config=mysql_config"
+    cpan> o conf makepl_arg "mysql_config=%s"
     cpan> install Data::Dumper
     cpan> install DBI
     cpan> force install DBD::mysql
-    '''
+    ''' % mysql_cnf
         exit(4)
 
 

@@ -1,7 +1,7 @@
 from os import system
 import subprocess
-import mysql.connector
-from mysql.connector import errorcode
+import mysql_python.connector
+from mysql_python.connector import errorcode
 from os.path import join, dirname, realpath
 
 import config
@@ -23,7 +23,7 @@ class DbCursor:
         self.step = step
 
     def __connect(self):
-        self.cnx = mysql.connector.connect(
+        self.cnx = mysql_python.connector.connect(
             user=self.db_login,
             password=self.db_passw,
             host='127.0.0.1',
@@ -44,7 +44,7 @@ class DbCursor:
                     conf = dict(l.strip().split('=', 1) for l
                                 in cf.readlines() if l.strip()[0] != '#')
 
-                cmd = 'mysqld_safe --port=%s &' % conf['db_port']
+                cmd = 'mysqld --port=%s &' % conf['db_port']
                 log.info('   Could not connect to MySql server. If it is not running, '
                          'please, start it at another terminal with "mysqld --port=%s &"' % conf['db_port'])
                 try:
@@ -66,7 +66,7 @@ class DbCursor:
     def __exit__(self, type, err, traceback):
         self.cursor.close()
         self.cnx.close()
-        if isinstance(err, mysql.connector.Error):
+        if isinstance(err, mysql_python.connector.Error):
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
                 log.error('Either incorrect user name or password')
             elif err.errno == errorcode.ER_BAD_DB_ERROR:

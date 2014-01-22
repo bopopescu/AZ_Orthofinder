@@ -5,8 +5,9 @@ from os.path import basename, exists
 from shutil import rmtree
 from subprocess import call
 import subprocess
-from mysql.connector import errorcode
-from db_connection import DbCursor, mysql
+from db_connection import DbCursor
+from mysql_python.connector import errorcode
+import mysql_python
 
 import config
 import logging
@@ -154,7 +155,7 @@ class Step:
                     try:
                         query = '   select count(*) from %s;' % table
                         cursor.execute(query)
-                    except mysql.connector.Error, err:
+                    except mysql_python.connector.Error, err:
                         #log.debug('   err.errno == errorcode.ER_TABLE_EXISTS_ERROR: ' +
                         #          str(err.errno == errorcode.ER_TABLE_EXISTS_ERROR))
                         #log.debug(err.msg)
@@ -189,7 +190,7 @@ class Step:
                 for table in self.req_tables:
                     try:
                         cursor.execute('select count(*) from %s;' % table)
-                    except mysql.connector.Error, err:
+                    except mysql_python.connector.Error, err:
                         missing_req_tables.append(table)
         if missing_req_tables:
             log.error('   ' + self.name + ' requires tables ' +
@@ -211,7 +212,7 @@ class Step:
                 for table in existing_prod_files:
                     try:
                         cursor.execute('drop table %s;' % table)
-                    except mysql.connector.Error, err:
+                    except mysql_python.connector.Error, err:
                         log.critical(err)
         return True, 0
 

@@ -4,7 +4,7 @@ from os.path import basename, join, relpath, exists, isdir
 from shutil import rmtree
 
 from Workflow import Step, cmdline
-from utils import check_and_install_mcl
+from utils import check_install_mcl
 from process_assembly import filter_assembly
 from save_orthogroups import save_orthogroups
 from make_proteomes import make_proteomes, adjust_proteomes
@@ -260,9 +260,9 @@ def dump_pairs_to_files(suffix):
                      pairs_inparalogs,
                      pairs_coorthologs])
 
-def mcl(mcl_path, inflation=1.5):
+def mcl(inflation=1.5):
     def run():
-        mcl_bin_path = check_and_install_mcl(mcl_path, config.log_fname)
+        mcl_bin_path = check_install_mcl()
 
         return cmdline(
             mcl_bin_path,

@@ -41,12 +41,12 @@ def parse_args(args):
     op = ArgumentParser(description='Find groups of orthologous genes.')
 
     #op.add_argument(dest='directory')
-    op.add_argument('-o', '--out', dest='out', required=True)
+    op.add_argument('-o', '--out', '--dir', dest='out', required=True)
 
-    op.add_argument('-g', '--gbs', dest='annotations')
-    op.add_argument('-p', '--proteomes', dest='proteomes')
-    op.add_argument('-s', '--species-list', dest='species_list')
-    op.add_argument('-i', '--ids-list', dest='ids_list')
+    op.add_argument('-g', '--annotations', '--gbs', dest='annotations')
+    op.add_argument('-p', '--proteins', '--proteomes', dest='proteomes')
+    op.add_argument('-s', '--species', '--species-list', dest='species_list')
+    op.add_argument('-i', '--ids', '--ids-list', dest='ids_list')
 
     op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
 

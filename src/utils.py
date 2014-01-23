@@ -321,7 +321,7 @@ def set_up_config():
         'dbi:mysql:database=orthomcl;' \
         'host=%s;' \
         'port=%s;' \
-        'myisam_sort_buffer_size=%dG' \
+        'myisam_sort_buffer_size=%dG;' \
         'read_buffer_size=%dG;' \
         'innodb_buffer_pool_size=%dG;' \
         'mysql_local_infile=1;' % (
@@ -332,6 +332,8 @@ def set_up_config():
             memory / 4)
     omcl_conf['dbLogin'] = conf['db_login']
     omcl_conf['dbPassword'] = conf['db_password']
+
+    log.info('Database connection string: ' + omcl_conf['dbConnectString'])
 
     with open(orthomcl_config, 'w') as ocf:
         ocf.writelines('='.join(item) + '\n' for item in omcl_conf.items())

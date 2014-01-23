@@ -44,9 +44,9 @@ def check_and_install_tools(debug, log_fpath):
 
     check_install_mcl(log_fpath)
 
-    check_perl_modules(debug)
+    #prepare_mysql_config()
 
-    check_install_mysql()
+    check_perl_modules(debug)
 
 
 def which(program):
@@ -64,6 +64,17 @@ def which(program):
             if is_exe(exe_file):
                 return exe_file
     return None
+
+
+def check_mysql(only_warn=False):
+    if which('mysqld'):
+        return 'mysqld'
+    else:
+        if only_warn:
+            log.warn('WARNING: MySQL is not installed. It is required for some steps.')
+        else:
+            log.error('ERROR: MySQL is not installed.')
+            exit(1)
 
 
 def check_install_mysql(only_warn=False, internet_ok=False):
@@ -103,7 +114,6 @@ def check_install_mysql(only_warn=False, internet_ok=False):
 
         else:
             log.error('ERROR: MySQL is not installed.')
-    pass
 
 
 def check_installed_tools(tools, only_warn=False):
@@ -177,7 +187,7 @@ def check_perl_modules(debug, only_warn=False):
     lib_path = join(perl_modules_path, 'lib')
     man_path = join(perl_modules_path, 'man')
     cpan_path = join(tool_patb, '.cpan')
-    cpan_cpan_path = join(cpan_path, 'CPAN')
+    cpan_cpan_path = join(cpan_path, 'CPAN')    #    subprocess.call("perl -wle'print for grep /src/perl_modules/, @INC'",
 
     if not isdir(perl_modules_path):
         mkdir(perl_modules_path)
@@ -303,9 +313,21 @@ def set_up_config():
         omcl_conf = dict(l.strip().split('=', 1) for l
                          in ocf.readlines() if l.strip()[0] != '#')
 
+    memory = int(conf['memory'])
+
+
     omcl_conf['dbConnectString'] = \
-        'dbi:mysql:database=orthomcl;host=127.0.0.1;port=%s;mysql_local_infile=1' % \
-            conf['db_port']
+        'dbi:mysql:database=orthomcl;' \
+        'host=127.0.0.1;' \
+        'port=%s;' \
+        'mysql_local_infile=1;' \
+        'myisam_sort_buffer_size=%dG' \
+        'read_buffer_size=%dG;' \
+        'innodb_buffer_pool_size=%dG;' % (
+            conf['db_port'],
+            memory / 2,
+            memory / 4,
+            memory / 4)
     omcl_conf['dbLogin'] = conf['db_login']
     omcl_conf['dbPassword'] = conf['db_password']
 

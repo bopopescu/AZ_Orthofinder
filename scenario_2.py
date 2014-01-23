@@ -144,12 +144,38 @@ def step_blast_singletones():
 new_proteomes_dir = join('new_proteomes')
 
 
+def filter_dublicated_proteomes(prot_dir, new_files):
+    prot_names = \
+        [splitext(prot)[0] for prot in listdir(prot_dir) if prot and prot[0] != '.']
+    new_prot_names = \
+        [splitext(basename(prot))[0] for prot in new_files if prot and prot[0] != '.']
+
+    filtered_new_prots = []
+    for new_prot_name, new_prot_path in zip(new_prot_names, new_files):
+        if new_prot_name in prot_names:
+            log.warn(('   Proteome "%s" is already considered (check the "' % new_prot_name)
+                     + prot_dir + '" directory)')
+        else:
+            filtered_new_prots.append(new_prot_path)
+
+    return filtered_new_prots
+
+
 def step_prepare_input(p):
     if p.assemblies:
         assemblies = [
             join(p.assemblies, f)
             for f in listdir(p.assemblies)
             if f and f[0] != '.']
+
+        if isdir(steps.proteomes_dir):
+            assemblies = filter_dublicated_proteomes(steps.proteomes_dir, assemblies)
+            if assemblies == []:
+                log.warn('   Notice: All proteomes are already considered in this directory.'
+                         ' If you are sure the input is different from the proteomes in the %s directory, '
+                         ' You will need to rename the input files.' % steps.proteomes_dir)
+                exit(1)
+
         assembly_names = [
             splitext(basename(asm))[0]
             for asm in assemblies]
@@ -210,6 +236,14 @@ def step_prepare_input(p):
             join(p.proteomes, prot)
             for prot in listdir(p.proteomes)
             if prot and prot[0] != '.']
+
+        if isdir(steps.proteomes_dir):
+            proteomes = filter_dublicated_proteomes(steps.proteomes_dir, proteomes)
+            if proteomes == []:
+                log.warn('Notice: All proteomes are already considered in this directory. '
+                         'If you are sure the input is different from the proteomes in the %s directory, '
+                         'You will need to rename the input files.' % steps.proteomes_dir)
+                exit(1)
 
         new_proteomes = [
             join(new_proteomes_dir, basename(prot) + '.fasta')

@@ -159,10 +159,10 @@ def step_prepare_proteomes_and_annotations(p, internet_is_on):
     def run():
         if p.species_list:
             if not internet_is_on:
-                log.error('No internet connection: cannot fetch annotations.')
+                log.error('   No internet connection: cannot fetch annotations.')
                 return 4
 
-            log.debug('Using species list: ' + str(p.species_list))
+            log.debug('   Using species list: ' + str(p.species_list))
             species_list = read_list(p.species_list)
             res = fetch_annotations_for_species_from_ftp(species_list, p.proxy)
             if res != 0: return res
@@ -173,7 +173,7 @@ def step_prepare_proteomes_and_annotations(p, internet_is_on):
                 log.error('No internet connection: cannot fetch annotations.')
                 return 4
 
-            log.debug('Using ref ids: ' + str(p.ids_list))
+            log.debug('   Using ref ids: ' + str(p.ids_list))
             ref_ids = read_list(p.ids_list)
             res = fetch_annotations_for_ids(steps.annotations_dir, ref_ids)
             if res != 0: return res

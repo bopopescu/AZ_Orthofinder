@@ -38,6 +38,7 @@ orthogroups_file          = 'orthogroups.tsv'
 nice_orthogroups_file     = 'orthogroups_nice.txt'
 short_orthogroups_file    = 'orthogroups.txt'
 assembly_singletones_file = 'assembly_singletones.txt'
+singletone_dir            = 'new_singletones'
 
 
 def check_results_existence():
@@ -291,7 +292,8 @@ def step_save_orthogroups(added_proteomes_dir=None, annotations=None, internet_o
 
         return save_orthogroups(
             added_proteomes_files, annotations or annotations_dir, mcl_output,
-            orthogroups_file, nice_orthogroups_file, short_orthogroups_file, assembly_singletones_file)
+            orthogroups_file, nice_orthogroups_file, short_orthogroups_file, assembly_singletones_file,
+            singletone_dir)
 
     prod_files = [
         orthogroups_file,

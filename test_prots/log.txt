@@ -1,0 +1,210 @@
+Thu Jan 23 19:58:34 2014  INFO      python scenario_1.py --ids-list test_input/ids.txt -o test_prots
+Thu Jan 23 19:58:34 2014  INFO      
+Thu Jan 23 19:58:35 2014  DEBUG     Read conf: {'db_password': '1234', 'memory': '16', 'db_login': 'orthomcl', 'db_port': '3307'}
+Thu Jan 23 19:58:35 2014  INFO      Changing to /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/test_prots
+Thu Jan 23 19:58:35 2014  INFO      Workflow id is "test_prots"
+Thu Jan 23 19:58:35 2014  INFO      
+Thu Jan 23 19:58:35 2014  INFO      1. Preparing proteomes and annotations
+Thu Jan 23 19:58:35 2014  DEBUG     Using ref ids: /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/test_input/ids.txt
+Thu Jan 23 19:58:35 2014  INFO         IDs: NC_008253.1, NC_011748.1, NC_005816.1
+Thu Jan 23 19:58:35 2014  INFO         Fetching annotations for NC_008253.1...
+Thu Jan 23 19:58:53 2014  INFO             Escherichia coli 536, complete genome.
+Thu Jan 23 19:58:53 2014  INFO             4619 genes found.
+Thu Jan 23 19:58:53 2014  INFO             saved annotations/NC_008253.1.gb
+Thu Jan 23 19:58:53 2014  INFO      
+Thu Jan 23 19:58:53 2014  INFO         Fetching annotations for NC_011748.1...
+Thu Jan 23 19:59:12 2014  INFO             Escherichia coli 55989 chromosome, complete genome.
+Thu Jan 23 19:59:12 2014  INFO             4755 genes found.
+Thu Jan 23 19:59:12 2014  INFO             saved annotations/NC_011748.1.gb
+Thu Jan 23 19:59:12 2014  INFO      
+Thu Jan 23 19:59:12 2014  INFO         Fetching annotations for NC_005816.1...
+Thu Jan 23 19:59:13 2014  INFO             Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.
+Thu Jan 23 19:59:13 2014  INFO             10 genes found.
+Thu Jan 23 19:59:13 2014  INFO             saved annotations/NC_005816.1.gb
+Thu Jan 23 19:59:13 2014  INFO      
+Thu Jan 23 19:59:13 2014  INFO         NC_005816.1: translating 10 features
+Thu Jan 23 19:59:13 2014  INFO         Written to proteomes/NC_005816.1.fasta
+Thu Jan 23 19:59:13 2014  INFO      
+Thu Jan 23 19:59:15 2014  INFO         NC_008253.1: translating 4619 features
+Thu Jan 23 19:59:15 2014  INFO         Written to proteomes/NC_008253.1.fasta
+Thu Jan 23 19:59:15 2014  INFO      
+Thu Jan 23 19:59:17 2014  INFO         NC_011748.1: translating 4755 features
+Thu Jan 23 19:59:17 2014  INFO         Written to proteomes/NC_011748.1.fasta
+Thu Jan 23 19:59:17 2014  INFO      
+Thu Jan 23 19:59:17 2014  INFO         Done.
+Thu Jan 23 19:59:17 2014  INFO      
+Thu Jan 23 19:59:17 2014  INFO      2. Filtering proteomes
+Thu Jan 23 19:59:17 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclFilterFasta.pl proteomes 10 20 intermediate/good_proteins.fasta intermediate/poor_proteins.fasta
+Thu Jan 23 19:59:18 2014  INFO         processing file NC_005816.1.fasta
+Thu Jan 23 19:59:18 2014  INFO         processing file NC_008253.1.fasta
+Thu Jan 23 19:59:18 2014  INFO         processing file NC_011748.1.fasta
+Thu Jan 23 19:59:18 2014  DEBUG           Ret 0
+Thu Jan 23 19:59:18 2014  INFO         Done.
+Thu Jan 23 19:59:18 2014  INFO      
+Thu Jan 23 19:59:18 2014  INFO      3. Making blast database
+Thu Jan 23 19:59:18 2014  INFO         makeblastdb -in intermediate/good_proteins.fasta -input_type fasta -out intermediate/blastdb -dbtype prot
+Thu Jan 23 19:59:18 2014  INFO         
+Thu Jan 23 19:59:18 2014  INFO         
+Thu Jan 23 19:59:18 2014  INFO         Building a new DB, current time: 01/23/2014 19:59:18
+Thu Jan 23 19:59:18 2014  INFO         New DB name:   intermediate/blastdb
+Thu Jan 23 19:59:18 2014  INFO         New DB title:  intermediate/good_proteins.fasta
+Thu Jan 23 19:59:18 2014  INFO         Sequence type: Protein
+Thu Jan 23 19:59:18 2014  INFO         Keep Linkouts: T
+Thu Jan 23 19:59:18 2014  INFO         Keep MBits: T
+Thu Jan 23 19:59:18 2014  INFO         Maximum file size: 1073741824B
+Thu Jan 23 19:59:18 2014  INFO         Adding sequences from FASTA; added 9384 sequences in 0.645313 seconds.
+Thu Jan 23 19:59:18 2014  DEBUG           Ret 0
+Thu Jan 23 19:59:18 2014  INFO         Done.
+Thu Jan 23 19:59:18 2014  INFO      
+Thu Jan 23 19:59:18 2014  INFO      4. Blasting
+Thu Jan 23 19:59:18 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000 -num_threads 30
+Thu Jan 23 19:59:19 2014  DEBUG           Ret -6
+Thu Jan 23 19:59:19 2014  INFO      
+Thu Jan 23 19:59:19 2014  WARNING      WARNING: blast refused to run multithreaded, running single-threaded instead.
+Thu Jan 23 19:59:19 2014  INFO         blastp -query intermediate/good_proteins.fasta -db intermediate/blastdb -out intermediate/blasted.tsv -outfmt 6 -seg yes -soft_masking true -evalue 1e-05 -dbsize 100000
+Thu Jan 23 20:00:05 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:00:05 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:00:05 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:00:10 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:00:21 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:00:21 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:00:31 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:00:31 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:00:31 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:00:31 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:00:31 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:00:31 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:00:31 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:00:33 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:00:33 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:00:33 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:01:08 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:01:08 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:01:08 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:01:13 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:02:15 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:03:50 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:03:50 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:03:50 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:03:58 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:04:07 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:04:07 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:04:20 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:04:20 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:04:20 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:04:20 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:04:21 2014  INFO         Warning: lcl|Query_6163 NC_011748.1|YP_002402679.1 NC_011748.1 Escherichia coli 55989 chromosome, complete genome. Gene fdnG. Protein YP_002402679.1: Warning: One or more U or O characters replaced by X for alignment score calculations at positions 195
+Thu Jan 23 20:04:22 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:04:22 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:04:22 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:04:27 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:04:27 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:04:27 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:04:27 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:04:27 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:04:27 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:04:41 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:04:41 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:05:02 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:05:02 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:05:02 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:05:05 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:06:14 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:06:32 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:06:32 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:06:32 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:06:32 2014  INFO         Warning: lcl|Query_8754 NC_011748.1|YP_002405276.1 NC_011748.1 Escherichia coli 55989 chromosome, complete genome. Gene fdoG. Protein YP_002405276.1: Warning: One or more U or O characters replaced by X for alignment score calculations at positions 195
+Thu Jan 23 20:06:42 2014  INFO         Selenocysteine (U) at position 140 replaced by X
+Thu Jan 23 20:06:42 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:06:42 2014  INFO         Selenocysteine (U) at position 196 replaced by X
+Thu Jan 23 20:06:42 2014  INFO         Warning: lcl|Query_8933 NC_011748.1|YP_002405455.1 NC_011748.1 Escherichia coli 55989 chromosome, complete genome. Gene fdhF. Protein YP_002405455.1: Warning: One or more U or O characters replaced by X for alignment score calculations at positions 139
+Thu Jan 23 20:07:02 2014  DEBUG           Ret 0
+Thu Jan 23 20:07:02 2014  INFO         Done.
+Thu Jan 23 20:07:02 2014  INFO      
+Thu Jan 23 20:07:02 2014  INFO      5. Parsing blast results
+Thu Jan 23 20:07:02 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclBlastParser.pl intermediate/blasted.tsv proteomes > intermediate/similar_sequences.txt
+Thu Jan 23 20:07:02 2014  INFO         acquiring genes from NC_005816.1.fasta
+Thu Jan 23 20:07:02 2014  INFO         acquiring genes from NC_008253.1.fasta
+Thu Jan 23 20:07:02 2014  INFO         acquiring genes from NC_011748.1.fasta
+Thu Jan 23 20:07:06 2014  DEBUG           Ret 0
+Thu Jan 23 20:07:06 2014  INFO         Done.
+Thu Jan 23 20:07:06 2014  INFO      
+Thu Jan 23 20:07:06 2014  INFO      6. Cleaning database
+Thu Jan 23 20:07:06 2014  INFO         Done.
+Thu Jan 23 20:07:06 2014  INFO      
+Thu Jan 23 20:07:06 2014  INFO      7. Installing schema
+Thu Jan 23 20:07:06 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclInstallSchema.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/log.sql _test_prots
+Thu Jan 23 20:07:07 2014  DEBUG           Ret 0
+Thu Jan 23 20:07:07 2014  INFO         Done.
+Thu Jan 23 20:07:07 2014  INFO      
+Thu Jan 23 20:07:07 2014  INFO      8. Loading blast results into the database
+Thu Jan 23 20:07:07 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclLoadBlast.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/similar_sequences.txt _test_prots
+Thu Jan 23 20:07:12 2014  DEBUG           Ret 0
+Thu Jan 23 20:07:12 2014  INFO         Done.
+Thu Jan 23 20:07:12 2014  INFO      
+Thu Jan 23 20:07:12 2014  INFO      9. Finding pairs
+Thu Jan 23 20:07:12 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclPairs.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config intermediate/orthomclpairs.log cleanup=yes suffix=_test_prots
+Thu Jan 23 20:07:20 2014  DEBUG           Ret 0
+Thu Jan 23 20:07:20 2014  INFO         Done.
+Thu Jan 23 20:07:20 2014  INFO      
+Thu Jan 23 20:07:20 2014  INFO      10. Dumping pairs files
+Thu Jan 23 20:07:20 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl_software/bin/orthomclDumpPairsFiles.pl /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/orthomcl.config mcl_input intermediate _test_prots
+Thu Jan 23 20:07:21 2014  DEBUG           Ret 0
+Thu Jan 23 20:07:21 2014  INFO         Done.
+Thu Jan 23 20:07:21 2014  INFO      
+Thu Jan 23 20:07:21 2014  INFO      11. MCL
+Thu Jan 23 20:07:21 2014  INFO         /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/src/mcl/bin/bin/mcl intermediate/mcl_input --abc -I 1.5 -o intermediate/mcl_output
+Thu Jan 23 20:07:21 2014  DEBUG        [mcl] new tab created
+Thu Jan 23 20:07:21 2014  DEBUG        [mcl] pid 92259
+Thu Jan 23 20:07:21 2014  DEBUG        ite -------------------  chaos  time hom(avg,lo,hi) expa expb expc fmv
+Thu Jan 23 20:07:21 2014  DEBUG        1  ...................   0.96  0.01 1.00/0.74/1.29 1.00 1.00 1.00   0
+Thu Jan 23 20:07:21 2014  DEBUG        2  ...................   0.91  0.01 1.00/0.74/1.65 1.00 1.00 1.00   0
+Thu Jan 23 20:07:21 2014  DEBUG        3  ...................   0.58  0.01 0.99/0.64/1.12 1.00 1.00 1.00   0
+Thu Jan 23 20:07:21 2014  DEBUG        4  ...................   0.68  0.01 0.99/0.59/1.00 1.00 1.00 1.00   0
+Thu Jan 23 20:07:21 2014  DEBUG        5  ...................   0.72  0.00 0.99/0.63/1.00 1.00 1.00 1.00   0
+Thu Jan 23 20:07:21 2014  DEBUG        6  ...................   1.01  0.00 0.99/0.47/1.00 1.00 1.00 1.00   0
+Thu Jan 23 20:07:21 2014  DEBUG        7  ...................   1.23  0.01 0.99/0.45/1.00 1.00 1.00 1.00   0
+Thu Jan 23 20:07:21 2014  DEBUG        8  ...................   1.06  0.01 0.99/0.54/1.00 1.00 1.00 0.99   0
+Thu Jan 23 20:07:21 2014  DEBUG        9  ...................   0.81  0.00 0.99/0.54/1.00 1.00 0.99 0.99   0
+Thu Jan 23 20:07:21 2014  DEBUG        10  ...................   1.15  0.01 0.99/0.47/1.00 1.00 0.99 0.98   0
+Thu Jan 23 20:07:21 2014  DEBUG        11  ...................   1.69  0.01 0.99/0.34/1.00 1.00 0.98 0.96   0
+Thu Jan 23 20:07:21 2014  DEBUG        12  ...................   2.00  0.00 1.00/0.40/1.00 1.00 0.99 0.95   0
+Thu Jan 23 20:07:21 2014  DEBUG        13  ...................   1.30  0.00 1.00/0.68/1.00 1.00 1.00 0.95   0
+Thu Jan 23 20:07:21 2014  DEBUG        14  ...................   0.42  0.00 1.00/0.72/1.00 1.00 1.00 0.94   0
+Thu Jan 23 20:07:21 2014  DEBUG        15  ...................   0.40  0.00 1.00/0.73/1.00 1.00 0.99 0.94   0
+Thu Jan 23 20:07:21 2014  DEBUG        16  ...................   0.38  0.00 1.00/0.76/1.00 1.00 0.99 0.93   0
+Thu Jan 23 20:07:21 2014  DEBUG        17  ...................   0.25  0.00 1.00/0.76/1.00 1.00 1.00 0.93   0
+Thu Jan 23 20:07:21 2014  DEBUG        18  ...................   0.32  0.00 1.00/0.79/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        19  ...................   0.30  0.00 1.00/0.80/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        20  ...................   0.36  0.00 1.00/0.76/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        21  ...................   0.39  0.00 1.00/0.75/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        22  ...................   0.39  0.00 1.00/0.74/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        23  ...................   0.33  0.00 1.00/0.78/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        24  ...................   0.20  0.00 1.00/0.87/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        25  ...................   0.11  0.00 1.00/0.88/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        26  ...................   0.10  0.01 1.00/0.88/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        27  ...................   0.07  0.01 1.00/0.91/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        28  ...................   0.03  0.00 1.00/0.96/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        29  ...................   0.01  0.01 1.00/0.99/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        30  ...................   0.00  0.00 1.00/1.00/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        31  ...................   0.00  0.00 1.00/1.00/1.00 1.00 1.00 0.92   0
+Thu Jan 23 20:07:21 2014  DEBUG        [mcl] jury pruning marks: <100,100,100>, out of 100
+Thu Jan 23 20:07:21 2014  DEBUG        [mcl] jury pruning synopsis: <100.0 or really really really good> (cf -scheme, -do log)
+Thu Jan 23 20:07:21 2014  DEBUG        [mcl] output is in intermediate/mcl_output
+Thu Jan 23 20:07:21 2014  DEBUG        [mcl] 3790 clusters found
+Thu Jan 23 20:07:21 2014  DEBUG        [mcl] output is in intermediate/mcl_output
+Thu Jan 23 20:07:21 2014  DEBUG        
+Thu Jan 23 20:07:21 2014  DEBUG           Ret 0
+Thu Jan 23 20:07:21 2014  INFO         Done.
+Thu Jan 23 20:07:21 2014  INFO      
+Thu Jan 23 20:07:21 2014  INFO      12. Saving orthogroups
+Thu Jan 23 20:07:21 2014  DEBUG        Reading annotations/NC_005816.1.gb
+Thu Jan 23 20:07:21 2014  DEBUG        Reading annotations/NC_008253.1.gb
+Thu Jan 23 20:07:23 2014  DEBUG        Reading annotations/NC_011748.1.gb
+Thu Jan 23 20:07:25 2014  INFO         Saved 3790 groups, totally containing 7877 genes.
+Thu Jan 23 20:07:25 2014  INFO         Done.
+Thu Jan 23 20:07:25 2014  INFO      
+Thu Jan 23 20:07:25 2014  INFO      Done.
+Thu Jan 23 20:07:25 2014  INFO      Log is in /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/test_prots/log.txt
+Thu Jan 23 20:07:25 2014  INFO      Groups are in /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/test_prots/orthogroups.tsv
+Thu Jan 23 20:07:25 2014  INFO      Groups with aligned columns are in /Users/vladsaveliev/Dropbox/bio/az/az_orthofinder/test_prots/orthogroups_nice.txt

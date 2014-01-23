@@ -99,7 +99,7 @@ def get_reference_genes(fname, max_lengths):
 
 
 def save_orthogroups(new_proteomes, annotations, mcl_output,
-                     out, out_nice, out_short, assembly_singletones):
+                     out, out_nice, out_short, assembly_singletones, singletone_dir):
     strains = dict()
     max_lengths = repeat(0)
 
@@ -185,18 +185,17 @@ def save_orthogroups(new_proteomes, annotations, mcl_output,
 
                 singletone_assembly_recs.append(group)
 
-                singletone_dir = 'new_singletones'
                 if exists(singletone_dir):
                     rmtree(singletone_dir)
                 if not isdir(singletone_dir):
                     mkdir(singletone_dir)
 
-                SeqIO.write(
-                    group,
-                    join(singletone_dir,
-                         splitext(assembly_singletones)[0] + '_group_' +
-                         str(singletone_group_number) + '.fasta'),
-                    'fasta')
+                a_singletone_filepath = join(
+                    singletone_dir,
+                    splitext(assembly_singletones)[0] + '_group_' +
+                    str(singletone_group_number) + '.fasta')
+
+                SeqIO.write(group, a_singletone_filepath, 'fasta')
 
     log.info('   Saved %d groups, totally containing %d genes.' % (group_nunber, gene_number))
 

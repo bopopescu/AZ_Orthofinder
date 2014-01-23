@@ -130,6 +130,9 @@ def step_finding_genes(assembly_names):
 
 def step_blast_singletones(blastdb=None):
     def blast_singletones(singletones_file, new_proteomes_dir):
+        from Bio.Blast import NCBIWWW
+        from Bio import SeqIO
+
         if not blastdb:
             if test_internet_conn():
                 log.info('   Using remote NCBI database.')
@@ -137,11 +140,19 @@ def step_blast_singletones(blastdb=None):
                 log.error('   No Blast database and no internet connection to use the remote NCBI database.')
                 return 1
 
-            with open(singletones_file) as f:
-                for line in f:
-                    strain, prot_id, gene_id, locus, product, description = line.split()
+            for group_singletones_file in (join(steps.singletone_dir, fname)
+                                           for fname in listdir(steps.singletone_dir)
+                                           if fname and fname[0] != '.'):
+                log.debug(group_singletones_file)
+                for rec in SeqIO.parse(group_singletones_file, 'fasta'):
+                    log.debug('   ' + rec.id)
+                    #strain, prot_id, gene_id, locus, product, description = line.split()
                     # TODO: Blast!
-        return 1
+                    result_handle = NCBIWWW.qblast('blastp', 'nr', rec.seq)
+                    with open(rec.id, 'w') as save_file:
+                        save_file.write(result_handle.read())
+
+        return 0
 
     return Step(
        'Blasting singletones',

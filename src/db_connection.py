@@ -16,6 +16,7 @@ class DbCursor:
         self.db_login = conf['db_login']
         self.db_passw = conf['db_password']
         self.db_port = conf['db_port']
+        self.db_server = conf['db_server']
 
         self.cnx = None
         self.cursor = None
@@ -26,7 +27,7 @@ class DbCursor:
         self.cnx = mysql_python.connector.connect(
             user=self.db_login,
             password=self.db_passw,
-            host='127.0.0.1',
+            host=self.db_server,
             port=self.db_port,
             database='orthomcl',
             buffered=True)

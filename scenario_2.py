@@ -35,11 +35,12 @@ def parse_args(args):
 
     op.add_argument('-a', '--assemblies', dest='assemblies')
     op.add_argument('-g', '--gbs', dest='annotations')
-    op.add_argument('-p', '--proteomes', dest='proteomes')
+    op.add_argument('-p', '--proteomes', '--proteins', dest='proteomes')
     op.add_argument('-s', '--species-list', dest='species_list')
     op.add_argument('-i', '--ids-list', dest='ids_list')
 
     op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
+    op.add_argument('--blastdb', dest='blastdb')
 
     op.usage = '''Extends an orthogroup database and orthogroups files.
     First argument is a fath to existed Scenario 1 output.
@@ -67,6 +68,8 @@ def parse_args(args):
     --prot-id-field:     When specifying proteomes, use this fasta id field number
                          to retrieve protein ids (default if 1, like
                          >NC_005816.1|NP_995567.1 ...).
+
+    --blast-db           Local Blast database path. If not set, NCBI will be used.
     ''' % basename(__file__)
 
     #indent = ' ' * len('usage: ' + basename(__file__) + ' ')
@@ -125,20 +128,25 @@ def step_finding_genes(assembly_names):
          prod_files=[predicted_proteomes])
 
 
-def step_blast_singletones():
+def step_blast_singletones(blastdb=None):
     def blast_singletones(singletones_file, new_proteomes_dir):
-        log.error('Not implemented: in progress.')
-        return 1
-        with open(singletones_file) as f:
-            for line in f:
-                strain, prot_id, gene_id, locus, product, description = line.split()
-                # TODO: Blast!
+        if not blastdb:
+            if test_internet_conn():
+                log.info('   Using remote NCBI database.')
+            else:
+                log.error('   No Blast database and no internet connection to use the remote NCBI database.')
+                return 1
+
+            with open(singletones_file) as f:
+                for line in f:
+                    strain, prot_id, gene_id, locus, product, description = line.split()
+                    # TODO: Blast!
         return 1
 
     return Step(
        'Blasting singletones',
-        run=lambda: blast_singletones(steps.assembly_singletones, new_proteomes_dir),
-        req_files=[steps.assembly_singletones])
+        run=lambda: blast_singletones(steps.assembly_singletones_file, new_proteomes_dir),
+        req_files=[steps.assembly_singletones_file])
 
 
 new_proteomes_dir = join('new_proteomes')
@@ -163,30 +171,30 @@ def filter_dublicated_proteomes(prot_dir, new_files):
 
 def step_prepare_input(p):
     if p.assemblies:
-        assemblies = [
-            join(p.assemblies, f)
-            for f in listdir(p.assemblies)
-            if f and f[0] != '.']
-
-        if isdir(steps.proteomes_dir):
-            assemblies = filter_dublicated_proteomes(steps.proteomes_dir, assemblies)
-            if assemblies == []:
-                log.warn('   Notice: All proteomes are already considered in this directory.'
-                         ' If you are sure the input is different from the proteomes in the %s directory, '
-                         ' You will need to rename the input files.' % steps.proteomes_dir)
-                exit(1)
-
-        assembly_names = [
-            splitext(basename(asm))[0]
-            for asm in assemblies]
-        filtered_assemblies = [
-            join(assemblies_dir, asm_name + '.fna')
-            for asm_name in assembly_names]
-        new_proteomes = [
-            join(steps.proteomes_dir, asm_name + '.fasta')
-            for asm_name in assembly_names]
-
         def run():
+            assemblies = [
+                join(p.assemblies, f)
+                for f in listdir(p.assemblies)
+                if f and f[0] != '.']
+
+            if isdir(steps.proteomes_dir):
+                assemblies = filter_dublicated_proteomes(steps.proteomes_dir, assemblies)
+                if assemblies == []:
+                    log.warn('   Notice: All proteomes are already considered in this directory.'
+                             ' If you are sure the input is different from the proteomes in the %s directory, '
+                             ' You will need to rename the input files.' % steps.proteomes_dir)
+                    exit(1)
+
+            assembly_names = [
+                splitext(basename(asm))[0]
+                for asm in assemblies]
+            filtered_assemblies = [
+                join(assemblies_dir, asm_name + '.fna')
+                for asm_name in assembly_names]
+            new_proteomes = [
+                join(steps.proteomes_dir, asm_name + '.fasta')
+                for asm_name in assembly_names]
+
             if not isdir(assemblies_dir): mkdir(assemblies_dir)
 
             total_successful_filters = 0
@@ -227,44 +235,40 @@ def step_prepare_input(p):
 
         return Step(
            'Preparing input',
-            req_files=assemblies,
-            prod_files=new_proteomes,
             run=run)
 
     elif p.proteomes:
-        proteomes = [
-            join(p.proteomes, prot)
-            for prot in listdir(p.proteomes)
-            if prot and prot[0] != '.']
-
-        if isdir(steps.proteomes_dir):
-            proteomes = filter_dublicated_proteomes(steps.proteomes_dir, proteomes)
-            if proteomes == []:
-                log.warn('Notice: All proteomes are already considered in this directory. '
-                         'If you are sure the input is different from the proteomes in the %s directory, '
-                         'You will need to rename the input files.' % steps.proteomes_dir)
-                exit(1)
-
-        new_proteomes = [
-            join(new_proteomes_dir, basename(prot) + '.fasta')
-            for prot in proteomes]
-
         def run():
+            input_proteomes = [
+                join(p.proteomes, prot)
+                for prot in listdir(p.proteomes)
+                if prot and prot[0] != '.']
+
+            if isdir(steps.proteomes_dir):
+                input_proteomes = filter_dublicated_proteomes(steps.proteomes_dir, input_proteomes)
+                if input_proteomes == []:
+                    log.warn('Notice: All proteomes are already considered in this directory. '
+                             'If you are sure the input is different from the proteomes in the %s directory, '
+                             'You will need to rename the input files.' % steps.proteomes_dir)
+                    exit(1)
+
+            new_prot_names = [splitext(basename(prot))[0] for prot in input_proteomes]
+
+            new_proteomes = [
+                join(new_proteomes_dir, prot_name + '.fasta')
+                for prot_name in new_prot_names]
+
             if not isdir(new_proteomes_dir):
                 mkdir(new_proteomes_dir)
 
-            for prot in proteomes:
-                copy(prot, join(steps.proteomes_dir, basename(prot)))
-
-            for prot in proteomes:
-                copy(prot, join(new_proteomes_dir, basename(prot)))
+            for prot_from, prot_to in zip(input_proteomes, new_proteomes):
+                copy(prot_from, prot_to)
+                copy(prot_from, join(steps.proteomes_dir, basename(prot_to)))
 
             return 0
 
         return Step(
            'Preparing input',
-            req_files=proteomes,
-            prod_files=new_proteomes,
             run=run)
 
 
@@ -274,17 +278,18 @@ new_bad_proteomes = join(steps.intermediate_dir, 'new_bad_proteins.fasta')
 
 def filter_new_proteomes(new_proteomes_dir, min_length=10, max_percent_stop=20):
     return Step(
-        'Filtering new proteomes',
-         run=cmdline(join(steps.orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
-             parameters=[
-                 new_proteomes_dir,
-                 min_length, max_percent_stop,
-                 new_good_proteomes,
-                 new_bad_proteomes]),
-         req_files=[new_proteomes_dir],
-         prod_files=[
-             new_good_proteomes,
-             new_bad_proteomes])
+       'Filtering new proteomes',
+        run=cmdline(
+            join(steps.orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
+            parameters=[
+                new_proteomes_dir,
+                min_length, max_percent_stop,
+                new_good_proteomes,
+                new_bad_proteomes]),
+        req_files=[new_proteomes_dir],
+        prod_files=[
+            new_good_proteomes,
+            new_bad_proteomes])
 
 
 def main(args):
@@ -331,7 +336,7 @@ def main(args):
         steps.dump_pairs_to_files(suffix),
         steps.mcl(),
         steps.step_save_orthogroups(new_proteomes_dir),
-        step_blast_singletones(),
+        step_blast_singletones(p.blastdb),
     ])
 
     result = workflow.run(start_after, start_from,

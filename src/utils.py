@@ -3,6 +3,7 @@ from os.path import basename, isdir, split, join, pathsep, isfile, dirname, exis
 from random import randint
 from shutil import copy
 from subprocess import call, Popen, PIPE
+import re
 from config import config_file, orthomcl_config, log_fname, mcl_dir, \
     mysql_cnf, mysql_linux_tar, mysql_osx_tar, mysql_extracted_dir
 import logging
@@ -25,8 +26,9 @@ def make_workflow_id(working_dir=None):
     if not working_dir:
         return str(randint(1000, 9999))
 
-    return (basename(working_dir) or basename(dirname(working_dir))).\
-        replace(' ', '_').replace('/', '_')
+    wid = (basename(working_dir) or basename(dirname(working_dir)))
+    wid = re.sub('[^0-9a-zA-Z_-]+', '_', wid)
+    return wid
 
 
 def interrupt(msg, code=1):
@@ -315,19 +317,19 @@ def set_up_config():
 
     memory = int(conf['memory'])
 
+        #'myisam_sort_buffer_size=%dG' \
+        #'read_buffer_size=%dG;' \
+        #'innodb_buffer_pool_size=%dG;'
 
     omcl_conf['dbConnectString'] = \
         'dbi:mysql:database=orthomcl;' \
         'host=127.0.0.1;' \
         'port=%s;' \
-        'mysql_local_infile=1;' \
-        'myisam_sort_buffer_size=%dG' \
-        'read_buffer_size=%dG;' \
-        'innodb_buffer_pool_size=%dG;' % (
-            conf['db_port'],
-            memory / 2,
-            memory / 4,
-            memory / 4)
+        'mysql_local_infile=1;' % (
+            conf['db_port'])
+            #memory / 2,
+            #memory / 4,
+            #memory / 4)
     omcl_conf['dbLogin'] = conf['db_login']
     omcl_conf['dbPassword'] = conf['db_password']
 

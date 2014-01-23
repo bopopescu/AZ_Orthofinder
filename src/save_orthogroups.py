@@ -177,7 +177,7 @@ def save_orthogroups(new_proteomes, annotations, mcl_output,
                 group = []
                 singletone_group_number += 1
 
-                with open(assembly_singletones, 'w') as singletones_f:
+                with open(assembly_singletones, 'a') as singletones_f:
                     for rec_id in line.split():
                         singletone_gene_number += 1
                         group.append(new_proteins_recs[rec_id])

@@ -16,28 +16,28 @@ import config
 import logging
 log = logging.getLogger(config.log_fname)
 
-proteomes_dir          = 'proteomes'
-annotations_dir        = 'annotations'
-intermediate_dir       = 'intermediate'
-sql_log                = 'intermediate/log.sql'
-good_proteins          = 'intermediate/good_proteins.fasta'
-poor_proteins          = 'intermediate/poor_proteins.fasta'
-blast_db               = 'intermediate/blastdb'
-blast_out              = 'intermediate/blasted.tsv'
-similar_sequences      = 'intermediate/similar_sequences.txt'
-pairs_log              = 'intermediate/orthomclpairs.log'
-mcl_input              = 'intermediate/mcl_input'
-mcl_output             = 'intermediate/mcl_output'
-pairs_dir              = 'intermediate/pairs'
-pairs_orthologs        = 'intermediate/pairs/potentialOrthologs.txt'
-pairs_inparalogs       = 'intermediate/pairs/potentialInparalogs.txt'
-pairs_coorthologs      = 'intermediate/pairs/potentialCoorthologs.txt'
-groups_file            = 'groups.txt'
-singletons_file        = 'singletons.txt'
-orthogroups_file       = 'orthogroups.tsv'
-nice_orthogroups_file  = 'orthogroups_nice.txt'
-short_orthogroups_file = 'orthogroups.txt'
-assembly_singletones   = 'assembly_singletones.txt'
+proteomes_dir             = 'proteomes'
+annotations_dir           = 'annotations'
+intermediate_dir          = 'intermediate'
+sql_log                   = 'intermediate/log.sql'
+good_proteins             = 'intermediate/good_proteins.fasta'
+poor_proteins             = 'intermediate/poor_proteins.fasta'
+blast_db                  = 'intermediate/blastdb'
+blast_out                 = 'intermediate/blasted.tsv'
+similar_sequences         = 'intermediate/similar_sequences.txt'
+pairs_log                 = 'intermediate/orthomclpairs.log'
+mcl_input                 = 'intermediate/mcl_input'
+mcl_output                = 'intermediate/mcl_output'
+pairs_dir                 = 'intermediate/pairs'
+pairs_orthologs           = 'intermediate/pairs/potentialOrthologs.txt'
+pairs_inparalogs          = 'intermediate/pairs/potentialInparalogs.txt'
+pairs_coorthologs         = 'intermediate/pairs/potentialCoorthologs.txt'
+groups_file               = 'groups.txt'
+singletons_file           = 'singletons.txt'
+orthogroups_file          = 'orthogroups.tsv'
+nice_orthogroups_file     = 'orthogroups_nice.txt'
+short_orthogroups_file    = 'orthogroups.txt'
+assembly_singletones_file = 'assembly_singletones.txt'
 
 
 def check_results_existence():
@@ -279,30 +279,25 @@ def mcl(inflation=1.5):
          req_files=[mcl_input],
          prod_files=[mcl_output])
 
-def step_save_orthogroups(new_proteomes_dir=None, annotations=None, internet_on=True):
+def step_save_orthogroups(added_proteomes_dir=None, annotations=None, internet_on=True):
     def run():
-        if new_proteomes_dir:
-            new_proteomes = [
-                join(new_proteomes_dir, prot)
-                for prot in listdir(new_proteomes_dir)
+        if added_proteomes_dir:
+            added_proteomes_files = [
+                join(added_proteomes_dir, prot)
+                for prot in listdir(added_proteomes_dir)
                 if prot and prot[0] != '.']
         else:
-            new_proteomes = []
+            added_proteomes_files = []
 
         return save_orthogroups(
-            new_proteomes,
-            annotations or annotations_dir,
-            mcl_output,
-            orthogroups_file,
-            nice_orthogroups_file,
-            short_orthogroups_file,
-            assembly_singletones)
+            added_proteomes_files, annotations or annotations_dir, mcl_output,
+            orthogroups_file, nice_orthogroups_file, short_orthogroups_file, assembly_singletones_file)
 
     prod_files = [
         orthogroups_file,
         nice_orthogroups_file,
         short_orthogroups_file,
-        assembly_singletones]
+        assembly_singletones_file]
 
     return Step(
        'Saving orthogroups',

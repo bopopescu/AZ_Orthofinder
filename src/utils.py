@@ -333,7 +333,7 @@ def set_up_config():
     omcl_conf['dbLogin'] = conf['db_login']
     omcl_conf['dbPassword'] = conf['db_password']
 
-    log.info('Database connection string: ' + omcl_conf['dbConnectString'])
+    log.debug('Database connection string: ' + omcl_conf['dbConnectString'])
 
     with open(orthomcl_config, 'w') as ocf:
         ocf.writelines('='.join(item) + '\n' for item in omcl_conf.items())

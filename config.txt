@@ -1,4 +1,4 @@
-db_server=localhost
+db_server=127.0.0.1
 db_login=orthomcl
 db_password=1234
 db_port=3307

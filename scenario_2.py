@@ -131,9 +131,9 @@ def step_finding_genes(assembly_names):
 blasted_singletones_dir = 'blasted_singletones'
 
 
-def step_blast_singletones(blastdb=None):
-    def blast_singletones(singletones_file, new_proteomes_dir):
-        from Bio.Blast import NCBIWWW
+def step_blast_singletones(blastdb=None, debug=False):
+    def run(singletones_file, new_proteomes_dir):
+        from Bio.Blast import NCBIWWW, NCBIXML
         from Bio import SeqIO
 
         if not blastdb:
@@ -144,29 +144,54 @@ def step_blast_singletones(blastdb=None):
                           ' to use the remote NCBI database.')
                 return 1
 
-            if exists(blasted_singletones_dir):
-                rmtree(blasted_singletones_dir)
-            if not isdir(blasted_singletones_dir):
-                mkdir(blasted_singletones_dir)
+            #if exists(blasted_singletones_dir):
+            #    rmtree(blasted_singletones_dir)
+            #if not isdir(blasted_singletones_dir):
+            #    mkdir(blasted_singletones_dir)
 
             for group_singletones_file in (join(steps.singletone_dir, fname)
                                            for fname in listdir(steps.singletone_dir)
                                            if fname and fname[0] != '.'):
                 log.debug('   ' + group_singletones_file)
-                for rec in SeqIO.parse(group_singletones_file, 'fasta'):
-                    log.debug('     ' + rec.id)
-                    #strain, prot_id, gene_id, locus, product, description = line.split()
-                    # TODO: Blast!
-                    result_handle = NCBIWWW.qblast('blastp', 'nr', rec.seq)
-                    save_fpath = join(blasted_singletones_dir, 'blasted_' + rec.id + '.fasta')
+                rec = next(SeqIO.parse(group_singletones_file, 'fasta'))
+                log.debug('     ' + rec.id)
+
+                # Blasting against NCBI
+                save_fpath = join(blasted_singletones_dir, 'refseq_blasted_' + rec.id + '.xml')
+                if debug and isfile(save_fpath):
+                    pass
+                else:
+                    result_handle = NCBIWWW.qblast('blastp', 'refseq_protein', rec.format('fasta'))
                     with open(save_fpath, 'w') as save_f:
                         save_f.write(result_handle.read())
+
+                # Searching best hit
+                best_alignment, best_hit, best_e = None, None, 2
+                with open(save_fpath) as result_handle:
+                    blast_record = NCBIXML.read(result_handle)
+                    for alignment in blast_record.alignments:
+                        if 'protein' in alignment.title:
+                            for hsp in alignment.hsps:
+                                if hsp.expect < best_e:
+                                    best_alignment, best_hit, best_e = alignment, hsp, hsp.expect
+
+                    if best_hit:
+                        log.debug('     sequence:' + best_alignment.title)
+                        log.debug('     accession: ' + best_alignment.hit_id)
+                        log.debug('     length:' + str(best_alignment.length))
+                        log.debug('     e value:' + str(best_hit.expect))
+                        log.debug('     ' + best_hit.query[:75] + '...')
+                        log.debug('     ' + best_hit.match[:75] + '...')
+                        log.debug('     ' + best_hit.sbjct[:75] + '...')
+                        log.debug('')
+                    else:
+                        log.warning('     No protein hits for ' + rec.id)
 
         return 0
 
     return Step(
        'Blasting singletones',
-        run=lambda: blast_singletones(steps.assembly_singletones_file, new_proteomes_dir),
+        run=lambda: run(steps.assembly_singletones_file, new_proteomes_dir),
         req_files=[steps.assembly_singletones_file])
 
 
@@ -357,7 +382,7 @@ def main(args):
         steps.dump_pairs_to_files(suffix),
         steps.mcl(p.debug),
         steps.step_save_orthogroups(new_proteomes_dir),
-        step_blast_singletones(p.blastdb),
+        step_blast_singletones(p.blastdb, p.debug),
     ])
 
     result = workflow.run(

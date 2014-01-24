@@ -131,34 +131,41 @@ def save_orthogroups(new_proteomes, annotations, mcl_output,
         new_proteins_recs.update(assembly_recs)
         strains[assembly_name] = genes
 
+    if new_proteins_recs:
+        if exists(singletone_dir):
+            rmtree(singletone_dir)
+        if not isdir(singletone_dir):
+            mkdir(singletone_dir)
+
     for fname in gb_files:
         strain_id, genes, max_lengths = get_reference_genes(fname, max_lengths)
         strains[strain_id] = genes
-
-    singletone_assembly_recs = []
 
     with open(mcl_output) as mcl_f:
         groups_total = sum(1 for _ in mcl_f)
 
     with open(mcl_output) as mcl_f, \
          open(out, 'w') as out_f, \
-         open(out_nice, 'w') as nice_f:
+         open(out_nice, 'w') as nice_f, \
+         open(assembly_singletones, 'a') as singletones_f:
+
+        singletone_assembly_recs = []
 
         gene_number = 0
         group_nunber = 0
         singletone_gene_number = 0
         singletone_group_number = 0
 
-        for line in mcl_f:
+        for group_line in mcl_f:
             group_nunber += 1
 
-            known_genes_in_group = []
-            for gene in line.split():
+            known_genes_in_this_group = []
+            for rec_id in group_line.split():
                 gene_number += 1
-                taxon_id, prot_id = gene.split('|')
+                taxon_id, prot_id = rec_id.split('|')
 
                 if assembly_names and taxon_id not in assembly_names:
-                    known_genes_in_group.append(prot_id)
+                    known_genes_in_this_group.append(prot_id)
 
                 if taxon_id not in strains:
                     log.warn('   No annotations for "' + taxon_id + '"')
@@ -170,31 +177,25 @@ def save_orthogroups(new_proteomes, annotations, mcl_output,
                     nice_f.write(str(val) + ' ' * (l - len(str(val))) + '\t')
                 out_f.write('\n')
                 nice_f.write('\n')
-
             nice_f.write('\n')
 
-            if new_proteins_recs and known_genes_in_group == []:
+            if new_proteins_recs and known_genes_in_this_group == []:
                 group = []
                 singletone_group_number += 1
 
-                with open(assembly_singletones, 'a') as singletones_f:
-                    for rec_id in line.split():
-                        singletone_gene_number += 1
-                        group.append(new_proteins_recs[rec_id])
-                        singletones_f.write(rec_id)
+                singletones_f.write('Group %d\n' % group_nunber)
+                for rec_id in group_line.split():
+                    singletone_gene_number += 1
+                    group.append(new_proteins_recs[rec_id])
+                    singletones_f.write(rec_id + ' ')
+                singletones_f.write('\n')
 
                 singletone_assembly_recs.append(group)
 
-                if exists(singletone_dir):
-                    rmtree(singletone_dir)
-                if not isdir(singletone_dir):
-                    mkdir(singletone_dir)
-
                 a_singletone_filepath = join(
                     singletone_dir,
-                    splitext(assembly_singletones)[0] + '_group_' +
-                    str(singletone_group_number) + '.fasta')
-
+                    splitext(assembly_singletones)[0] + '_group_'
+                    + str(group_nunber) + '.fasta')
                 SeqIO.write(group, a_singletone_filepath, 'fasta')
 
     log.info('   Saved %d groups, totally containing %d genes.' % (group_nunber, gene_number))

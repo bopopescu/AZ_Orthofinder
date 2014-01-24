@@ -259,8 +259,9 @@ def main(args):
     workflow.extend([
         step_prepare_proteomes_and_annotations(p, internet_is_on),
 
-        steps.filter_proteomes(min_length=int(p.min_length),
-                               max_percent_stop=int(p.max_percent_stop)),
+        steps.filter_proteomes(
+            min_length=int(p.min_length),
+            max_percent_stop=int(p.max_percent_stop)),
         steps.make_blast_db(),
         steps.blast(p.threads, evalue=float(p.evalue)),
         steps.parse_blast_results(),
@@ -272,13 +273,18 @@ def main(args):
         steps.mcl(p.debug),
         steps.step_save_orthogroups()])
 
-    result = workflow.run(start_after, start_from, overwrite=True, ask_before=p.ask_each_step)
+    result = workflow.run(
+        start_after, start_from,
+        overwrite=True,
+        ask_before=p.ask_each_step)
+
     if result == 0:
         log.info('Done.')
         log.info('Log is in ' + join(working_dir, log_fname))
         log.info('Groups are in ' + join(working_dir, steps.orthogroups_file))
         if isfile(steps.nice_orthogroups_file):
-            log.info('Groups with aligned columns are in ' + join(working_dir, steps.nice_orthogroups_file))
+            log.info('Groups with aligned columns are in ' +
+                     join(working_dir, steps.nice_orthogroups_file))
     return result
 
 

@@ -128,6 +128,9 @@ def step_finding_genes(assembly_names):
          prod_files=[predicted_proteomes])
 
 
+blasted_singletones_dir = 'blasted_singletones'
+
+
 def step_blast_singletones(blastdb=None):
     def blast_singletones(singletones_file, new_proteomes_dir):
         from Bio.Blast import NCBIWWW
@@ -137,20 +140,27 @@ def step_blast_singletones(blastdb=None):
             if test_internet_conn():
                 log.info('   Using remote NCBI database.')
             else:
-                log.error('   No Blast database and no internet connection to use the remote NCBI database.')
+                log.error('   No Blast database and no internet connection'
+                          ' to use the remote NCBI database.')
                 return 1
+
+            if exists(blasted_singletones_dir):
+                rmtree(blasted_singletones_dir)
+            if not isdir(blasted_singletones_dir):
+                mkdir(blasted_singletones_dir)
 
             for group_singletones_file in (join(steps.singletone_dir, fname)
                                            for fname in listdir(steps.singletone_dir)
                                            if fname and fname[0] != '.'):
-                log.debug(group_singletones_file)
+                log.debug('   ' + group_singletones_file)
                 for rec in SeqIO.parse(group_singletones_file, 'fasta'):
-                    log.debug('   ' + rec.id)
+                    log.debug('     ' + rec.id)
                     #strain, prot_id, gene_id, locus, product, description = line.split()
                     # TODO: Blast!
                     result_handle = NCBIWWW.qblast('blastp', 'nr', rec.seq)
-                    with open(rec.id, 'w') as save_file:
-                        save_file.write(result_handle.read())
+                    save_fpath = join(blasted_singletones_dir, 'blasted_' + rec.id + '.fasta')
+                    with open(save_fpath, 'w') as save_f:
+                        save_f.write(result_handle.read())
 
         return 0
 
@@ -345,14 +355,16 @@ def main(args):
         steps.load_blast_results(suffix),
         steps.find_pairs(suffix),
         steps.dump_pairs_to_files(suffix),
-        steps.mcl(),
+        steps.mcl(p.debug),
         steps.step_save_orthogroups(new_proteomes_dir),
         step_blast_singletones(p.blastdb),
     ])
 
-    result = workflow.run(start_after, start_from,
-                          overwrite=True,
-                          ask_before=p.ask_each_step)
+    result = workflow.run(
+        start_after, start_from,
+        overwrite=True,
+        ask_before=p.ask_each_step)
+
     if result == 0:
         log.info('Done.')
         log.info('Log is in ' + join(working_dir, log_fname))

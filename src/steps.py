@@ -167,7 +167,8 @@ def blast(threads, new_good_proteomes=None, evalue=1e-5):
                       stderr=None)()
         if res == -6:
             log.info('')
-            log.warn('   WARNING: blast refused to run multithreaded, running single-threaded instead.')
+            log.warn('   WARNING: blast refused to run multithreaded, '
+                     'running single-threaded instead.')
             res = cmdline('blastp', parameters)()
 
         if new_good_proteomes:
@@ -261,9 +262,11 @@ def dump_pairs_to_files(suffix):
                      pairs_inparalogs,
                      pairs_coorthologs])
 
-def mcl(inflation=1.5):
+def mcl(debug, inflation=1.5):
     def run():
-        mcl_bin_path = check_install_mcl()
+        mcl_bin_path, res = check_install_mcl(debug, only_warn=False)
+        if mcl_bin_path is None:
+            return res
 
         return cmdline(
             mcl_bin_path,
@@ -280,7 +283,8 @@ def mcl(inflation=1.5):
          req_files=[mcl_input],
          prod_files=[mcl_output])
 
-def step_save_orthogroups(added_proteomes_dir=None, annotations=None, internet_on=True):
+def step_save_orthogroups(added_proteomes_dir=None,
+                          annotations=None, internet_on=True):
     def run():
         if added_proteomes_dir:
             added_proteomes_files = [
@@ -292,7 +296,8 @@ def step_save_orthogroups(added_proteomes_dir=None, annotations=None, internet_o
 
         return save_orthogroups(
             added_proteomes_files, annotations or annotations_dir, mcl_output,
-            orthogroups_file, nice_orthogroups_file, short_orthogroups_file, assembly_singletones_file,
+            orthogroups_file, nice_orthogroups_file,
+            short_orthogroups_file, assembly_singletones_file,
             singletone_dir)
 
     prod_files = [

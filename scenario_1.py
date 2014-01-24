@@ -230,11 +230,11 @@ def main(args):
     register_ctrl_c()
 
     p = parse_args(args)
-    log_fpath = set_up_logging(p.debug, p.out)
+    log_path = set_up_logging(p.debug, p.out)
     log.info('python ' + basename(__file__) + ' ' + ' '.join(args))
     log.info('')
 
-    check_and_install_tools(p.debug, log_fpath)
+    check_and_install_tools(p.debug, log_path)
     set_up_config()
 
     start_from, start_after = get_starting_step(p.start_from, join(p.out, log_fname))
@@ -269,7 +269,7 @@ def main(args):
         steps.load_blast_results(suffix),
         steps.find_pairs(suffix),
         steps.dump_pairs_to_files(suffix),
-        steps.mcl(),
+        steps.mcl(p.debug),
         steps.step_save_orthogroups()])
 
     result = workflow.run(start_after, start_from, overwrite=True, ask_before=p.ask_each_step)

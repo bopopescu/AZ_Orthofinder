@@ -41,10 +41,10 @@ def register_ctrl_c():
     signal(SIGINT, lambda s, f: interrupt('', 0))
 
 
-def check_and_install_tools(debug, log_fpath):
+def check_and_install_tools(debug, log_path):
     check_installed_tools(['blastp'])
 
-    check_install_mcl(log_fpath)
+    check_install_mcl(debug, log_path=log_path, only_warn=False)
 
     #prepare_mysql_config()
 
@@ -131,38 +131,46 @@ def check_installed_tools(tools, only_warn=False):
     return ok
 
 
-def check_install_mcl(log_path=log_fname, only_warn=False):
-    if which('mcl'):
-        return 'mcl'
+def check_install_mcl(debug, log_path=log_fname, only_warn=False):
+    #if which('mcl'):
+    #    return 'mcl', 0
 
     mcl_bin_path = join(mcl_dir, 'bin', 'bin', 'mcl')
-    if not exists(mcl_bin_path):
-        with open(log_path) as log_f:
-            log.info('Compiling MCL...')
-            cur_dir = getcwd()
-            chdir(mcl_dir)
-            mcl_path = join(mcl_dir, 'bin')
+    if exists(mcl_bin_path):
+        return mcl_bin_path, 0
 
-            def run(command, exit_code=1):
-                log.info('   ' + command)
-                if call(command.split(), stderr=log_f, stdout=open(devnull, 'w')) != 0:
-                    if only_warn:
-                        log.warning('WARNING: Cannot find or install mcl. '
-                                    'It required for some steps. '
-                                    'Try to install it manually: http://micans.org/mcl/src')
-                        return None
-                    else:
-                        log.error('ERROR: Cannot find or install mcl. '
-                                  'Try to install it manually: http://micans.org/mcl/src')
-                        exit(1)
+    with open(log_path) as log_f:
+        def exec_cmdline(command):
+            log.info('   ' + command)
+            if debug:
+                res = call(command.split())
+            else:
+                res = call(command.split(), stderr=log_f, stdout=open(devnull, 'w'))
 
-            run('./configure -q --prefix=' + mcl_path, 2)
-            run('make', 3)
-            run('make check', 4)
-            run('make install', 5)
+            if res != 0:
+                log.debug('Running ' + command)
+                if only_warn:
+                    log.warning('WARNING: Cannot find or install mcl. '
+                                'It required for some steps. '
+                                'Try to install it manually: http://micans.org/mcl/src')
+                else:
+                    log.error('ERROR: Cannot find or install mcl. '
+                              'Try to install it manually: http://micans.org/mcl/src')
+                return None, res
 
-        chdir(cur_dir)
-    return mcl_bin_path
+    log.info('Compiling MCL...')
+    cur_dir = getcwd()
+    log.info('Changing to ' + cur_dir)
+    chdir(mcl_dir)
+    mcl_path = join(mcl_dir, 'bin')
+
+    exec_cmdline(join(mcl_dir, 'configure') + ' -q --prefix=' + mcl_path)
+    exec_cmdline('make')
+    exec_cmdline('make check')
+    exec_cmdline('make install')
+    chdir(cur_dir)
+
+    return mcl_bin_path, 0
 
 
 def check_perl_modules(debug, only_warn=False):

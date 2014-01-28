@@ -164,7 +164,8 @@ def step_prepare_proteomes_and_annotations(p, internet_is_on):
 
             log.debug('   Using species list: ' + str(p.species_list))
             species_list = read_list(p.species_list)
-            res = fetch_annotations_for_species_from_ftp(species_list, p.proxy)
+            log.debug('species_list: ' + str(species_list))
+            res = fetch_annotations_for_species_from_ftp(steps.annotations_dir, species_list, p.proxy)
             if res != 0: return res
             return make_proteomes(steps.annotations_dir, steps.proteomes_dir)
 

@@ -42,12 +42,12 @@ def fetch_annotations_for_species_from_ftp(save_dir, species_names, proxy=None, 
                         ftp.retrbinary('RETR ' + remote_fpath, open(dest_fpath, 'wb').write)
 
                         rec = SeqIO.read(dest_fpath, 'gb')
-                        #print '       Definition: ' + rec.description
-                        if 'plasmid' in rec.description:
-                            remove(dest_fpath)
-                        else:
-                            log.info('       saved ' + dest_fpath)
-                            log.info('')
+                        log.info('       Definition: ' + rec.description)
+                        # if 'plasmid' in rec.description:
+                        #     remove(dest_fpath)
+                        # else:
+                        log.info('       saved ' + dest_fpath)
+                        log.info('')
     return 0
 
 

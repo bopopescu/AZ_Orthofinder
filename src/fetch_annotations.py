@@ -1,6 +1,8 @@
+from itertools import chain
 from os import mkdir, remove
 from os.path import join, isdir, basename
 from ftplib import FTP
+import urllib2
 from utils import read_list
 from ftp_proxy import setup_http_proxy
 from Bio import Entrez, SeqIO
@@ -49,7 +51,49 @@ def fetch_annotations_for_species_from_ftp(save_dir, species_names, proxy=None, 
     return 0
 
 
+def __range_of_ref_ids(rng):
+    if ':' not in rng:
+        return [rng]
+
+    else:
+        ids = []
+        start, end = rng.split(':')
+
+        start_digits, start_chars, end_digits, end_chars = [], [], [], []
+
+        if '.' in rng:
+            log.error('   Incorrect ids range: ids must not contain dots: ' + rng)
+            return [None]
+
+        for c in start:
+            if c.isdigit():
+                start_digits += c
+            else:
+                start_chars += c
+
+        for c in end:
+            if c.isdigit():
+                end_digits += c
+            else:
+                end_chars += c
+
+        if start_chars != end_chars:
+            log.error('   Incorrect ids range, non-digit parts must be equal: ' + rng)
+            return [None]
+
+        for i in range(int(''.join(start_digits)), int(''.join(end_digits)) + 1):
+            ids.append(''.join(start_chars) +
+                       ''.join(['0'] * (len(start_digits) - len(str(i)))) +
+                       str(i))
+
+        return ids
+
+
 def fetch_annotations_for_ids(annotations_dir, ref_ids):
+    ref_ids = list(chain(*[__range_of_ref_ids(line) for line in ref_ids]))
+    if None in ref_ids:
+        return 1
+
     if not isdir(annotations_dir):
         mkdir(annotations_dir)
 
@@ -62,22 +106,27 @@ def fetch_annotations_for_ids(annotations_dir, ref_ids):
 
     log.info('   IDs: %s' % ', '.join(ref_ids))
 
-    for i, id in enumerate(ref_ids):
-        log.info('   Fetching annotations for %s...' % id)
+    for i, ref_id in enumerate(ref_ids):
+        log.info('   Fetching annotations for %s...' % ref_id)
 
         try:
-            fetch_handle = Entrez.efetch(db='nucleotide', id=id,
-                                         retmode='text', rettype='gbwithparts')
-            gb_fpath = join(annotations_dir, id + '.gb')
-            with open(gb_fpath, 'w') as file:
-                file.write(fetch_handle.read())
+            try:
+                fetch_handle = Entrez.efetch(db='nucleotide', id=ref_id,
+                                             retmode='text', rettype='gbwithparts')
+            except urllib2.HTTPError:
+                log.error('   Error: cannot fetch data for reference id ' + ref_id + ', probably incorrect id.')
+                return 1
+            else:
+                gb_fpath = join(annotations_dir, ref_id + '.gb')
+                with open(gb_fpath, 'w') as file:
+                    file.write(fetch_handle.read())
 
-            rec = SeqIO.read(gb_fpath, 'genbank')
-            genes_number = len([f for f in rec.features if f.type == 'CDS'])
-            log.info('       ' + rec.description)
-            log.info('       %d genes found.' % genes_number)
-            log.info('       saved %s' % gb_fpath)
-            log.info('')
+                rec = SeqIO.read(gb_fpath, 'genbank')
+                genes_number = len([f for f in rec.features if f.type == 'CDS'])
+                log.info('       ' + rec.description)
+                log.info('       %d genes found.' % genes_number)
+                log.info('       saved %s' % gb_fpath)
+                log.info('')
 
         except KeyboardInterrupt, e:
             return 1

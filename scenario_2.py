@@ -9,8 +9,9 @@ from os import chdir, mkdir, getcwd, listdir, symlink
 from os.path import join, exists, isdir, dirname, realpath,\
     basename, splitext, abspath
 import urllib2
+from src.fetch_annotations import fetch_annotations_for_ids
 from src.process_assembly import filter_assembly
-from src.make_proteomes import adjust_proteomes
+from src.make_proteomes import adjust_proteomes, make_proteomes
 from src.steps import check_results_existence
 from src import steps
 
@@ -38,7 +39,6 @@ def parse_args(args):
     op.add_argument('-a', '--assemblies', dest='assemblies')
     op.add_argument('-g', '--gbs', dest='annotations')
     op.add_argument('-p', '--proteomes', '--proteins', dest='proteomes')
-    op.add_argument('-s', '--species-list', dest='species_list')
     op.add_argument('-i', '--ids-list', dest='ids_list')
 
     op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
@@ -62,8 +62,6 @@ def parse_args(args):
     -p --proteomes:      Directory with fasta (or faa) protein files,
                          named by their reference ids (i.e. NC_005816.1.fasta).
                          Can contain annotations from Prodigal.
-
-    -s --species-list:   File with a list of organism names as in Genbank.
 
     -i --ids-list:       File with reference ids (will be fetched from Genbank).
 
@@ -93,6 +91,14 @@ def parse_args(args):
     if p.proteomes:
         check_dir(p.proteomes)
         p.proteomes = abspath(p.proteomes)
+
+    if p.ids_list:
+        check_file(p.ids_list)
+        p.ids_list = abspath(p.ids_list)
+
+    if p.annotations:
+        check_dir(p.species_list)
+        p.annotations = abspath(p.annotations)
 
     if not isdir(p.directory):
         arg_parse_error('Directory %s does not exist.' % p.directory)
@@ -214,10 +220,11 @@ def step_blast_singletones(blastdb=None, debug=False):
                                               'the threshold of %f; Title = %s' %
                                               ((len(rec.seq) / len(hsp.match)) - 1 , LEN_FACTOR, alignment.title))
                                 else:
-                                    log.debug('     len(rec.seq)/len(match) - 1 = ' + str((len(rec.seq) / len(hsp.match)) - 1))
+                                    log.debug('     len(rec.seq)/len(match) - 1 = ' +
+                                              str((len(rec.seq) / len(hsp.match)) - 1))
                                     if hsp.score == best_hits.score:
-                                        best_hits.hits += hsp
-                                        best_hits.alignments += alignment
+                                        best_hits.hits.add(hsp)
+                                        best_hits.alignments.add(alignment)
                                     if hsp.score > best_hits.score:
                                         best_hits = BestHits(hsp.score, hsp.expect, {alignment}, {hsp})
 
@@ -233,7 +240,7 @@ def step_blast_singletones(blastdb=None, debug=False):
                             log.info('       ' + hit.sbjct[:75] + '...')
                     else:
                         log.warning('     No hits for ' + rec.id)
-                log.info('   Saved to ' + short_fpath)
+                log.info('     Saved to ' + short_fpath)
                 log.info('')
 
         return 0
@@ -244,7 +251,8 @@ def step_blast_singletones(blastdb=None, debug=False):
         req_files=[steps.assembly_singletones_file])
 
 
-new_proteomes_dir = join('new_proteomes')
+new_proteomes_dir = 'new_proteomes'
+new_annotations_dir = 'new_annotations'
 
 
 def filter_dublicated_proteomes(prot_dir, new_files):
@@ -366,6 +374,28 @@ def step_prepare_input(p):
            'Preparing input',
             run=run)
 
+    elif p.ids_list:
+        def run():
+            if not test_internet_conn():
+                log.error('No internet connection: cannot fetch annotations.')
+                return 4
+
+            log.debug('   Using ref ids: ' + str(p.ids_list))
+            ref_ids = read_list(p.ids_list)
+            res = fetch_annotations_for_ids(new_annotations_dir, ref_ids)
+            if res != 0: return res
+            res = make_proteomes(new_annotations_dir, new_proteomes_dir)
+            if res != 0: return res
+            for fname in listdir(new_annotations_dir):
+                if fname[0] != '.':
+                    copy(join(new_annotations_dir, fname), steps.annotations_dir)
+
+            return 0
+
+        return Step(
+           'Preparing input',
+            run=run)
+
 
 new_good_proteomes = join(steps.intermediate_dir, 'new_good_proteins.fasta')
 new_bad_proteomes = join(steps.intermediate_dir, 'new_bad_proteins.fasta')
@@ -430,9 +460,10 @@ def main(args):
         steps.find_pairs(suffix),
         steps.dump_pairs_to_files(suffix),
         steps.mcl(p.debug),
-        steps.step_save_orthogroups(new_proteomes_dir),
-        step_blast_singletones(p.blastdb, p.debug),
+        steps.step_save_orthogroups(new_proteomes_dir if not p.ids_list else None)
     ])
+    if not p.ids_list:
+        workflow.extend(step_blast_singletones(p.blastdb, p.debug))
 
     result = workflow.run(
         start_after, start_from,

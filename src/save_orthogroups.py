@@ -109,14 +109,14 @@ def save_orthogroups(new_proteomes, annotations, mcl_output,
     else:
         if isdir(annotations) and listdir(annotations):
             gb_files = [
-                join(annotations, fname)
-                for fname in listdir(annotations) if fname[0] != '.']
+                join(annotations, gb_fname)
+                for gb_fname in listdir(annotations) if gb_fname[0] != '.']
         #    if not isdir(annotations): mkdir(annotations)
         #    if __download(annotations, mcl_output) != 0:
         #        return 1
 
-    if not gb_files:
-        return save_compact(mcl_output, out)
+    #if not gb_files:
+    #    return save_compact(mcl_output, out)
 
     assembly_names = []
     new_proteins_recs = dict()
@@ -137,8 +137,8 @@ def save_orthogroups(new_proteomes, annotations, mcl_output,
         if not isdir(singletone_dir):
             mkdir(singletone_dir)
 
-    for fname in gb_files:
-        strain_id, genes, max_lengths = get_reference_genes(fname, max_lengths)
+    for gb_fname in gb_files:
+        strain_id, genes, max_lengths = get_reference_genes(gb_fname, max_lengths)
         strains[strain_id] = genes
 
     with open(mcl_output) as mcl_f:

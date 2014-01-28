@@ -44,4 +44,3 @@ proteins_copy
 src/mcl_software
 src/mcl_software/*
 *.o
-.cpan

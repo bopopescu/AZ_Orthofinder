@@ -1,12 +1,15 @@
 from os import system
 import subprocess
-import mysql_python.connector
-from mysql_python.connector import errorcode
+import mysql.connector
+from mysql.connector import errorcode
 from os.path import join, dirname, realpath
 
 import config
 import logging
 log = logging.getLogger(config.log_fname)
+
+import sys
+sys.path.append(config.src_dir)
 
 
 class DbCursor:
@@ -24,7 +27,7 @@ class DbCursor:
         self.step = step
 
     def __connect(self):
-        self.cnx = mysql_python.connector.connect(
+        self.cnx = mysql.connector.connect(
             user=self.db_login,
             password=self.db_passw,
             host=self.db_server,
@@ -72,10 +75,10 @@ class DbCursor:
     def __exit__(self, type, err, traceback):
         self.cursor.close()
         self.cnx.close()
-        if isinstance(err, mysql_python.connector.Error):
-            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+        if isinstance(err, mysql.connector.Error):
+            if err.errno == mysql.connector.errorcode.ER_ACCESS_DENIED_ERROR:
                 log.error('Either incorrect user name or password')
-            elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            elif err.errno == mysql.connector.errorcode.ER_BAD_DB_ERROR:
                 log.error('Database orthomcl does not exist')
             else:
                 log.error(err)

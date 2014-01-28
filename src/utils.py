@@ -1,10 +1,13 @@
+from dircache import listdir
 from os import environ, access, X_OK, remove, getcwd, chdir, mkdir
+import os
 from os.path import basename, isdir, split, join, pathsep, isfile, dirname, exists, devnull, realpath
 from random import randint
 from shutil import copy
 from subprocess import call, Popen, PIPE
 import re
 import tarfile
+import shutil
 from config import config_file, orthomcl_config, log_fname, mcl_dir, \
     mysql_cnf, mysql_linux_tar, mysql_osx_tar, mysql_extracted_dir, src_dir
 import logging
@@ -43,13 +46,13 @@ def register_ctrl_c():
 
 
 def check_and_install_tools(debug, log_path):
-    check_installed_tools(['blastp'])
+    check_installed_tools(['blastp'], only_warn=True)
 
     check_install_mcl(debug, log_path=log_path, only_warn=False)
 
     #prepare_mysql_config()
 
-    check_perl_modules(debug)
+    check_perl_modules(debug, only_warn=True)
 
 
 def which(program):
@@ -125,8 +128,8 @@ def check_installed_tools(tools, only_warn=False):
         if not which(tool):
             ok = False
             if only_warn:
-                log.warn('WARNING: "' + tool + '" might not be installed. '
-                         'It is required for following steps.')
+                log.warn('WARNING: "' + tool + '" might be not installed. '
+                         'It is required to peform some following steps.')
     if not ok and not only_warn:
         exit(1)
     return ok
@@ -139,9 +142,25 @@ def check_install_mcl(debug, log_path=log_fname, only_warn=False):
     mcl_bin_path = join(mcl_dir, 'bin', 'bin', 'mcl')
     if exists(mcl_bin_path):
         return mcl_bin_path, 0
+    else:
+        if exists(mcl_dir):
+            shutil.rmtree(mcl_dir)
 
-    with tarfile.TarFile(src_dir, 'mcl.tar.gz', 'r:gz') as mcl_tar_gz:
-        mcl_tar_gz.extractall(mcl_dir)
+    tar_gz = join(src_dir, 'mcl.tar.gz')
+    if not isfile(join(src_dir, 'mcl.tar.gz')):
+        if not only_warn:
+            log.error('Error: no file ' % tar_gz)
+            return None, 1
+        else:
+            log.warning('Warning: no file ' % tar_gz)
+
+    with tarfile.TarFile.open(join(src_dir, 'mcl.tar.gz'), 'r:gz') as mcl_tar_gz:
+        mcl_tar_gz.extractall(src_dir)
+
+    for fname in listdir(src_dir):
+        if fname.startswith('mcl'):
+            shutil.move(join(src_dir, fname), mcl_dir)
+            break
 
     log.debug(log_path)
     log.debug(getcwd())
@@ -156,12 +175,12 @@ def check_install_mcl(debug, log_path=log_fname, only_warn=False):
             if res != 0:
                 log.debug('Running ' + command)
                 if only_warn:
-                    log.warning('WARNING: Cannot find or install mcl_software. '
-                                'It required for some steps. '
-                                'Try to install it manually: http://micans.org/mcl_software/src')
+                    log.warning('WARNING: Cannot find or install mcl. '
+                                'It required to perform some steps. '
+                                'Try to install it manually: http://micans.org/mcl/src')
                 else:
-                    log.error('ERROR: Cannot find or install mcl_software. '
-                              'Try to install it manually: http://micans.org/mcl_software/src')
+                    log.error('ERROR: Cannot find or install mcl. '
+                              'Try to install it manually: http://micans.org/mcl/src')
                 return None, res
 
     log.info('Compiling MCL...')
@@ -294,7 +313,10 @@ def check_perl_modules(debug, only_warn=False):
     cpan> install DBI
     cpan> force install DBD::mysql
     ''' % mysql_cnf
-        exit(4)
+        if only_warn:
+            return 0
+        else:
+            exit(4)
 
 
 def read_list(file, where_to_save=None):

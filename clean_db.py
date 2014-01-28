@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 from os.path import join, dirname, realpath
-from mysql.connector import errorcode
-import mysql.connector
+import src.mysql.connector
+from src.mysql.connector import errorcode
 import sys
 
 from src.db_connection import DbCursor
@@ -58,14 +58,14 @@ def clean_db(suffixes):
                     query = 'drop table %s;' % table
                     prt(query)
                     cursor.execute(query)
-                except mysql.connector.Error, err:
+                except src.mysql.connector.Error, err:
                     prt(err.msg)
                     pass
             try:
                 query = 'drop view %s;' % (conf['interTaxonMatchView'].strip() + suffix)
                 prt(query)
                 cursor.execute(query)
-            except mysql.connector.Error, err:
+            except src.mysql.connector.Error, err:
                 prt(err.msg)
                 pass
     return 0

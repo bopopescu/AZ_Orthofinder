@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from collections import namedtuple
 from genericpath import isfile
 from shutil import copyfile, rmtree, copy
 
@@ -7,6 +8,7 @@ import logging
 from os import chdir, mkdir, getcwd, listdir, symlink
 from os.path import join, exists, isdir, dirname, realpath,\
     basename, splitext, abspath
+import urllib2
 from src.process_assembly import filter_assembly
 from src.make_proteomes import adjust_proteomes
 from src.steps import check_results_existence
@@ -152,40 +154,87 @@ def step_blast_singletones(blastdb=None, debug=False):
             for group_singletones_file in (join(steps.singletone_dir, fname)
                                            for fname in listdir(steps.singletone_dir)
                                            if fname and fname[0] != '.'):
-                log.debug('   ' + group_singletones_file)
+                log.debug('     ' + group_singletones_file)
                 rec = next(SeqIO.parse(group_singletones_file, 'fasta'))
-                log.debug('     ' + rec.id)
+                log.info('     Reading ' + rec.id)
 
                 # Blasting against NCBI
-                save_fpath = join(blasted_singletones_dir, 'refseq_blasted_' + rec.id + '.xml')
-                if debug and isfile(save_fpath):
+                full_xml_fpath = join(blasted_singletones_dir, 'refseq_blasted_' + rec.id + '.xml')
+                short_fpath = join(blasted_singletones_dir, 'refseq_blasted_' + rec.id + '.txt')
+                if isfile(full_xml_fpath):
                     pass
                 else:
-                    result_handle = NCBIWWW.qblast('blastp', 'refseq_protein', rec.format('fasta'))
-                    with open(save_fpath, 'w') as save_f:
-                        save_f.write(result_handle.read())
+                    try:
+                        log.info('     Blasting against the refseq_proteins database...')
+                        full_xml_f = NCBIWWW.qblast('blastp', 'refseq_protein', rec.format('fasta'))
+                        with open(full_xml_fpath, 'w') as save_f:
+                            save_f.write(full_xml_f.read())
+                    except urllib2.HTTPError as e:
+                        log.error('Cannot blast through web: ' + e.msg)
+                        return 1
 
                 # Searching best hit
-                best_alignment, best_hit, best_e = None, None, 2
-                with open(save_fpath) as result_handle:
-                    blast_record = NCBIXML.read(result_handle)
-                    for alignment in blast_record.alignments:
-                        if 'protein' in alignment.title:
-                            for hsp in alignment.hsps:
-                                if hsp.expect < best_e:
-                                    best_alignment, best_hit, best_e = alignment, hsp, hsp.expect
+                LEN_FACTOR = 0.05
+                BIG_EVALUE = 2
+                BestHits = namedtuple('BestHits', 'score, evalue, alignments, hits')
+                best_hits = BestHits(0, BIG_EVALUE, set(), set())
 
-                    if best_hit:
-                        log.debug('     sequence:' + best_alignment.title)
-                        log.debug('     accession: ' + best_alignment.hit_id)
-                        log.debug('     length:' + str(best_alignment.length))
-                        log.debug('     e value:' + str(best_hit.expect))
-                        log.debug('     ' + best_hit.query[:75] + '...')
-                        log.debug('     ' + best_hit.match[:75] + '...')
-                        log.debug('     ' + best_hit.sbjct[:75] + '...')
-                        log.debug('')
+                with open(full_xml_fpath) as full_xml_f, \
+                     open(short_fpath, 'w') as short_f:
+                    short_f.write(rec.description + '\n')
+                    short_f.write(str(rec.seq) + '\n\n')
+
+                    blast_record = NCBIXML.read(full_xml_f)
+
+                    for i, alignment in enumerate(blast_record.alignments):
+                        short_f.write(str(i + 1) + '. Alignment\n'
+                                      '   Title: ' + alignment.title + '\n'
+                                      '   Length: ' + str(alignment.length) + '\n'
+                                      '   Accession: ' + alignment.hit_id + '\n')
+
+                        #if 'protein' in alignment.title:
+                        for hsp in alignment.hsps:
+                            short_f.write(
+                                '     Hit score: ' + str(hsp.score) + '\n'
+                                '     Hit expect value: ' + str(hsp.expect) + '\n'
+                                '     Hit query (starts at ' + str(hsp.query_start) + '):\n     ' + hsp.query + '\n'
+                                '     Hit match:\n     ' + hsp.match + '\n'
+                                '     Hit subject (starts at ' + str(hsp.sbjct_start) + ':\n     ' + hsp.sbjct + '\n\n')
+
+                            if hsp.expect != 0:
+                                if hsp.expect == best_hits.evalue:
+                                    best_hits.hits += hsp
+                                    best_hits.alignments += alignment
+                                if hsp.expect < best_hits.evalue:
+                                    best_hits = BestHits(hsp.score, hsp.expect, {alignment}, {hsp})
+                            else:
+                                if (len(rec.seq) / len(hsp.match)) - 1 > LEN_FACTOR:
+                                    log.debug('     Evaue is 0 and lengths do not match: '
+                                              'len(rec.seq)/len(match) - 1 = %f, witch is greater than '
+                                              'the threshold of %f; Title = %s' %
+                                              ((len(rec.seq) / len(hsp.match)) - 1 , LEN_FACTOR, alignment.title))
+                                else:
+                                    log.debug('     len(rec.seq)/len(match) - 1 = ' + str((len(rec.seq) / len(hsp.match)) - 1))
+                                    if hsp.score == best_hits.score:
+                                        best_hits.hits += hsp
+                                        best_hits.alignments += alignment
+                                    if hsp.score > best_hits.score:
+                                        best_hits = BestHits(hsp.score, hsp.expect, {alignment}, {hsp})
+
+                    if best_hits.hits:
+                        log.info('     e-value: ' + str(best_hits.evalue))
+                        log.info('     score:   ' + str(best_hits.score))
+                        for hit, alignment in zip(best_hits.hits, best_hits.alignments):
+                            log.info('       title:     ' + alignment.title)
+                            log.info('       accession: ' + alignment.hit_id)
+                            log.info('       length:    ' + str(alignment.length))
+                            log.info('       ' + hit.query[:75] + '...')
+                            log.info('       ' + hit.match[:75] + '...')
+                            log.info('       ' + hit.sbjct[:75] + '...')
                     else:
-                        log.warning('     No protein hits for ' + rec.id)
+                        log.warning('     No hits for ' + rec.id)
+                log.info('   Saved to ' + short_fpath)
+                log.info('')
 
         return 0
 

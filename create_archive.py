@@ -25,7 +25,7 @@ dropbox_folder = '/Users/vladsaveliev/Dropbox/Public/az'
 
 archive_dir = 'orthofinder'
 
-ignored = '*.pyc', 'CVS', '.git', 'tmp', '.svn', '.DS_Store', '*.o'
+ignored = '*.pyc', 'CVS', '.git', 'tmp', '.svn', '.DS_Store', '*.o', 'mcl_software'
 
 def compress(source_dir, dest_file):
     relroot = abspath(join(source_dir, ".."))

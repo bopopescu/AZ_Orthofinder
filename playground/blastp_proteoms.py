@@ -37,7 +37,7 @@ def orthomcl(species_dirpath):
     orthomclLoadBlast orthomcl.config similarSequences.txt
     orthomclPairs orthomcl.config orthomclpairs.log cleanup=no
     orthomclDumpPairsFiles orthomcl.config
-    mcl mclInput --abc -I 1.5 -o mclOutput
+    mcl_software mclInput --abc -I 1.5 -o mclOutput
     orthomclMclToGroups az 1000 < mclOutput > groups.txt
     orthomclSingletons goodProteins.fasta groups.txt >> singletons.txt
     '''.split('\n') if l]:

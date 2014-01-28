@@ -41,8 +41,6 @@ cache
 
 proteins_copy
 
-src/mcl/bin
-src/mcl/doc
+src/mcl_software
+src/mcl_software/*
 *.o
-src/mcl/src/*.o
-src/mcl/util/*.o

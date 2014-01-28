@@ -4,8 +4,9 @@ from random import randint
 from shutil import copy
 from subprocess import call, Popen, PIPE
 import re
+import tarfile
 from config import config_file, orthomcl_config, log_fname, mcl_dir, \
-    mysql_cnf, mysql_linux_tar, mysql_osx_tar, mysql_extracted_dir
+    mysql_cnf, mysql_linux_tar, mysql_osx_tar, mysql_extracted_dir, src_dir
 import logging
 
 log = logging.getLogger(log_fname)
@@ -132,12 +133,15 @@ def check_installed_tools(tools, only_warn=False):
 
 
 def check_install_mcl(debug, log_path=log_fname, only_warn=False):
-    #if which('mcl'):
-    #    return 'mcl', 0
+    if which('mcl'):
+        return 'mcl', 0
 
     mcl_bin_path = join(mcl_dir, 'bin', 'bin', 'mcl')
     if exists(mcl_bin_path):
         return mcl_bin_path, 0
+
+    with tarfile.TarFile(src_dir, 'mcl.tar.gz', 'r:gz') as mcl_tar_gz:
+        mcl_tar_gz.extractall(mcl_dir)
 
     with open(log_path) as log_f:
         def exec_cmdline(command):
@@ -150,12 +154,12 @@ def check_install_mcl(debug, log_path=log_fname, only_warn=False):
             if res != 0:
                 log.debug('Running ' + command)
                 if only_warn:
-                    log.warning('WARNING: Cannot find or install mcl. '
+                    log.warning('WARNING: Cannot find or install mcl_software. '
                                 'It required for some steps. '
-                                'Try to install it manually: http://micans.org/mcl/src')
+                                'Try to install it manually: http://micans.org/mcl_software/src')
                 else:
-                    log.error('ERROR: Cannot find or install mcl. '
-                              'Try to install it manually: http://micans.org/mcl/src')
+                    log.error('ERROR: Cannot find or install mcl_software. '
+                              'Try to install it manually: http://micans.org/mcl_software/src')
                 return None, res
 
     log.info('Compiling MCL...')

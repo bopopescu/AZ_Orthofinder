@@ -107,6 +107,10 @@ sub getTaxonAndLength {
     $subject->{subjectTaxon} = $genes->{$subject->{subjectId}}->{taxon};
     $subject->{queryLength} = $genes->{$subject->{queryId}}->{length};
     $subject->{subjectLength} = $genes->{$subject->{subjectId}}->{length};
+#    print("$subject->{queryTaxon}\n");
+#    print("$subject->{subjectTaxon}\n");
+#    print("$subject->{queryLength}\n");
+#    print("$subject->{subjectLength}\n");
     die "couldn't find taxon for gene '$subject->{subjectId}'" unless $subject->{subjectTaxon};
     die "couldn't find taxon for gene '$subject->{queryId}'" unless $subject->{queryTaxon};
     return $subject->{queryLength} < $subject->{subjectLength};

@@ -389,6 +389,9 @@ def step_prepare_input(p):
             for fname in listdir(new_annotations_dir):
                 if fname[0] != '.':
                     copy(join(new_annotations_dir, fname), steps.annotations_dir)
+            for fname in listdir(new_proteomes_dir):
+                if fname[0] != '.':
+                    copy(join(new_proteomes_dir, fname), steps.proteomes_dir)
 
             return 0
 

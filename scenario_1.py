@@ -232,6 +232,7 @@ def main(args):
     p = parse_args(args)
     log_path = set_up_logging(p.debug, p.out)
     log.info('python ' + basename(__file__) + ' ' + ' '.join(args))
+    log.info('logging to ' + log_path)
     log.info('')
 
     check_and_install_tools(p.debug, log_path)

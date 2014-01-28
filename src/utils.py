@@ -143,6 +143,8 @@ def check_install_mcl(debug, log_path=log_fname, only_warn=False):
     with tarfile.TarFile(src_dir, 'mcl.tar.gz', 'r:gz') as mcl_tar_gz:
         mcl_tar_gz.extractall(mcl_dir)
 
+    log.debug(log_path)
+    log.debug(getcwd())
     with open(log_path) as log_f:
         def exec_cmdline(command):
             log.info('   ' + command)

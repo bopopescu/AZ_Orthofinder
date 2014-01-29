@@ -8,7 +8,7 @@ from os.path import join, exists, isdir, isfile, dirname, realpath, \
 from Bio import SeqIO
 
 from src.fetch_annotations import fetch_annotations_for_species_from_ftp, \
-    fetch_annotations_for_ids
+    fetch_annotations_for_ids, fetch_annotations_species_name_entrez
 from src.make_proteomes import adjust_proteomes, make_proteomes
 from src.steps import check_results_existence
 from src import steps
@@ -165,7 +165,7 @@ def step_prepare_proteomes_and_annotations(p, internet_is_on):
             log.debug('   Using species list: ' + str(p.species_list))
             species_list = read_list(p.species_list)
             log.debug('species_list: ' + str(species_list))
-            res = fetch_annotations_for_species_from_ftp(steps.annotations_dir, species_list, p.proxy)
+            res = fetch_annotations_species_name_entrez(steps.annotations_dir, species_list, p.proxy)
             if res != 0: return res
             return make_proteomes(steps.annotations_dir, steps.proteomes_dir)
 

@@ -134,7 +134,7 @@ def fetch_annotations_for_ids(annotations_dir, ref_ids):
     return 0
 
 
-def fetch_annotations_species_name_entrez(save_dir, species_names, clip=None):
+def fetch_annotations_species_name_entrez(save_dir, species_names, clip=100000):
     if not species_names:
         log.error('   No species names')
         return 1
@@ -147,9 +147,9 @@ def fetch_annotations_species_name_entrez(save_dir, species_names, clip=None):
         if species_name == '' or species_name[0] == '#':
             continue
 
-        term = '%s[Organism] AND (complete genome[Title] OR complete sequence[Title])' % species_name
+        term = '(%s[Organism] AND (complete genome[Title] OR complete sequence[Title]))' % species_name
         log.info('   Query: %s' % term)
-        search_handle = Entrez.esearch(db='nuccore', retmax=clip, term=term)
+        search_handle = Entrez.esearch(db='nuccore', retmax=100000, term=term)
         ids = Entrez.read(search_handle)['IdList']
 
         if ids == []:
@@ -159,14 +159,14 @@ def fetch_annotations_species_name_entrez(save_dir, species_names, clip=None):
                 log.error('   No references :(')
                 return 1
 
-        log.info('   IDs: %s' % ', '.join(ids))
+        log.info('   IDs (totally %d): %s' % (len(ids), ', '.join(ids)))
 
         for i, id in enumerate(ids):
             log.info('   Fetching %s...' % id)
 
             fetch_handle = Entrez.efetch(db='nuccore', id=id, retmode='text',
                                          rettype='gbwithparts')
-            gb_fpath = join(save_dir, str(species_i) + '_' + str(i) + '_' + id + '.' + genbank_ext)
+            gb_fpath = join(save_dir, str(species_i) + '_' + str(i) + '_' + id + '.gb')
             with open(gb_fpath, 'w') as file:
                 file.write(fetch_handle.read())
 

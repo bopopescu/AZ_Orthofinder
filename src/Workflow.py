@@ -30,9 +30,6 @@ class Workflow:
         self.steps.extend(steps)
 
     def run(self, start_after, start_from, overwrite, ask_before):
-        i = 0
-        print i[0]
-
         for i, step in izip(count(1), filter(None, self.steps)):
             if start_after is not None \
                     and isinstance(start_after, basestring) \

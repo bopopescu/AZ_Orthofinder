@@ -67,7 +67,7 @@ def make_proteomes(annotations, proteomes_dir):
         try:
             rec = SeqIO.read(gb_fpath, 'genbank')
         except:
-            log.warning('   Cannot read proteins from ' + gb_fpath)
+            log.warning('   Can not read proteins from ' + gb_fpath)
             continue
 
         features = [f for f in rec.features if f.type == 'CDS']
@@ -106,14 +106,21 @@ def make_proteomes(annotations, proteomes_dir):
                 #if translation:
                 #    assert str(my_translation) == str(translation)
 
-                log.info('Notice: no translation field for ' + protein_descripton + ', translating from genome.')
-                log.debug('Translation field is ' + str(translation_field))
+                log.info('   Notice: no translation field for ' + protein_descripton + ', translating from genome.')
 
-                # TODO: OR BETTER FETCH PROTEIN
                 fetch_handle = Entrez.efetch(db='protein', id=protein_id,
                                              retmode='text', rettype='fasta')
-                rec = SeqIO.read(fetch_handle, 'fasta')
-                translation = rec.seq
+                try:
+                    rec = SeqIO.read(fetch_handle, 'fasta')
+                except:
+                    log.warning('   No results for protein_id ' + protein_id + ', skipping.')
+                    continue
+                else:
+                    translation = rec.seq
+                    log.info('   Fetched ' + str(rec.seq))
+                    if not translation:
+                        log.warning('   No results for protein_id ' + protein_id + ', skipping.')
+                        continue
 
             proteins.append(SeqRecord(seq=translation, id=taxoncode + '|' + protein_id,
                                       description=protein_descripton))

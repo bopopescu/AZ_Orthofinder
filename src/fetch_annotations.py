@@ -1,3 +1,4 @@
+from genericpath import isfile
 from itertools import chain
 from os import mkdir, remove
 from os.path import join, isdir, basename
@@ -167,18 +168,35 @@ def fetch_annotations_species_name_entrez(save_dir, species_names, clip=100000):
 
             fetch_handle = Entrez.efetch(db='nuccore', id=id, retmode='text',
                                          rettype='gbwithparts')
-            gb_fpath = join(save_dir, str(species_i) + '_' + str(i) + '_' + id + '.gb')
+            gb_fpath = join(save_dir, str(species_i + 1) + '_' + str(i + 1) + '_' + id + '.gb')
             with open(gb_fpath, 'w') as file:
-                file.write(fetch_handle.read())
+                try:
+                    data = fetch_handle.read()
+                    file.write(data)
+                except:
+                    log.warning('Could not fetch annotation in ' + gb_fpath)
+                    log.exception(file=config.log_fname)
 
-            rec = SeqIO.read(gb_fpath, 'gb')
-            log.info('       Organism: ' + rec.annotations['organism'])
-            log.info('       Definition: ' + rec.description)
-            if 'plasmid' in rec.description:
-                remove(gb_fpath)
+            if not isfile(gb_fpath):
+                log.debug('No file ' + gb_fpath)
+                continue
+            with open(gb_fpath) as gb_f:
+                if gb_f.read():
+                    log.debug(gb_fpath + ' is empty.')
+                    continue
+
+            try:
+                rec = SeqIO.read(gb_fpath, 'gb')
+            except ValueError, e:
+                log.warning('Could not read annotation in ' + gb_fpath)
             else:
-                log.info('       saved %s' % gb_fpath)
-            log.info('')
+                log.info('       Organism: ' + rec.annotations['organism'])
+                log.info('       Definition: ' + rec.description)
+                if 'plasmid' in rec.description:
+                    remove(gb_fpath)
+                else:
+                    log.info('       saved %s' % gb_fpath)
+                log.info('')
 
             #fetch_handle = Entrez.efetch(db='nuccore', id=id, retmode='text', rettype=fasta_ext, **kwargs)
             #fasta_fpath = join(dirpath, str(i) + '_' + id + '.' + fasta_ext)

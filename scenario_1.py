@@ -106,11 +106,11 @@ def parse_args(args):
         p.ids_list = abspath(p.ids_list)
 
     if p.proteomes:
-        check_dir(p.species_list)
+        check_dir(p.proteomes)
         p.proteomes = abspath(p.proteomes)
 
     if p.annotations:
-        check_dir(p.species_list)
+        check_dir(p.annotations)
         p.annotations = abspath(p.annotations)
 
     #if p.species_list or p.ids_list:
@@ -294,7 +294,8 @@ def main(args):
         return 1
 
     except Exception as e:
-        log.exception('Unexpected error.')
+        log.error('')
+        log.exception('Unexpected error!')
         return 2
 
 

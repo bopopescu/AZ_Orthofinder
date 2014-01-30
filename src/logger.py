@@ -32,7 +32,7 @@ def set_up_logging(debug, working_dir):
     fh = logging.FileHandler(log_fpath, 'a')
     fh.setLevel(logging.DEBUG if debug else logging.info)
     fh.setFormatter(logging.Formatter(
-        '%(asctime)-15s  %(levelname)-8s  %(message)s',
+        '%(asctime)-15s  %(message)s',
         datefmt='%c'))
     logger.addHandler(fh)
 

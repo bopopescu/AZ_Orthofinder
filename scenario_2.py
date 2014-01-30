@@ -85,7 +85,7 @@ def parse_args(args):
     check_common_args(p)
 
     if p.assemblies:
-        check_dir(p.species_list)
+        check_dir(p.assemblies)
         p.assemblies = abspath(p.assemblies)
 
     if p.proteomes:
@@ -97,7 +97,7 @@ def parse_args(args):
         p.ids_list = abspath(p.ids_list)
 
     if p.annotations:
-        check_dir(p.species_list)
+        check_dir(p.annotations)
         p.annotations = abspath(p.annotations)
 
     if not isdir(p.directory):
@@ -466,7 +466,7 @@ def main(args):
         steps.step_save_orthogroups(new_proteomes_dir if not p.ids_list else None)
     ])
     if not p.ids_list:
-        workflow.extend(step_blast_singletones(p.blastdb, p.debug))
+        workflow.extend([step_blast_singletones(p.blastdb, p.debug)])
 
     result = workflow.run(
         start_after, start_from,

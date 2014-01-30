@@ -236,58 +236,66 @@ def main(args):
     log.info('logging to ' + log_path)
     log.info('')
 
-    check_and_install_tools(p.debug, log_path)
-    set_up_config()
+    try:
+        check_and_install_tools(p.debug, log_path)
+        set_up_config()
 
-    start_from, start_after = get_starting_step(p.start_from, join(p.out, log_fname))
+        start_from, start_after = get_starting_step(p.start_from, join(p.out, log_fname))
 
-    working_dir = p.out
-    log.info('Changing to %s' % working_dir)
-    chdir(working_dir)
+        working_dir = p.out
+        log.info('Changing to %s' % working_dir)
+        chdir(working_dir)
 
-    workflow = Workflow(working_dir, id=make_workflow_id(working_dir))
-    log.info('Workflow id is "' + workflow.id + '"')
-    log.info('')
-    suffix = '_' + workflow.id
+        workflow = Workflow(working_dir, id=make_workflow_id(working_dir))
+        log.info('Workflow id is "' + workflow.id + '"')
+        log.info('')
+        suffix = '_' + workflow.id
 
-    if not p.overwrite:
-        check_results_existence()
+        if not p.overwrite:
+            check_results_existence()
 
-    if not exists(steps.intermediate_dir):
-        mkdir(steps.intermediate_dir)
+        if not exists(steps.intermediate_dir):
+            mkdir(steps.intermediate_dir)
 
-    internet_is_on = test_internet_conn()
+        internet_is_on = test_internet_conn()
 
-    workflow.extend([
-        step_prepare_proteomes_and_annotations(p, internet_is_on),
+        workflow.extend([
+            step_prepare_proteomes_and_annotations(p, internet_is_on),
 
-        steps.filter_proteomes(
-            min_length=int(p.min_length),
-            max_percent_stop=int(p.max_percent_stop)),
-        steps.make_blast_db(),
-        steps.blast(p.threads, evalue=float(p.evalue)),
-        steps.parse_blast_results(),
-        steps.clean_database(suffix),
-        steps.install_schema(suffix),
-        steps.load_blast_results(suffix),
-        steps.find_pairs(suffix),
-        steps.dump_pairs_to_files(suffix),
-        steps.mcl(p.debug),
-        steps.step_save_orthogroups()])
+            steps.filter_proteomes(
+                min_length=int(p.min_length),
+                max_percent_stop=int(p.max_percent_stop)),
+            steps.make_blast_db(),
+            steps.blast(p.threads, evalue=float(p.evalue)),
+            steps.parse_blast_results(),
+            steps.clean_database(suffix),
+            steps.install_schema(suffix),
+            steps.load_blast_results(suffix),
+            steps.find_pairs(suffix),
+            steps.dump_pairs_to_files(suffix),
+            steps.mcl(p.debug),
+            steps.step_save_orthogroups()])
 
-    result = workflow.run(
-        start_after, start_from,
-        overwrite=True,
-        ask_before=p.ask_each_step)
+        result = workflow.run(
+            start_after, start_from,
+            overwrite=True,
+            ask_before=p.ask_each_step)
 
-    if result == 0:
-        log.info('Done.')
-        log.info('Log is in ' + join(working_dir, log_fname))
-        log.info('Groups are in ' + join(working_dir, steps.orthogroups_file))
-        if isfile(steps.nice_orthogroups_file):
-            log.info('Groups with aligned columns are in ' +
-                     join(working_dir, steps.nice_orthogroups_file))
-    return result
+        if result == 0:
+            log.info('Done.')
+            log.info('Log is in ' + join(working_dir, log_fname))
+            log.info('Groups are in ' + join(working_dir, steps.orthogroups_file))
+            if isfile(steps.nice_orthogroups_file):
+                log.info('Groups with aligned columns are in ' +
+                         join(working_dir, steps.nice_orthogroups_file))
+        return result
+
+    except (KeyboardInterrupt, SystemExit, GeneratorExit):
+        return 1
+
+    except Exception as e:
+        log.exception('Unexpected error.')
+        return 2
 
 
 if __name__ == '__main__':

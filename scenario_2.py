@@ -152,10 +152,10 @@ def step_blast_singletones(blastdb=None, debug=False):
                           ' to use the remote NCBI database.')
                 return 1
 
-            #if exists(blasted_singletones_dir):
-            #    rmtree(blasted_singletones_dir)
-            #if not isdir(blasted_singletones_dir):
-            #    mkdir(blasted_singletones_dir)
+            if exists(blasted_singletones_dir):
+                rmtree(blasted_singletones_dir)
+            if not isdir(blasted_singletones_dir):
+                mkdir(blasted_singletones_dir)
 
             for group_singletones_file in (join(steps.singletone_dir, fname)
                                            for fname in listdir(steps.singletone_dir)
@@ -428,60 +428,68 @@ def main(args):
     log.info('python ' + basename(__file__) + ' ' + ' '.join(args))
     log.info('')
 
-    check_and_install_tools(p.debug, log_fpath)
-    set_up_config()
+    try:
+        check_and_install_tools(p.debug, log_fpath)
+        set_up_config()
 
-    start_from, start_after = get_starting_step(p.start_from, join(p.directory, log_fname))
+        start_from, start_after = get_starting_step(p.start_from, join(p.directory, log_fname))
 
-    working_dir = p.directory
-    log.info('Changing to %s' % working_dir)
-    chdir(working_dir)
+        working_dir = p.directory
+        log.info('Changing to %s' % working_dir)
+        chdir(working_dir)
 
-    if not exists('intermediate'):
-        arg_parse_error('You need to run Scenario 1 on this directory first.')
+        if not exists('intermediate'):
+            arg_parse_error('You need to run Scenario 1 on this directory first.')
 
-    workflow = Workflow(working_dir, id=make_workflow_id(working_dir))
-    log.info('Workflow id is "' + workflow.id + '"')
-    log.info('')
-    suffix = '_' + workflow.id
+        workflow = Workflow(working_dir, id=make_workflow_id(working_dir))
+        log.info('Workflow id is "' + workflow.id + '"')
+        log.info('')
+        suffix = '_' + workflow.id
 
-    workflow.extend([
-        step_prepare_input(p),
-        steps.filter_proteomes(
-            min_length=int(p.min_length),
-            max_percent_stop=int(p.max_percent_stop)),
-        filter_new_proteomes(
-            new_proteomes_dir,
-            min_length=int(p.min_length),
-            max_percent_stop=int(p.max_percent_stop)),
-        steps.make_blast_db(),
-        steps.blast(p.threads, new_good_proteomes, evalue=float(p.evalue)),
-        steps.parse_blast_results(),
-        steps.clean_database(suffix),
-        steps.install_schema(suffix),
-        steps.load_blast_results(suffix),
-        steps.find_pairs(suffix),
-        steps.dump_pairs_to_files(suffix),
-        steps.mcl(p.debug),
-        steps.step_save_orthogroups(new_proteomes_dir if not p.ids_list else None)
-    ])
-    if not p.ids_list:
-        workflow.extend([step_blast_singletones(p.blastdb, p.debug)])
+        workflow.extend([
+            step_prepare_input(p),
+            steps.filter_proteomes(
+                min_length=int(p.min_length),
+                max_percent_stop=int(p.max_percent_stop)),
+            filter_new_proteomes(
+                new_proteomes_dir,
+                min_length=int(p.min_length),
+                max_percent_stop=int(p.max_percent_stop)),
+            steps.make_blast_db(),
+            steps.blast(p.threads, new_good_proteomes, evalue=float(p.evalue)),
+            steps.parse_blast_results(),
+            steps.clean_database(suffix),
+            steps.install_schema(suffix),
+            steps.load_blast_results(suffix),
+            steps.find_pairs(suffix),
+            steps.dump_pairs_to_files(suffix),
+            steps.mcl(p.debug),
+            steps.step_save_orthogroups(new_proteomes_dir if not p.ids_list else None)
+        ])
+        if not p.ids_list:
+            workflow.extend([step_blast_singletones(p.blastdb, p.debug)])
 
-    result = workflow.run(
-        start_after, start_from,
-        overwrite=True,
-        ask_before=p.ask_each_step)
+        result = workflow.run(
+            start_after, start_from,
+            overwrite=True,
+            ask_before=p.ask_each_step)
 
-    if result == 0:
-        log.info('Done.')
-        log.info('Log is in ' + join(working_dir, log_fname))
-        log.info('Groups are in ' + join(working_dir, steps.orthogroups_file))
-        if isfile(steps.nice_orthogroups_file):
-            log.info('Groups with aligned columns are in ' +
-                     join(working_dir, steps.nice_orthogroups_file))
-    return result
+        if result == 0:
+            log.info('Done.')
+            log.info('Log is in ' + join(working_dir, log_fname))
+            log.info('Groups are in ' + join(working_dir, steps.orthogroups_file))
+            if isfile(steps.nice_orthogroups_file):
+                log.info('Groups with aligned columns are in ' +
+                         join(working_dir, steps.nice_orthogroups_file))
+        return result
 
+    except (KeyboardInterrupt, SystemExit, GeneratorExit):
+        return 1
+
+    except Exception as e:
+        log.error('')
+        log.exception('Unexpected error!')
+        return 2
 
 
 if __name__ == '__main__':

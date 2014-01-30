@@ -7,7 +7,7 @@ from config import log_fname
 
 def set_up_logging(debug, working_dir):
     logger = logging.getLogger(log_fname)
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.DEBUG if debug else logging.INFO)
 
     class InfoFilter(logging.Filter):
         def filter(self, rec):
@@ -30,7 +30,7 @@ def set_up_logging(debug, working_dir):
 
     log_fpath = join(working_dir, log_fname)
     fh = logging.FileHandler(log_fpath, 'a')
-    fh.setLevel(logging.DEBUG)
+    fh.setLevel(logging.DEBUG if debug else logging.info)
     fh.setFormatter(logging.Formatter(
         '%(asctime)-15s  %(levelname)-8s  %(message)s',
         datefmt='%c'))

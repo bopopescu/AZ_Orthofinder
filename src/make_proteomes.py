@@ -92,7 +92,8 @@ def make_proteomes(annotations, proteomes_dir):
                                  '. Protein ' + protein_id
             #log.debug('   ' + protein_descripton)
             translation = None
-            if qs.get('translation', [None]) is not None:
+            translation_field = qs.get('translation', [None])
+            if translation_field and len(translation_field) > 0 and translation_field[0]:
                 translation = Seq(qs.get('translation', [None])[0], generic_protein)
 
             if not translation:
@@ -104,6 +105,9 @@ def make_proteomes(annotations, proteomes_dir):
                 #print my_translation
                 #if translation:
                 #    assert str(my_translation) == str(translation)
+
+                log.info('Notice: no translation field for ' + protein_descripton + ', translating from genome.')
+                log.debug('Translation field is ' + str(translation_field))
 
                 # TODO: OR BETTER FETCH PROTEIN
                 fetch_handle = Entrez.efetch(db='protein', id=protein_id,

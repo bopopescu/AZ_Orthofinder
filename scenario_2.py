@@ -69,7 +69,7 @@ def parse_args(args):
                          to retrieve protein ids (default if 1, like
                          >NC_005816.1|NP_995567.1 ...).
 
-    --blast-db           Local Blast database path. If not set, NCBI will be used.
+    --blast-db           Local Blast database path. If not set, remote NCBI will be used.
     ''' % basename(__file__)
 
     #indent = ' ' * len('usage: ' + basename(__file__) + ' ')
@@ -141,10 +141,13 @@ blasted_singletones_dir = 'blasted_singletones'
 
 def step_blast_singletones(blastdb=None, debug=False):
     def run(singletones_file, new_proteomes_dir):
+        from Bio.Blast.Applications import NcbiblastxCommandline
         from Bio.Blast import NCBIWWW, NCBIXML
         from Bio import SeqIO
 
-        if not blastdb:
+        if blastdb:
+            log.info('   Using local NCBI database: ' + blastdb)
+        else:
             if test_internet_conn():
                 log.info('   Using remote NCBI database.')
             else:
@@ -157,91 +160,101 @@ def step_blast_singletones(blastdb=None, debug=False):
             if not isdir(blasted_singletones_dir):
                 mkdir(blasted_singletones_dir)
 
-            for group_singletones_file in (join(steps.singletone_dir, fname)
-                                           for fname in listdir(steps.singletone_dir)
-                                           if fname and fname[0] != '.'):
-                log.debug('     ' + group_singletones_file)
-                rec = next(SeqIO.parse(group_singletones_file, 'fasta'))
-                log.info('     Reading ' + rec.id)
+        for group_singletones_file in (join(steps.singletone_dir, fname)
+                                       for fname in listdir(steps.singletone_dir)
+                                       if fname and fname[0] != '.'):
+            log.debug('     ' + group_singletones_file)
+            rec = next(SeqIO.parse(group_singletones_file, 'fasta'))
+            log.info('     Reading ' + rec.id)
 
-                # Blasting against NCBI
-                full_xml_fpath = join(blasted_singletones_dir, 'refseq_blasted_' + rec.id + '.xml')
-                short_fpath = join(blasted_singletones_dir, 'refseq_blasted_' + rec.id + '.txt')
-                if isfile(full_xml_fpath):
-                    pass
+            # Blasting against NCBI
+            full_xml_fpath = join(blasted_singletones_dir, 'refseq_blasted_' + rec.id + '.xml')
+            short_fpath = join(blasted_singletones_dir, 'refseq_blasted_' + rec.id + '.txt')
+            if isfile(full_xml_fpath):
+                pass
+            else:
+                log.info('     Blasting against the refseq_proteins database...')
+                if blastdb:
+                    cmdline = NcbiblastxCommandline(
+                        query=group_singletones_file,
+                        db='refseq_protein',
+                        outfmt=5,
+                        out=full_xml_fpath)
+                    stdout, stderr = cmdline()
                 else:
                     try:
-                        log.info('     Blasting against the refseq_proteins database...')
                         full_xml_f = NCBIWWW.qblast('blastp', 'refseq_protein', rec.format('fasta'))
                         with open(full_xml_fpath, 'w') as save_f:
                             save_f.write(full_xml_f.read())
+
                     except urllib2.HTTPError as e:
-                        log.error('Cannot blast through web: ' + e.msg)
+                        log.error('   Could not blast through web. ' + e.msg)
+                        log.error('   Try running from this step again.')
                         return 1
 
-                # Searching best hit
-                LEN_FACTOR = 0.05
-                BIG_EVALUE = 2
-                BestHits = namedtuple('BestHits', 'score, evalue, alignments, hits')
-                best_hits = BestHits(0, BIG_EVALUE, set(), set())
+            # Searching best hit
+            LEN_FACTOR = 0.05
+            BIG_EVALUE = 2
+            BestHits = namedtuple('BestHits', 'score, evalue, alignments, hits')
+            best_hits = BestHits(0, BIG_EVALUE, set(), set())
 
-                with open(full_xml_fpath) as full_xml_f, \
-                     open(short_fpath, 'w') as short_f:
-                    short_f.write(rec.description + '\n')
-                    short_f.write(str(rec.seq) + '\n\n')
+            with open(full_xml_fpath) as full_xml_f, \
+                 open(short_fpath, 'w') as short_f:
+                short_f.write(rec.description + '\n')
+                short_f.write(str(rec.seq) + '\n\n')
 
-                    blast_record = NCBIXML.read(full_xml_f)
+                blast_record = NCBIXML.read(full_xml_f)
 
-                    for i, alignment in enumerate(blast_record.alignments):
-                        short_f.write(str(i + 1) + '. Alignment\n'
-                                      '   Title: ' + alignment.title + '\n'
-                                      '   Length: ' + str(alignment.length) + '\n'
-                                      '   Accession: ' + alignment.hit_id + '\n')
+                for i, alignment in enumerate(blast_record.alignments):
+                    short_f.write(str(i + 1) + '. Alignment\n'
+                                  '   Title: ' + alignment.title + '\n'
+                                  '   Length: ' + str(alignment.length) + '\n'
+                                  '   Accession: ' + alignment.hit_id + '\n')
 
-                        #if 'protein' in alignment.title:
-                        for hsp in alignment.hsps:
-                            short_f.write(
-                                '     Hit score: ' + str(hsp.score) + '\n'
-                                '     Hit expect value: ' + str(hsp.expect) + '\n'
-                                '     Hit query (starts at ' + str(hsp.query_start) + '):\n     ' + hsp.query + '\n'
-                                '     Hit match:\n     ' + hsp.match + '\n'
-                                '     Hit subject (starts at ' + str(hsp.sbjct_start) + ':\n     ' + hsp.sbjct + '\n\n')
+                    #if 'protein' in alignment.title:
+                    for hsp in alignment.hsps:
+                        short_f.write(
+                            '     Hit score: ' + str(hsp.score) + '\n'
+                            '     Hit expect value: ' + str(hsp.expect) + '\n'
+                            '     Hit query (starts at ' + str(hsp.query_start) + '):\n     ' + hsp.query + '\n'
+                            '     Hit match:\n     ' + hsp.match + '\n'
+                            '     Hit subject (starts at ' + str(hsp.sbjct_start) + ':\n     ' + hsp.sbjct + '\n\n')
 
-                            if hsp.expect != 0:
-                                if hsp.expect == best_hits.evalue:
-                                    best_hits.hits += hsp
-                                    best_hits.alignments += alignment
-                                if hsp.expect < best_hits.evalue:
-                                    best_hits = BestHits(hsp.score, hsp.expect, {alignment}, {hsp})
+                        if hsp.expect != 0:
+                            if hsp.expect == best_hits.evalue:
+                                best_hits.hits += hsp
+                                best_hits.alignments += alignment
+                            if hsp.expect < best_hits.evalue:
+                                best_hits = BestHits(hsp.score, hsp.expect, {alignment}, {hsp})
+                        else:
+                            if (len(rec.seq) / len(hsp.match)) - 1 > LEN_FACTOR:
+                                log.debug('     Evaue is 0 and lengths do not match: '
+                                          'len(rec.seq)/len(match) - 1 = %f, witch is greater than '
+                                          'the threshold of %f; Title = %s' %
+                                          ((len(rec.seq) / len(hsp.match)) - 1 , LEN_FACTOR, alignment.title))
                             else:
-                                if (len(rec.seq) / len(hsp.match)) - 1 > LEN_FACTOR:
-                                    log.debug('     Evaue is 0 and lengths do not match: '
-                                              'len(rec.seq)/len(match) - 1 = %f, witch is greater than '
-                                              'the threshold of %f; Title = %s' %
-                                              ((len(rec.seq) / len(hsp.match)) - 1 , LEN_FACTOR, alignment.title))
-                                else:
-                                    log.debug('     len(rec.seq)/len(match) - 1 = ' +
-                                              str((len(rec.seq) / len(hsp.match)) - 1))
-                                    if hsp.score == best_hits.score:
-                                        best_hits.hits.add(hsp)
-                                        best_hits.alignments.add(alignment)
-                                    if hsp.score > best_hits.score:
-                                        best_hits = BestHits(hsp.score, hsp.expect, {alignment}, {hsp})
+                                log.debug('     len(rec.seq)/len(match) - 1 = ' +
+                                          str((len(rec.seq) / len(hsp.match)) - 1))
+                                if hsp.score == best_hits.score:
+                                    best_hits.hits.add(hsp)
+                                    best_hits.alignments.add(alignment)
+                                if hsp.score > best_hits.score:
+                                    best_hits = BestHits(hsp.score, hsp.expect, {alignment}, {hsp})
 
-                    if best_hits.hits:
-                        log.info('     e-value: ' + str(best_hits.evalue))
-                        log.info('     score:   ' + str(best_hits.score))
-                        for hit, alignment in zip(best_hits.hits, best_hits.alignments):
-                            log.info('       title:     ' + alignment.title)
-                            log.info('       accession: ' + alignment.hit_id)
-                            log.info('       length:    ' + str(alignment.length))
-                            log.info('       ' + hit.query[:75] + '...')
-                            log.info('       ' + hit.match[:75] + '...')
-                            log.info('       ' + hit.sbjct[:75] + '...')
-                    else:
-                        log.warning('     No hits for ' + rec.id)
-                log.info('     Saved to ' + short_fpath)
-                log.info('')
+                if best_hits.hits:
+                    log.info('     e-value: ' + str(best_hits.evalue))
+                    log.info('     score:   ' + str(best_hits.score))
+                    for hit, alignment in zip(best_hits.hits, best_hits.alignments):
+                        log.info('       title:     ' + alignment.title)
+                        log.info('       accession: ' + alignment.hit_id)
+                        log.info('       length:    ' + str(alignment.length))
+                        log.info('       ' + hit.query[:75] + '...')
+                        log.info('       ' + hit.match[:75] + '...')
+                        log.info('       ' + hit.sbjct[:75] + '...')
+                else:
+                    log.warning('     No hits for ' + rec.id)
+            log.info('     Saved to ' + short_fpath)
+            log.info('')
 
         return 0
 
@@ -264,13 +277,18 @@ def filter_dublicated_proteomes(prot_dir, new_files):
     filtered_new_prots = []
     for new_prot_name, new_prot_path in zip(new_prot_names, new_files):
         if new_prot_name in prot_names:
-            log.warn(('   Proteome "%s" is already considered (check the "' % new_prot_name)
-                     + prot_dir + '" directory)')
+            log.warn('   Proteome "%s" is already considered (check "%s").' \
+                      % (new_prot_name, realpath(prot_dir)))
         else:
             filtered_new_prots.append(new_prot_path)
 
     return filtered_new_prots
 
+
+all_considered_warning = '   Notice: all proteomes are already considered in this directory.\n' + \
+                         'If you are sure the input is different from the proteomes in the %s directory, ' + \
+                         'you will need to rename the input files.\nNote that proteomes are identified ' + \
+                         'by their filenames, so it is not desired to just removed those files and restart.'
 
 def step_prepare_input(p):
     if p.assemblies:
@@ -283,9 +301,7 @@ def step_prepare_input(p):
             if isdir(steps.proteomes_dir):
                 assemblies = filter_dublicated_proteomes(steps.proteomes_dir, assemblies)
                 if assemblies == []:
-                    log.warn('   Notice: All proteomes are already considered in this directory.'
-                             ' If you are sure the input is different from the proteomes in the %s directory, '
-                             ' You will need to rename the input files.' % steps.proteomes_dir)
+                    log.warn(all_considered_warning % steps.proteomes_dir)
                     exit(1)
 
             assembly_names = [
@@ -350,9 +366,7 @@ def step_prepare_input(p):
             if isdir(steps.proteomes_dir):
                 input_proteomes = filter_dublicated_proteomes(steps.proteomes_dir, input_proteomes)
                 if input_proteomes == []:
-                    log.warn('Notice: All proteomes are already considered in this directory. '
-                             'If you are sure the input is different from the proteomes in the %s directory, '
-                             'You will need to rename the input files.' % steps.proteomes_dir)
+                    log.warn(all_considered_warning % steps.proteomes_dir)
                     exit(1)
 
             new_prot_names = [splitext(basename(prot))[0] for prot in input_proteomes]

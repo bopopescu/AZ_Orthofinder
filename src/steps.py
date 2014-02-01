@@ -4,7 +4,7 @@ from os.path import basename, join, relpath, exists, isdir
 from shutil import rmtree
 
 from Workflow import Step, cmdline
-from utils import check_install_mcl
+from utils import check_install_mcl, check_installed_tools
 from process_assembly import filter_assembly
 from save_orthogroups import save_orthogroups
 from make_proteomes import make_proteomes, adjust_proteomes
@@ -162,11 +162,14 @@ def blast(threads, new_good_proteomes=None, evalue=1e-5):
             '-dbsize', BLAST_DBSIZE]
 
     def run():
-        res = cmdline('blastp',
-                      parameters + ['-num_threads', threads],
-                      stderr=None)()
+        if not check_installed_tools(['blastp'], only_warn=False):
+            return 1
+
+        res = cmdline(
+            'blastp', parameters + ['-num_threads', threads],
+             ignore_lines_by_pattern=r'.* at position .* replaced by .*')()
         if res == -6:
-            log.info('')
+            log.warn('')
             log.warn('   WARNING: blast refused to run multithreaded, '
                      'running single-threaded instead.')
             res = cmdline('blastp', parameters)()
@@ -188,8 +191,8 @@ def parse_blast_results():
     return Step(
         'Parsing blast results',
          run=cmdline(join(orthomcl_bin_dir, 'orthomclBlastParser.pl'),
-            parameters=[blast_out, proteomes_dir],
-            stdout=similar_sequences),
+                     parameters=[blast_out, proteomes_dir],
+                     stdout=similar_sequences),
          req_files=[proteomes_dir, blast_out],
          prod_files=[similar_sequences])
 
@@ -270,10 +273,12 @@ def mcl(debug, inflation=1.5):
 
         return cmdline(
             mcl_bin_path,
-            parameters=[mcl_input,
-                        '--abc',
-                        '-I', str(inflation),
-                        '-o', mcl_output],
+            parameters=[
+                mcl_input,
+                '--abc',
+                '-I', str(inflation),
+                '-o', mcl_output],
+            start_ignoring_from=r'Please cite:.*',
             stderr='log',
             stdout='log')()
 

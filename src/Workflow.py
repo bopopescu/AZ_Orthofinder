@@ -64,7 +64,9 @@ class Workflow:
 
 
 def cmdline(command, parameters=None, stdin=None,
-            stdout='pipe', stderr='pipe'):
+            stdout='pipe', stderr='pipe', env=None,
+            ignore_lines_by_pattern=None,
+            start_ignoring_from=None):
     parameters = parameters or []
 
     def callback():
@@ -96,12 +98,25 @@ def cmdline(command, parameters=None, stdin=None,
 
         log.info('   ' + commandline)
         try:
-            p = subprocess.Popen([command] + map(str, parameters),
-                                 stdin=stdin_f, stdout=stdout_f, stderr=stderr_f)
+            p = subprocess.Popen(
+                [command] + map(str, parameters), env=env,
+                stdin=stdin_f, stdout=stdout_f, stderr=stderr_f)
+
             if stdout_f == subprocess.PIPE:
                 for line in iter(p.stdout.readline, ''):
-                    if line.strip().startswith('Please cite:'):
-                        break
+
+                    if start_ignoring_from:
+                        import re
+                        a = re.compile(start_ignoring_from)
+                        if a.match(line.strip()):
+                            break
+
+                    if ignore_lines_by_pattern:
+                        import re
+                        a = re.compile(ignore_lines_by_pattern)
+                        if a.match(line.strip()):
+                            continue
+
                     if stdout == 'pipe':
                         log.info('   ' + line.strip())
                     if stdout == 'log':
@@ -153,7 +168,7 @@ class Step:
             with DbCursor() as cursor:
                 for table in self.prod_tables:
                     try:
-                        query = '   select count(*) from %s;' % table
+                        query = 'select count(*) from %s;' % table
                         cursor.execute(query)
                     except mysql.connector.Error, err:
                         #log.debug('   err.errno == errorcode.ER_TABLE_EXISTS_ERROR: ' +

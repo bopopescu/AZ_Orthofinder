@@ -11,6 +11,7 @@ import shutil
 from config import config_file, orthomcl_config, log_fname, mcl_dir, \
     mysql_cnf, mysql_linux_tar, mysql_osx_tar, mysql_extracted_dir, src_dir
 import logging
+from src.Workflow import cmdline
 
 log = logging.getLogger(log_fname)
 
@@ -130,6 +131,10 @@ def check_installed_tools(tools, only_warn=False):
             if only_warn:
                 log.warn('WARNING: "' + tool + '" might be not installed. '
                          'It is required to peform some following steps.')
+                log.warn('')
+            else:
+                log.error('ERROR: "' + tool + '" might be not installed. It is required to proceed.')
+
     if not ok and not only_warn:
         exit(1)
     return ok
@@ -164,24 +169,24 @@ def check_install_mcl(debug, log_path=log_fname, only_warn=False):
 
     log.debug(log_path)
     log.debug(getcwd())
-    with open(log_path) as log_f:
-        def exec_cmdline(command):
-            log.info('   ' + command)
-            if debug:
-                res = call(command.split())
-            else:
-                res = call(command.split(), stderr=log_f, stdout=open(devnull, 'w'))
 
-            if res != 0:
-                log.debug('Running ' + command)
-                if only_warn:
-                    log.warning('WARNING: Cannot find or install mcl. '
-                                'It required to perform some steps. '
-                                'Try to install it manually: http://micans.org/mcl/src')
-                else:
-                    log.error('ERROR: Cannot find or install mcl. '
-                              'Try to install it manually: http://micans.org/mcl/src')
-                return None, res
+    def exec_cmdline(command):
+        log.info('   ' + command)
+        if debug:
+            res = cmdline(command.split())()
+        else:
+            res = cmdline(command.split(), stdout=None, stderr=None)()
+
+        if res != 0:
+            log.debug('Running ' + command)
+            if only_warn:
+                log.warning('WARNING: Cannot find or install mcl. '
+                            'It required to perform some steps. '
+                            'Try to install it manually: http://micans.org/mcl/src')
+            else:
+                log.error('ERROR: Cannot find or install mcl. '
+                          'Try to install it manually: http://micans.org/mcl/src')
+            return None, res
 
     log.info('Compiling MCL...')
     cur_dir = getcwd()
@@ -199,108 +204,115 @@ def check_install_mcl(debug, log_path=log_fname, only_warn=False):
 
 
 def check_perl_modules(debug, only_warn=False):
-    def check(env):
-        dbimysql = call('perl -MDBD::mysql -e 1'.split(),
-                         stderr=open(devnull, 'w'),
-                         stdout=open(devnull, 'w'),
-                         env=env) == 0
+    def check(env=None):
+        dbimysql = call(
+            'perl -MDBD::mysql -e 1'.split(),
+             stderr=open(devnull, 'w'),
+             stdout=open(devnull, 'w'),
+             env=env) == 0
         if not dbimysql:
             log.debug('DBD::mysql is not installed.')
 
-        dbd = call('perl -MDBI -e 1'.split(),
-                    stderr=open(devnull, 'w'),
-                    stdout=open(devnull, 'w'),
-                    env=env) == 0
+        dbd = call(
+            'perl -MDBI -e 1'.split(),
+             stderr=open(devnull, 'w'),
+             stdout=open(devnull, 'w'),
+             env=env) == 0
         if not dbd:
             log.debug('DBI is not installed.')
 
         return dbimysql and dbd
 
-    tool_patb = join(dirname(realpath(__file__)), '../')
-    assert isdir(tool_patb)
-    perl_modules_path = join(tool_patb, 'perl_modules')
-    lib_path = join(perl_modules_path, 'lib')
-    man_path = join(perl_modules_path, 'man')
-    cpan_path = join(tool_patb, '.cpan')
-    cpan_cpan_path = join(cpan_path, 'CPAN')    #    subprocess.call("perl -wle'print for grep /src/perl_modules/, @INC'",
-
-    if not isdir(perl_modules_path):
-        mkdir(perl_modules_path)
-        mkdir(lib_path)
-        mkdir(man_path)
-        mkdir(join(man_path, 'man1'))
-        mkdir(join(man_path, 'man3'))
-    if not isdir(cpan_path): mkdir(cpan_path)
-    if not isdir(cpan_cpan_path): mkdir(cpan_cpan_path)
-
-    with open(join(cpan_cpan_path, 'MyConfig.pm'), 'w') as cpan_f, \
-         open(join(cpan_cpan_path, 'MyConfig_template.pm')) as cpan_tmpl_f:
-        cpan_f.write(cpan_tmpl_f.read().replace('{PATH}', tool_patb))
-
-    if 'PERL5LIB' not in environ:
-        environ['PERL5LIB'] = lib_path
-    else:
-        environ['PERL5LIB'] = environ['PERL5LIB'] + ':' + lib_path
-
-    if 'MANPATH' not in environ:
-        environ['MANPATH'] = lib_path
-    else:
-        environ['MANPATH'] = environ['MANPATH'] + ':' + man_path
-
-    env = {'PERL5LIB': lib_path, 'MANPATH': man_path}
-    if check(environ):
-        return
-
-    #if debug:
-    #    subprocess.call("perl -wle'print for grep /src/perl_modules/, @INC'",
-    #                    shell=True, env=environ,
-    #                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-    #call('perl -MCPAN -we shell', shell=True,
-    #                stdin=open(), stdout=)
-
-    #log.info('Installing Data::Dumper...')
-    #cmd = ['cpan', '-j', join(cpan_cpan_path, 'MyConfig.pm'), 'Data::Dumper']
-    #log.debug(' '.join(cmd))
-    #call(cmd, env=env,
-    #     stdout=(open(devnull, 'w') if not debug else PIPE),
-    #     stderr=(open(log_file_path, 'w') if not debug else PIPE))
-
-    #log.info('Installing DBI...')
-    #cmd = ['cpan', '-j', join(cpan_cpan_path, 'MyConfig.pm'), 'DBI']
-    #log.debug(' '.join(cmd))
-    #call(cmd, env=env,
-    #     stdout=(open(devnull, 'w') if not debug else PIPE),
-    #     stderr=(open(log_file_path, 'w') if not debug else PIPE))
-
-    log.info('Installing DBD::mysql...')
-    cmd = ['cpan', '-f', '-j', join(cpan_cpan_path, 'MyConfig.pm'), 'DBD::mysql']
-    log.debug(' '.join(cmd))
-    call(cmd, env=env)
-
-
-    #p = Popen('perl -MCPAN -we shell'.split(),
-    #          stdout=(open(devnull, 'w') if not debug else PIPE),
-    #          stdin=PIPE,
-    #          stderr=(open(log_file_path, 'w') if not debug else PIPE))
+    # tool_patb = join(dirname(realpath(__file__)), '../')
+    # assert isdir(tool_patb)
+    # perl_modules_path = join(tool_patb, 'perl_modules')
+    # lib_path = join(perl_modules_path, 'lib')
+    # man_path = join(perl_modules_path, 'man')
+    # cpan_path = join(tool_patb, '.cpan')
+    # cpan_cpan_path = join(cpan_path, 'CPAN')    #    subprocess.call("perl -wle'print for grep /src/perl_modules/, @INC'",
     #
-    #grep_stdout = p.communicate(input='one\ntwo\nthree\nfour\nfive\nsix\n')[0]
-    #print(grep_stdout)
+    # if not isdir(perl_modules_path):
+    #     mkdir(perl_modules_path)
+    #     mkdir(lib_path)
+    #     mkdir(man_path)
+    #     mkdir(join(man_path, 'man1'))
+    #     mkdir(join(man_path, 'man3'))
+    # if not isdir(cpan_path): mkdir(cpan_path)
+    # if not isdir(cpan_cpan_path): mkdir(cpan_cpan_path)
+    #
+    # with open(join(cpan_cpan_path, 'MyConfig.pm'), 'w') as cpan_f, \
+    #      open(join(cpan_cpan_path, 'MyConfig_template.pm')) as cpan_tmpl_f:
+    #     cpan_f.write(cpan_tmpl_f.read().replace('{PATH}', tool_patb))
+    #
+    # if 'PERL5LIB' not in environ:
+    #     environ['PERL5LIB'] = lib_path
+    # else:
+    #     environ['PERL5LIB'] = environ['PERL5LIB'] + ':' + lib_path
+    #
+    # if 'MANPATH' not in environ:
+    #     environ['MANPATH'] = lib_path
+    # else:
+    #     environ['MANPATH'] = environ['MANPATH'] + ':' + man_path
+    #
+    # env = {'PERL5LIB': lib_path, 'MANPATH': man_path}
+    # if check(environ):
+    #     return
+
+        #if debug:
+        #    subprocess.call("perl -wle'print for grep /src/perl_modules/, @INC'",
+        #                    shell=True, env=environ,
+        #                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        #call('perl -MCPAN -we shell', shell=True,
+        #                stdin=open(), stdout=)
+
+        #log.info('Installing Data::Dumper...')
+        #cmd = ['cpan', '-j', join(cpan_cpan_path, 'MyConfig.pm'), 'Data::Dumper']
+        #log.debug(' '.join(cmd))
+        #call(cmd, env=env,
+        #     stdout=(open(devnull, 'w') if not debug else PIPE),
+        #     stderr=(open(log_file_path, 'w') if not debug else PIPE))
+
+        #log.info('Installing DBI...')
+        #cmd = ['cpan', '-j', join(cpan_cpan_path, 'MyConfig.pm'), 'DBI']
+        #log.debug(' '.join(cmd))
+        #call(cmd, env=env,
+        #     stdout=(open(devnull, 'w') if not debug else PIPE),
+        #     stderr=(open(log_file_path, 'w') if not debug else PIPE))
+
+    # log.info('Installing DBD::mysql...')
+    # # log.debug(' '.join(cmd))
+    # cmdline('cpan',
+    #         ['-f',
+    #          '-rj',
+    #          join(cpan_cpan_path, 'MyConfig.pm'),
+    #          'DBD::mysql'],
+    #         env=env,
+    #         stdout='pipe',
+    #         stderr='pipe')()
+
+        #p = Popen('perl -MCPAN -we shell'.split(),
+        #          stdout=(open(devnull, 'w') if not debug else PIPE),
+        #          stdin=PIPE,
+        #          stderr=(open(log_file_path, 'w') if not debug else PIPE))
+        #
+        #grep_stdout = p.communicate(input='one\ntwo\nthree\nfour\nfive\nsix\n')[0]
+        #print(grep_stdout)
 
 
-    #log.info('Installing DBD::mysql perl module...')
-    #if which('yum'):
-    #    res = call('yum install "perl(DBD::mysql)"'.split(),
-    #                stderr=open(devnull, 'w'),
-    #                stdout=open(devnull, 'w'))
-    #elif which('apt-get'):
-    #    res = call('sudo apt-get install libdbd-mysql-perl"'.split(),
-    #                stderr=open(devnull, 'w'),
-    #                stdout=open(devnull, 'w'))
-    #else:
-    #    log.error('Cannot install DBD::mysql for your system.')
+        #log.info('Installing DBD::mysql perl module...')
+        #if which('yum'):
+        #    res = call('yum install "perl(DBD::mysql)"'.split(),
+        #                stderr=open(devnull, 'w'),
+        #                stdout=open(devnull, 'w'))
+        #elif which('apt-get'):
+        #    res = call('sudo apt-get install libdbd-mysql-perl"'.split(),
+        #                stderr=open(devnull, 'w'),
+        #                stdout=open(devnull, 'w'))
+        #else:
+        #    log.error('Cannot install DBD::mysql for your system.')
 
-    if not check(env):
+    if not check():  # (env):
         if only_warn:
             log.warning('WARNING: Could not find or install Perl modules.')
         else:

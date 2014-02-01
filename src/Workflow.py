@@ -124,6 +124,19 @@ def cmdline(command, parameters=None, stdin=None,
 
             if stderr_f == subprocess.PIPE:
                 for line in iter(p.stderr.readline, ''):
+
+                    if start_ignoring_from:
+                        import re
+                        a = re.compile(start_ignoring_from)
+                        if a.match(line.strip()):
+                            break
+
+                    if ignore_lines_by_pattern:
+                        import re
+                        a = re.compile(ignore_lines_by_pattern)
+                        if a.match(line.strip()):
+                            continue
+                            
                     if stderr == 'pipe':
                         log.info('   ' + line.strip())
                     if stderr == 'log':

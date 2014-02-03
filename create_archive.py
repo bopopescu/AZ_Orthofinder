@@ -16,7 +16,7 @@ structure = [
     'scenario_2.py',
     'clean_db.py',
     'src',
-    '.cpan',
+    #'.cpan',
     'test_input',
     'config.txt',
     ]

@@ -85,9 +85,9 @@ def parse_args(args):
 
     op.usage += '''
     Test runs:
-    python scenario_2.py test_ids --ids test_input/add_ids.txt
+    python scenario_2.py test_ids --ids test_input/new_ids.txt
 
-    python scenario_2.py test_proteomes --proteomes test_input/add_proteins
+    python scenario_2.py test_proteomes --proteomes test_input/new_proteins
     '''
 
     p = op.parse_args(args)

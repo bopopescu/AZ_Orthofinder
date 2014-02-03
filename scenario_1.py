@@ -53,7 +53,7 @@ def parse_args(args):
     op.usage = '''Finding orthogroups for a list of annotations / proteomes / ref ids / species.
 
     usage: %s [--proteomes dir] [--annotations dir] [--ids-list file] [--species-list file]
-                        [-o] [-t num] [--start-from step]
+                         [-o] [-t num] [--start-from step]
 
     -o:                  Output directory.
 
@@ -85,6 +85,14 @@ def parse_args(args):
     #    indent + '[--species-file FILE]\n'
 
     add_common_arguments(op)
+
+    op.usage += '''
+    Test runs:
+    python scenario_1.py --ids test_input/ids.txt -o test_ids
+
+    python scenario_1.py --proteomes test_input/proteins -o test_proteomes
+    '''
+
     p = op.parse_args(args)
 
     check_common_args(p)

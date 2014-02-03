@@ -36,6 +36,7 @@ def parse_args(args):
 
     op.add_argument(dest='directory')
 
+    op.add_argument('-o', '--out', dest='out_dir', required=False)
     op.add_argument('-a', '--assemblies', dest='assemblies')
     op.add_argument('-g', '--gbs', dest='annotations')
     op.add_argument('-p', '--proteomes', '--proteins', dest='proteomes')
@@ -44,13 +45,14 @@ def parse_args(args):
     op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
     op.add_argument('--blastdb', dest='blastdb')
 
+    #-o:                  Output directory (if not specified, the input directory will be used).
+
     op.usage = '''Extends an orthogroup database and orthogroups files.
     First argument is a fath to existed Scenario 1 output.
 
-    usage: %s <directory> [--assemblies dir]
-                        [--proteomes dir] [--annotations dir] [--ids-list file]
-                        [--species-list file]
-                        [-t num] [--start-from step]
+    usage: %s <directory> [--assemblies dir] [--proteomes dir]
+                                     [--gbs dir] [--ids-list file] [--species-list file]
+                                     [-t num] [--start-from step] [--blast-db]
 
     First argument <directory> is a fath to existed Scenario 1 output.
 
@@ -80,6 +82,14 @@ def parse_args(args):
     #    indent + '[--proteome FASTA]\n'
 
     add_common_arguments(op)
+
+    op.usage += '''
+    Test runs:
+    python scenario_2.py test_ids --ids test_input/add_ids.txt
+
+    python scenario_2.py test_proteomes --proteomes test_input/add_proteins
+    '''
+
     p = op.parse_args(args)
 
     check_common_args(p)
@@ -259,6 +269,7 @@ def step_blast_singletones(blastdb=None, debug=False, rewrite=False):
                     log.info('     e-value: ' + str(best_hits.evalue))
                     log.info('     score:   ' + str(best_hits.score))
                     for hit, alignment in zip(best_hits.hits, best_hits.alignments):
+                        log.info('     hits:')
                         log.info('       title:     ' + alignment.title)
                         log.info('       accession: ' + alignment.hit_id)
                         log.info('       length:    ' + str(alignment.length))

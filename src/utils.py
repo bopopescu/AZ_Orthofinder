@@ -194,7 +194,7 @@ def check_install_mcl(debug, log_path=log_fname, only_warn=False):
     chdir(mcl_dir)
     mcl_path = join(mcl_dir, 'bin')
 
-    exec_cmdline(join(mcl_dir, 'configure') + ' -q --prefix=' + mcl_path)
+    exec_cmdline('./configure' + ' -q --prefix=' + mcl_path)
     exec_cmdline('make')
     exec_cmdline('make check')
     exec_cmdline('make install')

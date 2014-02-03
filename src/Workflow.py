@@ -18,10 +18,11 @@ orthomcl_bin_dir = config.orthomcl_bin_dir
 
 
 class Workflow:
-    def __init__(self, working_dir, id):
+    def __init__(self, working_dir, id, cmdline_args):
         self.working_dir = working_dir
         self.id = id
         self.steps = []
+        self.cmdline_args = cmdline_args
 
     def add(self, step):
         self.steps.append(step)
@@ -53,13 +54,21 @@ class Workflow:
             log.info(str(i) + '. ' + step.name)
             res = step._run(overwrite, ask_before)
             if res != 0:
-                log.info('')
-                log.warning('   Process was not complete. You can restart from this point '
-                            'using --start-from "' + step.name + '"')
+                if '--start-from' in self.cmdline_args:
+                    i = self.cmdline_args.index('--start-from')
+                    del self.cmdline_args[i]
+                    del self.cmdline_args[i]
+
+                self.cmdline_args.append('--start-from')
+                self.cmdline_args.append(str(i))
+
+                log.warn('')
+                log.warn('   Process was not complete. You can restart from this point with the following:')
+                log.warn('       ' + ' '.join(self.cmdline_args))
                 return 1
+
             log.info('   Done.')
             log.info('')
-
         return 0
 
 

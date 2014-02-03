@@ -139,7 +139,7 @@ def step_finding_genes(assembly_names):
 blasted_singletones_dir = 'blasted_singletones'
 
 
-def step_blast_singletones(blastdb=None, debug=False):
+def step_blast_singletones(blastdb=None, debug=False, rewrite=False):
     def run(singletones_file, new_proteomes_dir):
         from Bio.Blast.Applications import NcbiblastxCommandline
         from Bio.Blast import NCBIWWW, NCBIXML
@@ -155,15 +155,16 @@ def step_blast_singletones(blastdb=None, debug=False):
                           ' to use the remote NCBI database.')
                 return 1
 
-            if exists(blasted_singletones_dir):
+            if rewrite and exists(blasted_singletones_dir):
                 rmtree(blasted_singletones_dir)
             if not isdir(blasted_singletones_dir):
                 mkdir(blasted_singletones_dir)
 
-        for group_singletones_file in (join(steps.singletone_dir, fname)
-                                       for fname in listdir(steps.singletone_dir)
-                                       if fname and fname[0] != '.'):
-            log.debug('     ' + group_singletones_file)
+        for i, group_singletones_file in enumerate(
+                (join(steps.singletone_dir, fname)
+                 for fname in listdir(steps.singletone_dir)
+                 if fname and fname[0] != '.')):
+            log.debug('   ' + str(i) + '. ' + group_singletones_file)
             rec = next(SeqIO.parse(group_singletones_file, 'fasta'))
             log.info('     Reading ' + rec.id)
 
@@ -174,23 +175,36 @@ def step_blast_singletones(blastdb=None, debug=False):
                 pass
             else:
                 log.info('     Blasting against the refseq_proteins database...')
+
                 if blastdb:
-                    cmdline = NcbiblastxCommandline(
+                    blast_cmdline = NcbiblastxCommandline(
                         query=group_singletones_file,
                         db='refseq_protein',
                         outfmt=5,
                         out=full_xml_fpath)
-                    stdout, stderr = cmdline()
-                else:
-                    try:
-                        full_xml_f = NCBIWWW.qblast('blastp', 'refseq_protein', rec.format('fasta'))
-                        with open(full_xml_fpath, 'w') as save_f:
-                            save_f.write(full_xml_f.read())
+                    stdout, stderr = blast_cmdline()
 
-                    except urllib2.HTTPError as e:
-                        log.error('   Could not blast through web. ' + e.msg)
-                        log.error('   Try running from this step again.')
-                        return 1
+                else:
+                    retrying = False
+                    while True:
+                        try:
+                            full_xml_f = NCBIWWW.qblast('blastp', 'refseq_protein', rec.format('fasta'))
+                            with open(full_xml_fpath, 'w') as save_f:
+                                save_f.write(full_xml_f.read())
+
+                        except urllib2.HTTPError as e:
+                            log.warn('')
+                            log.warn('   Warning: could not blast through web. %s. '
+                                     'Retrying... (You can type Ctrl-C to interrupt and continue later).' % e.msg)
+                            retrying = True
+
+                        except (KeyboardInterrupt, SystemExit, GeneratorExit):
+                            if retrying:
+                                log.info('   If you restart from this step and do not remove the "%s" directory, '
+                                         'the process will continue from here.' % blasted_singletones_dir)
+                                return 1
+
+                    log.info('   Try running from this step again.')
 
             # Searching best hit
             LEN_FACTOR = 0.05
@@ -455,7 +469,8 @@ def main(args):
         if not exists('intermediate'):
             arg_parse_error('You need to run Scenario 1 on this directory first.')
 
-        workflow = Workflow(working_dir, id=make_workflow_id(working_dir))
+        workflow = Workflow(working_dir, id=make_workflow_id(working_dir),
+                            cmdline_args=['python', basename(__file__)] + args)
         log.info('Workflow id is "' + workflow.id + '"')
         log.info('')
         suffix = '_' + workflow.id

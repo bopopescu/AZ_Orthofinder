@@ -246,7 +246,8 @@ def main(args):
         log.info('Changing to %s' % working_dir)
         chdir(working_dir)
 
-        workflow = Workflow(working_dir, id=make_workflow_id(working_dir))
+        workflow = Workflow(working_dir, id=make_workflow_id(working_dir),
+                            cmdline_args=['python', basename(__file__)] + args)
         log.info('Workflow id is "' + workflow.id + '"')
         log.info('')
         suffix = '_' + workflow.id

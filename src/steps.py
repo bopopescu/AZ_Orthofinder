@@ -36,7 +36,7 @@ groups_file               = 'groups.txt'
 singletons_file           = 'singletons.txt'
 orthogroups_file          = 'orthogroups.tsv'
 nice_orthogroups_file     = 'orthogroups_nice.txt'
-short_orthogroups_file    = 'orthogroups.txt'
+short_orthogroups_file    = 'orthogroups_short.tsv'
 assembly_singletones_file = 'assembly_singletones.txt'
 singletone_dir            = 'new_singletones'
 

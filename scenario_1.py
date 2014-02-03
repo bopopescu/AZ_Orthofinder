@@ -293,10 +293,14 @@ def main(args):
         if result == 0:
             log.info('Done.')
             log.info('Log is in ' + join(working_dir, log_fname))
-            log.info('Groups are in ' + join(working_dir, steps.orthogroups_file))
-            if isfile(steps.nice_orthogroups_file):
-                log.info('Groups with aligned columns are in ' +
-                         join(working_dir, steps.nice_orthogroups_file))
+            if internet_is_on:
+                log.info('Groups are in ' + join(working_dir, steps.orthogroups_file))
+                if isfile(steps.nice_orthogroups_file):
+                    log.info('Groups with aligned columns are in ' +
+                             join(working_dir, steps.nice_orthogroups_file))
+            else:
+                log.info('Groups in short format are in ' + join(working_dir, steps.short_orthogroups_file))
+
         return result
 
     except (KeyboardInterrupt, SystemExit, GeneratorExit):

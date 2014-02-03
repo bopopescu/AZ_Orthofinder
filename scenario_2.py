@@ -38,9 +38,9 @@ def parse_args(args):
 
     op.add_argument('-o', '--out', dest='out_dir', required=False)
     op.add_argument('-a', '--assemblies', dest='assemblies')
-    op.add_argument('-g', '--gbs', dest='annotations')
+    op.add_argument('-g', '--annotations', '--gbs', dest='annotations')
     op.add_argument('-p', '--proteomes', '--proteins', dest='proteomes')
-    op.add_argument('-i', '--ids-list', dest='ids_list')
+    op.add_argument('-i', '--ids', '--ids-list', dest='ids_list')
 
     op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
     op.add_argument('--blastdb', dest='blastdb')

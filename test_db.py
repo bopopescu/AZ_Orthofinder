@@ -1,4 +1,5 @@
-import sys
+#!/usr/bin/env python
+
 import traceback
 import src.mysql.connector
 from src.mysql.connector import errorcode

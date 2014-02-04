@@ -1,3 +1,4 @@
-from site import addsitedir
-from os.path import join, realpath
-addsitedir(join(realpath(__file__), '..', '..'))
+import sys
+from src import config
+
+sys.path = [config.src_dir] + sys.path

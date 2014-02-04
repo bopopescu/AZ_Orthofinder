@@ -10,7 +10,7 @@ import logging
 log = logging.getLogger(config.log_fname)
 
 import sys
-sys.path.append(config.src_dir)
+sys.path = [config.src_dir] + sys.path
 
 
 class DbCursor:

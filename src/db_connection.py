@@ -51,8 +51,8 @@ class DbCursor:
                 cmd1 = 'mysqld --port=%s &' % conf['db_port']
                 cmd2 = 'mysqld_safe --port=%s &' % conf['db_port']
                 log.info('   Could not connect to MySql server. '
-                         'The connection address: %s:%s, login: %s, password: %s, database: %s. '
-                         'Please, review the connection options in the confix.txt file in the root directory.' %
+                         'The connection address: %s, port: %s, login: %s, password: %s, database: %s. '
+                         'Please, review the connection options in the config.txt file in the root directory.' %
                          (self.db_server, self.db_port, self.db_login, self.db_passw, 'orthomcl'))
                 log.info('   If the server is not running, '
                          'please, start it at another terminal with "%s" or "%s"' % (cmd1, cmd2))

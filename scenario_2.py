@@ -48,15 +48,20 @@ def parse_args(args):
     #-o:                  Output directory (if not specified, the input directory will be used).
 
     op.usage = '''Extends an orthogroup database and orthogroups files.
-    First argument is a fath to existed Scenario 1 output.
+First argument is a fath to existed Scenario 1 output.
 
-    usage: %s <directory> [--assemblies dir] [--proteomes dir]
-                                     [--gbs dir] [--ids-list file] [--species-list file]
-                                     [-t num] [--start-from step] [--blast-db]
+Test runs:
+    python scenario_2.py test_ids --ids test_input/new_ids.txt
+
+    python scenario_2.py test_proteomes --proteomes test_input/new_proteins
+
+Usage: %s <directory> [--assemblies dir] [--proteomes dir]
+                                 [--gbs dir] [--ids-list file] [--species-list file]
+                                 [-t num] [--start-from step] [--blast-db]
 
     First argument <directory> is a fath to existed Scenario 1 output.
 
-    Optional arguments:
+Optional arguments:
     -a --assemblies:     Directory with assemblies in fasta format.
 
     -g --gbs:            Directory with gb files.
@@ -82,13 +87,6 @@ def parse_args(args):
     #    indent + '[--proteome FASTA]\n'
 
     add_common_arguments(op)
-
-    op.usage += '''
-    Test runs:
-    python scenario_2.py test_ids --ids test_input/new_ids.txt
-
-    python scenario_2.py test_proteomes --proteomes test_input/new_proteins
-    '''
 
     p = op.parse_args(args)
 

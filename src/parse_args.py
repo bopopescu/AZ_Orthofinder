@@ -79,7 +79,7 @@ def add_common_arguments(op):
 
     -t  --threads          Number of threads to run Blast. Default 30.
 
-    Fine tuning parameters:
+Fine tuning:
     --min-length           Minimum allowed length of proteins (default: 10)
 
     --max-percent_stop     Maximum percent stop codons (default: 20)

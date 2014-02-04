@@ -29,7 +29,7 @@ from site import addsitedir
 from os.path import join, realpath, dirname
 import sys
 addsitedir(join(dirname(realpath(__file__)), '..', '..'))
-#sys.path.append(join(dirname(realpath(__file__)), '../../'))
+sys.path.append(join(dirname(realpath(__file__)), '../../'))
 
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.errors import (  # pylint: disable=W0622

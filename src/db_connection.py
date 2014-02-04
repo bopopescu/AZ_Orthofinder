@@ -1,5 +1,6 @@
 from os import system
 import subprocess
+import traceback
 import mysql.connector
 from mysql.connector import errorcode
 from os.path import join, dirname, realpath
@@ -47,6 +48,8 @@ class DbCursor:
                 with open(config.config_file) as cf:
                     conf = dict(l.strip().split('=', 1) for l
                                 in cf.readlines() if l.strip()[0] != '#')
+
+                log.warn('   ' + traceback.print_exc(limit=0))
 
                 cmd1 = 'mysqld --port=%s &' % conf['db_port']
                 cmd2 = 'mysqld_safe --port=%s &' % conf['db_port']

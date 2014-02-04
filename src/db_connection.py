@@ -49,7 +49,7 @@ class DbCursor:
                     conf = dict(l.strip().split('=', 1) for l
                                 in cf.readlines() if l.strip()[0] != '#')
 
-                log.warn('   ' + traceback.print_exc(limit=0))
+                log.warn('   ' + str(traceback.format_exc(limit=0)))
 
                 cmd1 = 'mysqld --port=%s &' % conf['db_port']
                 cmd2 = 'mysqld_safe --port=%s &' % conf['db_port']

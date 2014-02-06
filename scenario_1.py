@@ -22,7 +22,7 @@ from src.parse_args import arg_parse_error, check_file, check_dir, \
 from src.logger import set_up_logging
 from src.Workflow import Workflow, Step
 
-import config
+from src import config
 
 from src.config import log_fname
 log = logging.getLogger(log_fname)
@@ -265,10 +265,8 @@ def main(args):
                         for l in f.readlines() if l.strip()[0] != '#')
             if conf['db_vendor'] == 'sqlite':
                 suffix = ''
-                config.orthomcl_bin_dir = config.orthomcl_sqlite_bin_dir
             else:
                 suffix = '_' + workflow.id
-                config.orthomcl_bin_dir = config.orthomcl_mysql_bin_dir
 
         if not p.overwrite:
             check_results_existence()

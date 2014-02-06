@@ -9,6 +9,13 @@ orthomcl_config = join(dirname(realpath(__file__)), 'orthomcl.config')
 orthomcl_sqlite_bin_dir = join(dirname(realpath(__file__)), 'orthomcl_software/bin')
 orthomcl_mysql_bin_dir = join(dirname(realpath(__file__)), 'orthomcl_software_mysql/bin')
 orthomcl_bin_dir = orthomcl_sqlite_bin_dir
+with open(config_file) as f:
+    conf = dict(l.strip().lower().split('=', 1)
+                for l in f.readlines() if l.strip()[0] != '#')
+    if conf['db_vendor'] == 'sqlite':
+        orthomcl_bin_dir = orthomcl_sqlite_bin_dir
+    else:
+        orthomcl_bin_dir = orthomcl_mysql_bin_dir
 mcl_dir = join(dirname(realpath(__file__)), 'mcl_software')
 mysql_linux_tar = join(dirname(realpath(__file__)), 'mysql-5.6.15-linux-glibc2.5-x86_64.tar.gz')
 mysql_osx_tar = join(dirname(realpath(__file__)), 'mysql-5.6.15-osx10.7-x86_64.tar.gz')

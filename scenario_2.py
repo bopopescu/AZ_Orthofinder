@@ -24,7 +24,7 @@ from src.parse_args import arg_parse_error, check_file,\
 from src.logger import set_up_logging
 from src.Workflow import Workflow, Step, cmdline
 
-import config
+from src import config
 
 from src.config import log_fname
 log = logging.getLogger(log_fname)

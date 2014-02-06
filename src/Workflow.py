@@ -3,7 +3,7 @@ from itertools import izip, count, ifilterfalse, ifilter
 from os import remove
 from os.path import basename, exists
 from shutil import rmtree
-from subprocess import call
+import sqlite3
 import subprocess
 from db_connection import DbCursor
 from mysql.connector import errorcode
@@ -31,6 +31,18 @@ class Workflow:
         self.steps.extend(steps)
 
     def run(self, start_after, start_from, overwrite, ask_before):
+        if start_after is not None \
+                and isinstance(start_after, basestring):
+            start_after = start_after.lower()
+            step_found = False
+            for step in self.steps:
+                step_found = (start_after.lower() == step.name.lower())
+            if not step_found:
+                log.error('Step %s was not found, maybe incorrect spelling? The list of available steps:')
+                for i, step in izip(count(1), filter(None, self.steps)):
+                    log.error('  %d. %s' % (i, step.name))
+                log.error('')
+
         for i, step in izip(count(1), filter(None, self.steps)):
             if start_after is not None \
                     and isinstance(start_after, basestring) \
@@ -64,7 +76,7 @@ class Workflow:
 
                 log.warn('')
                 log.warn('   Process was not complete. You can restart from this point with the following:')
-                log.warn('       ' + ' '.join(self.cmdline_args))
+                log.warn('      ' + ' '.join(self.cmdline_args))
                 return 1
 
             log.info('   Done.')
@@ -192,7 +204,7 @@ class Step:
                     try:
                         query = 'select count(*) from %s;' % table
                         cursor.execute(query)
-                    except mysql.connector.Error, err:
+                    except (mysql.connector.Error, sqlite3.OperationalError):
                         #log.debug('   err.errno == errorcode.ER_TABLE_EXISTS_ERROR: ' +
                         #          str(err.errno == errorcode.ER_TABLE_EXISTS_ERROR))
                         #log.debug(err.msg)
@@ -227,7 +239,7 @@ class Step:
                 for table in self.req_tables:
                     try:
                         cursor.execute('select count(*) from %s;' % table)
-                    except mysql.connector.Error, err:
+                    except (mysql.connector.Error, sqlite3.OperationalError):
                         missing_req_tables.append(table)
         if missing_req_tables:
             log.error('   ' + self.name + ' requires tables ' +
@@ -249,6 +261,8 @@ class Step:
                 for table in existing_prod_files:
                     try:
                         cursor.execute('drop table %s;' % table)
+                    except sqlite3.OperationalError, err:
+                        log.critical(err)
                     except mysql.connector.Error, err:
                         log.critical(err)
         return True, 0

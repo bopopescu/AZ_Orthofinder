@@ -468,12 +468,13 @@ def main(args):
     log.info('')
 
     try:
+        working_dir = p.out
+
         check_and_install_tools(p.debug, log_fpath)
-        set_up_config()
+        set_up_config(working_dir)
 
         start_from, start_after = get_starting_step(p.start_from, join(p.directory, log_fname))
 
-        working_dir = p.directory
         log.info('Changing to %s' % working_dir)
         chdir(working_dir)
 
@@ -484,7 +485,14 @@ def main(args):
                             cmdline_args=['python', basename(__file__)] + args)
         log.info('Workflow id is "' + workflow.id + '"')
         log.info('')
-        suffix = '_' + workflow.id
+
+        with open(config.config_file) as f:
+            conf = dict(l.strip().lower().split('=', 1)
+                        for l in f.readlines() if l.strip()[0] != '#')
+            if conf['db_vendor'] == 'sqlite':
+                suffix = ''
+            else:
+                suffix = '_' + workflow.id
 
         workflow.extend([
             step_prepare_input(p),
@@ -517,10 +525,14 @@ def main(args):
         if result == 0:
             log.info('Done.')
             log.info('Log is in ' + join(working_dir, log_fname))
-            log.info('Groups are in ' + join(working_dir, config.orthogroups_file))
-            if isfile(config.nice_orthogroups_file):
-                log.info('Groups with aligned columns are in ' +
-                         join(working_dir, config.nice_orthogroups_file))
+            if isfile(join(working_dir, config.orthogroups_file)):
+                log.info('Groups are in ' + join(working_dir, config.orthogroups_file))
+                if isfile(config.nice_orthogroups_file):
+                    log.info('Groups with aligned columns are in ' +
+                             join(working_dir, config.nice_orthogroups_file))
+            else:
+                log.info('Groups in short format are in ' + join(working_dir, config.short_orthogroups_file))
+
         return result
 
     except (KeyboardInterrupt, SystemExit, GeneratorExit):

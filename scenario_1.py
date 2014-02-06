@@ -99,26 +99,26 @@ Optional arguments:
 
     if not p.out:
         arg_parse_error('Specify output directory with -o.')
-    if isfile(p.out):
+    if isfile(expanduser(p.out)):
         arg_parse_error('%s is a file' % p.out)
     p.out = abspath(expanduser(p.out))
     if not isdir(p.out):
         mkdir(p.out)
 
     if p.species_list:
-        check_file(p.species_list)
+        check_file(expanduser(p.species_list))
         p.species_list = abspath(expanduser(p.species_list))
 
     if p.ids_list:
-        check_file(p.ids_list)
+        check_file(expanduser(p.ids_list))
         p.ids_list = abspath(expanduser(p.ids_list))
 
     if p.proteomes:
-        check_dir(p.proteomes)
+        check_dir(expanduser(p.proteomes))
         p.proteomes = abspath(expanduser(p.proteomes))
 
     if p.annotations:
-        check_dir(p.annotations)
+        check_dir(expanduser(p.annotations))
         p.annotations = abspath(expanduser(p.annotations))
 
     #if p.species_list or p.ids_list:

@@ -7,7 +7,7 @@ import sys
 import logging
 from os import chdir, mkdir, getcwd, listdir, symlink
 from os.path import join, exists, isdir, dirname, realpath,\
-    basename, splitext, abspath
+    basename, splitext, abspath, expanduser
 import urllib2
 from src.fetch_annotations import fetch_annotations_for_ids
 from src.process_assembly import filter_assembly
@@ -95,23 +95,24 @@ Optional arguments:
     check_common_args(p)
 
     if p.assemblies:
-        check_dir(p.assemblies)
-        p.assemblies = abspath(p.assemblies)
+        check_dir(expanduser(p.assemblies))
+        p.assemblies = abspath(expanduser(p.assemblies))
 
     if p.proteomes:
-        check_dir(p.proteomes)
-        p.proteomes = abspath(p.proteomes)
+        check_dir(expanduser(p.proteomes))
+        p.proteomes = abspath(expanduser(p.proteomes))
 
     if p.ids_list:
-        check_file(p.ids_list)
-        p.ids_list = abspath(p.ids_list)
+        check_file(expanduser(p.ids_list))
+        p.ids_list = abspath(expanduser(p.ids_list))
 
     if p.annotations:
-        check_dir(p.annotations)
-        p.annotations = abspath(p.annotations)
+        check_dir(expanduser(p.annotations))
+        p.annotations = abspath(expanduser(p.annotations))
 
-    if not isdir(p.directory):
+    if not isdir(expanduser(p.directory)):
         arg_parse_error('Directory %s does not exist.' % p.directory)
+    p.directory = abspath(expanduser(p.directory))
 
     return p
 
@@ -468,7 +469,7 @@ def main(args):
     log.info('')
 
     try:
-        working_dir = p.out
+        working_dir = p.directory
 
         check_and_install_tools(p.debug, log_fpath)
         set_up_config(working_dir)

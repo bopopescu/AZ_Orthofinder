@@ -31,14 +31,13 @@ class Workflow:
         self.steps.extend(steps)
 
     def run(self, start_after, start_from, overwrite, ask_before):
-        if start_after is not None \
-                and isinstance(start_after, basestring):
-            start_after = start_after.lower()
+        if start_from is not None \
+                and isinstance(start_from, basestring):
             step_found = False
             for step in self.steps:
-                step_found = (start_after.lower() == step.name.lower())
+                step_found = (start_from.lower() == step.name.lower())
             if not step_found:
-                log.error('Step %s was not found, maybe incorrect spelling? The list of available steps:')
+                log.error('Step "%s" was not found, maybe incorrect spelling? The list of available steps:' % start_from)
                 for i, step in izip(count(1), filter(None, self.steps)):
                     log.error('  %d. %s' % (i, step.name))
                 log.error('')

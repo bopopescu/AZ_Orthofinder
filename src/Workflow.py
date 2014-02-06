@@ -66,9 +66,9 @@ class Workflow:
             res = step._run(overwrite, ask_before)
             if res != 0:
                 if '--start-from' in self.cmdline_args:
-                    i = self.cmdline_args.index('--start-from')
-                    del self.cmdline_args[i]
-                    del self.cmdline_args[i]
+                    inx = self.cmdline_args.index('--start-from')
+                    del self.cmdline_args[inx]
+                    del self.cmdline_args[inx]
 
                 self.cmdline_args.append('--start-from')
                 self.cmdline_args.append(str(i))

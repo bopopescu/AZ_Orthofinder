@@ -24,6 +24,8 @@ from src.parse_args import arg_parse_error, check_file,\
 from src.logger import set_up_logging
 from src.Workflow import Workflow, Step, cmdline
 
+import config
+
 from src.config import log_fname
 log = logging.getLogger(log_fname)
 
@@ -130,17 +132,17 @@ def step_finding_genes(assembly_names):
             return 0
 
     filtered_assemblies = \
-        [join(steps.intermediate_dir, asm_name + '.fna')
+        [join(config.intermediate_dir, asm_name + '.fna')
          for asm_name in assembly_names]
 
     predicted_proteomes = \
-        [join(steps.proteomes_dir, asm_name + '.fasta')
+        [join(config.proteomes_dir, asm_name + '.fasta')
          for asm_name in assembly_names]
 
     return Step(
         'Finding genes',
          run=run,
-         req_files=[steps.proteomes_dir, filtered_assemblies],
+         req_files=[config.proteomes_dir, filtered_assemblies],
          prod_files=[predicted_proteomes])
 
 
@@ -169,8 +171,8 @@ def step_blast_singletones(blastdb=None, debug=False, rewrite=False):
                 mkdir(blasted_singletones_dir)
 
         for i, group_singletones_file in enumerate(
-                (join(steps.singletone_dir, fname)
-                 for fname in listdir(steps.singletone_dir)
+                (join(config.singletone_dir, fname)
+                 for fname in listdir(config.singletone_dir)
                  if fname and fname[0] != '.')):
             log.debug('   ' + str(i) + '. ' + group_singletones_file)
             rec = next(SeqIO.parse(group_singletones_file, 'fasta'))
@@ -283,8 +285,8 @@ def step_blast_singletones(blastdb=None, debug=False, rewrite=False):
 
     return Step(
        'Blasting singletones',
-        run=lambda: run(steps.assembly_singletones_file, new_proteomes_dir),
-        req_files=[steps.assembly_singletones_file])
+        run=lambda: run(config.assembly_singletones_file, new_proteomes_dir),
+        req_files=[config.assembly_singletones_file])
 
 
 new_proteomes_dir = 'new_proteomes'
@@ -321,10 +323,10 @@ def step_prepare_input(p):
                 for f in listdir(p.assemblies)
                 if f and f[0] != '.']
 
-            if isdir(steps.proteomes_dir):
-                assemblies = filter_dublicated_proteomes(steps.proteomes_dir, assemblies)
+            if isdir(config.proteomes_dir):
+                assemblies = filter_dublicated_proteomes(config.proteomes_dir, assemblies)
                 if assemblies == []:
-                    log.warn(all_considered_warning % steps.proteomes_dir)
+                    log.warn(all_considered_warning % config.proteomes_dir)
                     exit(1)
 
             assembly_names = [
@@ -334,7 +336,7 @@ def step_prepare_input(p):
                 join(assemblies_dir, asm_name + '.fna')
                 for asm_name in assembly_names]
             new_proteomes = [
-                join(steps.proteomes_dir, asm_name + '.fasta')
+                join(config.proteomes_dir, asm_name + '.fasta')
                 for asm_name in assembly_names]
 
             if not isdir(assemblies_dir): mkdir(assemblies_dir)
@@ -355,13 +357,13 @@ def step_prepare_input(p):
                 res = cmdline('prodigal',
                     parameters=[
                        '-i', asm,
-                       '-o', join(steps.intermediate_dir, asm_name),
+                       '-o', join(config.intermediate_dir, asm_name),
                        '-a', prot])()
                 if res != 0:
                     return res
                 log.info('')
 
-            res = adjust_proteomes(new_proteomes, steps.proteomes_dir,
+            res = adjust_proteomes(new_proteomes, config.proteomes_dir,
                                    prot_id_field=0)
             if res != 0:
                 return res
@@ -386,10 +388,10 @@ def step_prepare_input(p):
                 for prot in listdir(p.proteomes)
                 if prot and prot[0] != '.']
 
-            if isdir(steps.proteomes_dir):
-                input_proteomes = filter_dublicated_proteomes(steps.proteomes_dir, input_proteomes)
+            if isdir(config.proteomes_dir):
+                input_proteomes = filter_dublicated_proteomes(config.proteomes_dir, input_proteomes)
                 if input_proteomes == []:
-                    log.warn(all_considered_warning % steps.proteomes_dir)
+                    log.warn(all_considered_warning % config.proteomes_dir)
                     exit(1)
 
             new_prot_names = [splitext(basename(prot))[0] for prot in input_proteomes]
@@ -403,7 +405,7 @@ def step_prepare_input(p):
 
             for prot_from, prot_to in zip(input_proteomes, new_proteomes):
                 copy(prot_from, prot_to)
-                copy(prot_from, join(steps.proteomes_dir, basename(prot_to)))
+                copy(prot_from, join(config.proteomes_dir, basename(prot_to)))
 
             return 0
 
@@ -425,10 +427,10 @@ def step_prepare_input(p):
             if res != 0: return res
             for fname in listdir(new_annotations_dir):
                 if fname[0] != '.':
-                    copy(join(new_annotations_dir, fname), steps.annotations_dir)
+                    copy(join(new_annotations_dir, fname), config.annotations_dir)
             for fname in listdir(new_proteomes_dir):
                 if fname[0] != '.':
-                    copy(join(new_proteomes_dir, fname), steps.proteomes_dir)
+                    copy(join(new_proteomes_dir, fname), config.proteomes_dir)
 
             return 0
 
@@ -437,8 +439,8 @@ def step_prepare_input(p):
             run=run)
 
 
-new_good_proteomes = join(steps.intermediate_dir, 'new_good_proteins.fasta')
-new_bad_proteomes = join(steps.intermediate_dir, 'new_bad_proteins.fasta')
+new_good_proteomes = join(config.intermediate_dir, 'new_good_proteins.fasta')
+new_bad_proteomes = join(config.intermediate_dir, 'new_bad_proteins.fasta')
 
 
 def filter_new_proteomes(new_proteomes_dir, min_length=10, max_percent_stop=20):
@@ -515,10 +517,10 @@ def main(args):
         if result == 0:
             log.info('Done.')
             log.info('Log is in ' + join(working_dir, log_fname))
-            log.info('Groups are in ' + join(working_dir, steps.orthogroups_file))
-            if isfile(steps.nice_orthogroups_file):
+            log.info('Groups are in ' + join(working_dir, config.orthogroups_file))
+            if isfile(config.nice_orthogroups_file):
                 log.info('Groups with aligned columns are in ' +
-                         join(working_dir, steps.nice_orthogroups_file))
+                         join(working_dir, config.nice_orthogroups_file))
         return result
 
     except (KeyboardInterrupt, SystemExit, GeneratorExit):

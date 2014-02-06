@@ -1,3 +1,5 @@
+# db_vendor is either mysql, oracle or sqlite (for sqlite you don't have to specify anything)
+db_vendor=mysql
 db_server=127.0.0.1
 db_login=root
 db_password=1234

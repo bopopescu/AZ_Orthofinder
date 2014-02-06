@@ -20,13 +20,11 @@ if ($sqlLog) {
 }
 
 
-runSql("drop table IF EXISTS BestHit$suffix");
-runSql("drop table IF EXISTS BestQueryTaxonScore$suffix");
-runSql("drop table IF EXISTS " . $base->getConfig("similarSequencesTable") . $suffix);
-runSql("drop table IF EXISTS " . $base->getConfig("inParalogTable") . $suffix);
-runSql("drop table IF EXISTS " . $base->getConfig("orthologTable") . $suffix);
-runSql("drop table IF EXISTS " . $base->getConfig("coOrthologTable") . $suffix);
-runSql("drop view IF EXISTS " . $base->getConfig("interTaxonMatchView") . $suffix);
+runSql("drop table " . $base->getConfig("similarSequencesTable") . $suffix);
+runSql("drop table " . $base->getConfig("inParalogTable") . $suffix);
+runSql("drop table " . $base->getConfig("orthologTable") . $suffix);
+runSql("drop table " . $base->getConfig("coOrthologTable") . $suffix);
+runSql("drop view " . $base->getConfig("interTaxonMatchView") . $suffix);
 
 ##############################################################
 

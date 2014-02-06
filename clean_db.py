@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 from os.path import join, dirname, realpath
+import sqlite3
+from src import config
 import src.mysql.connector
 from src.mysql.connector import errorcode
 import sys
@@ -11,14 +13,17 @@ orthomcl_config = join(dirname(realpath(__file__)), 'src/orthomcl.config')
 orthomcl_bin_dir = join(dirname(realpath(__file__)), 'src/orthomcl_software/bin')
 
 
-def prt(txt):
+def print_if_main(txt):
     if __name__ == '__main__':
         print txt
 
 
 def clean_db(suffixes):
-    if not isinstance(suffixes, (list, tuple)):
-        suffixes = [suffixes]
+    if suffixes:
+        if not isinstance(suffixes, (list, tuple)):
+            suffixes = [suffixes]
+    else:
+        suffixes = ['']
 
     for suffix in suffixes:
         with open(orthomcl_config) as f:
@@ -52,21 +57,27 @@ def clean_db(suffixes):
             'BestHit',
             'BestQueryTaxonScore']]
 
-        with DbCursor() as cursor:
+        with DbCursor(data_fpath=config.sqlite_file) as cursor:
             for table in tables:
                 try:
                     query = 'drop table %s;' % table
-                    prt(query)
+                    print_if_main(query)
                     cursor.execute(query)
                 except src.mysql.connector.Error, err:
-                    prt(err.msg)
+                    print_if_main(err.msg)
+                    pass
+                except sqlite3.OperationalError, err:
+                    print_if_main(str(err))
                     pass
             try:
                 query = 'drop view %s;' % (conf['interTaxonMatchView'].strip() + suffix)
-                prt(query)
+                print_if_main(query)
                 cursor.execute(query)
             except src.mysql.connector.Error, err:
-                prt(err.msg)
+                print_if_main(err.msg)
+                pass
+            except sqlite3.OperationalError, err:
+                print_if_main(str(err))
                 pass
     return 0
 

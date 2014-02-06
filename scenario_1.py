@@ -4,7 +4,7 @@ import sys
 import logging
 from os import chdir, mkdir, getcwd, listdir
 from os.path import join, exists, isdir, isfile, dirname, realpath, \
-    basename, relpath, splitext, abspath
+    basename, relpath, splitext, abspath, expanduser
 from Bio import SeqIO
 
 from src.fetch_annotations import fetch_annotations_for_species_from_ftp, \
@@ -21,6 +21,8 @@ from src.parse_args import arg_parse_error, check_file, check_dir, \
     add_common_arguments, check_common_args
 from src.logger import set_up_logging
 from src.Workflow import Workflow, Step
+
+import config
 
 from src.config import log_fname
 log = logging.getLogger(log_fname)
@@ -99,25 +101,25 @@ Optional arguments:
         arg_parse_error('Specify output directory with -o.')
     if isfile(p.out):
         arg_parse_error('%s is a file' % p.out)
-    p.out = abspath(p.out)
+    p.out = abspath(expanduser(p.out))
     if not isdir(p.out):
         mkdir(p.out)
 
     if p.species_list:
         check_file(p.species_list)
-        p.species_list = abspath(p.species_list)
+        p.species_list = abspath(expanduser(p.species_list))
 
     if p.ids_list:
         check_file(p.ids_list)
-        p.ids_list = abspath(p.ids_list)
+        p.ids_list = abspath(expanduser(p.ids_list))
 
     if p.proteomes:
         check_dir(p.proteomes)
-        p.proteomes = abspath(p.proteomes)
+        p.proteomes = abspath(expanduser(p.proteomes))
 
     if p.annotations:
         check_dir(p.annotations)
-        p.annotations = abspath(p.annotations)
+        p.annotations = abspath(expanduser(p.annotations))
 
     #if p.species_list or p.ids_list:
     #    if not isdir(p.out):
@@ -171,9 +173,9 @@ def step_prepare_proteomes_and_annotations(p, internet_is_on):
             log.debug('   Using species list: ' + str(p.species_list))
             species_list = read_list(p.species_list)
             log.debug('species_list: ' + str(species_list))
-            res = fetch_annotations_species_name_entrez(steps.annotations_dir, species_list, p.proxy)
+            res = fetch_annotations_species_name_entrez(config.annotations_dir, species_list, p.proxy)
             if res != 0: return res
-            return make_proteomes(steps.annotations_dir, steps.proteomes_dir)
+            return make_proteomes(config.annotations_dir, config.proteomes_dir)
 
         elif p.ids_list:
             if not internet_is_on:
@@ -182,9 +184,9 @@ def step_prepare_proteomes_and_annotations(p, internet_is_on):
 
             log.debug('   Using ref ids: ' + str(p.ids_list))
             ref_ids = read_list(p.ids_list)
-            res = fetch_annotations_for_ids(steps.annotations_dir, ref_ids)
+            res = fetch_annotations_for_ids(config.annotations_dir, ref_ids)
             if res != 0: return res
-            return make_proteomes(steps.annotations_dir, steps.proteomes_dir)
+            return make_proteomes(config.annotations_dir, config.proteomes_dir)
 
         else:
             proteomes, annotations = [], []
@@ -206,31 +208,31 @@ def step_prepare_proteomes_and_annotations(p, internet_is_on):
             #    log.warn('Directory %s contains both fasta and genbank files, using fasta.')
 
             if annotations:
-                if not isdir(steps.annotations_dir):
-                    mkdir(steps.annotations_dir)
+                if not isdir(config.annotations_dir):
+                    mkdir(config.annotations_dir)
 
                 for annotation in annotations:
-                    copy(annotation, steps.annotations_dir)
+                    copy(annotation, config.annotations_dir)
 
-                return make_proteomes(steps.annotations_dir, steps.proteomes_dir)
+                return make_proteomes(config.annotations_dir, config.proteomes_dir)
 
             elif proteomes:
-                if not isdir(steps.proteomes_dir):
-                    mkdir(steps.proteomes_dir)
+                if not isdir(config.proteomes_dir):
+                    mkdir(config.proteomes_dir)
 
                 if not internet_is_on:
                     log.warn('   Warning: no internet connection, cannot fetch annotations. '
                              'A reduced version of orthogroups.txt with no annotations will be produced.')
                 else:
                     ref_ids = [splitext(basename(prot_file))[0] for prot_file in proteomes]
-                    fetch_annotations_for_ids(steps.annotations_dir, ref_ids)
+                    fetch_annotations_for_ids(config.annotations_dir, ref_ids)
 
-                return adjust_proteomes(proteomes, steps.proteomes_dir, p.prot_id_field)
+                return adjust_proteomes(proteomes, config.proteomes_dir, p.prot_id_field)
 
     return Step(
        'Preparing proteomes and annotations',
         run=run,
-        prod_files=[steps.proteomes_dir, steps.annotations_dir])
+        prod_files=[config.proteomes_dir, config.annotations_dir])
 
 
 def main(args):
@@ -243,12 +245,13 @@ def main(args):
     log.info('')
 
     try:
+        working_dir = p.out
+
         check_and_install_tools(p.debug, log_path)
-        set_up_config()
+        set_up_config(working_dir)
 
         start_from, start_after = get_starting_step(p.start_from, join(p.out, log_fname))
 
-        working_dir = p.out
         log.info('Changing to %s' % working_dir)
         chdir(working_dir)
 
@@ -256,13 +259,22 @@ def main(args):
                             cmdline_args=['python', basename(__file__)] + args)
         log.info('Workflow id is "' + workflow.id + '"')
         log.info('')
-        suffix = '_' + workflow.id
+
+        with open(config.config_file) as f:
+            conf = dict(l.strip().lower().split('=', 1)
+                        for l in f.readlines() if l.strip()[0] != '#')
+            if conf['db_vendor'] == 'sqlite':
+                suffix = ''
+                config.orthomcl_bin_dir = config.orthomcl_sqlite_bin_dir
+            else:
+                suffix = '_' + workflow.id
+                config.orthomcl_bin_dir = config.orthomcl_mysql_bin_dir
 
         if not p.overwrite:
             check_results_existence()
 
-        if not exists(steps.intermediate_dir):
-            mkdir(steps.intermediate_dir)
+        if not exists(config.intermediate_dir):
+            mkdir(config.intermediate_dir)
 
         internet_is_on = test_internet_conn()
 
@@ -291,13 +303,13 @@ def main(args):
         if result == 0:
             log.info('Done.')
             log.info('Log is in ' + join(working_dir, log_fname))
-            if internet_is_on:
-                log.info('Groups are in ' + join(working_dir, steps.orthogroups_file))
-                if isfile(steps.nice_orthogroups_file):
+            if isfile(join(working_dir, config.orthogroups_file)):
+                log.info('Groups are in ' + join(working_dir, config.orthogroups_file))
+                if isfile(config.nice_orthogroups_file):
                     log.info('Groups with aligned columns are in ' +
-                             join(working_dir, steps.nice_orthogroups_file))
+                             join(working_dir, config.nice_orthogroups_file))
             else:
-                log.info('Groups in short format are in ' + join(working_dir, steps.short_orthogroups_file))
+                log.info('Groups in short format are in ' + join(working_dir, config.short_orthogroups_file))
 
         return result
 

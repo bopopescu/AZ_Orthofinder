@@ -144,7 +144,7 @@ def save_orthogroups(new_prot_fpaths, annotations, mcl_output,
     with open(mcl_output) as mcl_f:
         groups_total = sum(1 for _ in mcl_f)
 
-    if not gb_fpaths or True:
+    if not gb_fpaths:
         with open(mcl_output) as mcl_f, \
              open(out_short, 'w') as out_f:
             gene_number = 0

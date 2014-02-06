@@ -64,8 +64,6 @@ printPreviousSubject($subject);
 
 ########################################################################################
 
-use File::Basename;
-
 sub getGenesFromFasta {
     my $fastaFilesDir = shift(@_);
     my (@fastaFiles) = @_;
@@ -74,11 +72,10 @@ sub getGenesFromFasta {
     foreach my $fastaFile (@fastaFiles) {
 	next if $fastaFile =~ /^\./;
 	print STDERR "acquiring genes from $fastaFile\n";
-	my @exts = qw(.faa .fasta);
-	my ($taxon, $dir, $ext) = fileparse($fastaFile, @exts);
-#	$fastaFile =~ /(\w+).fasta/ || die "'$fastaFile' is not in 'taxon.fasta' format\n";
-#	my $taxon = $1;
-#    print $dir, " ", $fastaFile, " ", $ext, " ";
+	$fastaFile =~ /(\S+).fasta/ || $fastaFile =~ /(\S+).fa/ || die "'$fastaFile' is not in 'taxon.fasta' format\n";
+	my $taxon = $1;
+#	my @exts = qw(.faa .fasta);
+#	my ($taxon, $dir, $ext) = fileparse($fastaFile, @exts);
 	open(FF,"$fastaFilesDir/$fastaFile") || die "can't open fasta file '$fastaFilesDir/$fastaFile'";
 	my $gene;
 	my $length;
@@ -107,10 +104,6 @@ sub getTaxonAndLength {
     $subject->{subjectTaxon} = $genes->{$subject->{subjectId}}->{taxon};
     $subject->{queryLength} = $genes->{$subject->{queryId}}->{length};
     $subject->{subjectLength} = $genes->{$subject->{subjectId}}->{length};
-#    print("$subject->{queryTaxon}\n");
-#    print("$subject->{subjectTaxon}\n");
-#    print("$subject->{queryLength}\n");
-#    print("$subject->{subjectLength}\n");
     die "couldn't find taxon for gene '$subject->{subjectId}'" unless $subject->{subjectTaxon};
     die "couldn't find taxon for gene '$subject->{queryId}'" unless $subject->{queryTaxon};
     return $subject->{queryLength} < $subject->{subjectLength};

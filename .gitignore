@@ -48,3 +48,5 @@ src/mcl_software/*
 .cpan
 .idea
 .idea/*
+.idea/az_orthofinder.iml
+.idea/inspectionProfiles/profiles_settings.xml

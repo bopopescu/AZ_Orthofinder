@@ -8,10 +8,11 @@ from subprocess import call, Popen, PIPE
 import re
 import tarfile
 import shutil
+import config
 from config import config_file, orthomcl_config, log_fname, mcl_dir, \
     mysql_cnf, mysql_linux_tar, mysql_osx_tar, mysql_extracted_dir, src_dir
 import logging
-from src.Workflow import cmdline
+from Workflow import cmdline
 
 log = logging.getLogger(log_fname)
 
@@ -223,6 +224,44 @@ def check_perl_modules(debug, only_warn=False):
 
         return dbimysql and dbd
 
+    if not check():  # (env):
+        if only_warn:
+            log.warning('WARNING: Could not find or install Perl modules.')
+        else:
+            log.error('ERROR: Could not find or install Perl modules. ')
+
+        print '''Pleasy, try the following manually:
+    $ perl -MCPAN -e shell
+    cpan> install Data::Dumper
+    cpan> install DBI
+    cpan> force install DBD::mysql
+    ''' % mysql_cnf
+        if only_warn:
+            return 0
+        else:
+            exit(4)
+
+
+def check_perl_modules_mysql(debug, only_warn=False):
+    def check(env=None):
+        dbimysql = call(
+            'perl -MDBD::mysql -e 1'.split(),
+             stderr=open(devnull, 'w'),
+             stdout=open(devnull, 'w'),
+             env=env) == 0
+        if not dbimysql:
+            log.debug('DBD::mysql is not installed.')
+
+        dbd = call(
+            'perl -MDBI -e 1'.split(),
+             stderr=open(devnull, 'w'),
+             stdout=open(devnull, 'w'),
+             env=env) == 0
+        if not dbd:
+            log.debug('DBI is not installed.')
+
+        return dbimysql and dbd
+
     # tool_patb = join(dirname(realpath(__file__)), '../')
     # assert isdir(tool_patb)
     # perl_modules_path = join(tool_patb, 'perl_modules')
@@ -353,10 +392,11 @@ def test_internet_conn():
         return True
 
 
-def set_up_config():
+def set_up_config(working_dir):
     with open(config_file) as cf:
-        conf = dict(l.strip().split('=', 1) for l
-                    in cf.readlines() if l.strip()[0] != '#')
+        conf = dict(
+            l.strip().split('=', 1) for l
+            in cf.readlines() if l.strip()[0] != '#')
         log.debug('Read conf: ' + str(conf))
 
     with open(orthomcl_config) as ocf:
@@ -365,23 +405,32 @@ def set_up_config():
 
     memory = int(conf['memory'])
 
-    omcl_conf['dbConnectString'] = \
-        'dbi:mysql:database=orthomcl;' \
-        'host=%s;' \
-        'port=%s;' \
-        'myisam_sort_buffer_size=%dG;' \
-        'read_buffer_size=%dG;' \
-        'innodb_buffer_pool_size=%dG;' \
-        'mysql_local_infile=1;' % (
-            conf['db_server'],
-            conf['db_port'],
-            memory / 2,
-            memory / 4,
-            memory / 4)
-    omcl_conf['dbLogin'] = conf['db_login']
-    omcl_conf['dbPassword'] = conf['db_password']
+    if conf['db_vendor'] == 'sqlite':
+        db_file = join(working_dir, config.sqlite_file)
 
-    log.debug('Database connection string: ' + omcl_conf['dbConnectString'])
+        omcl_conf['dbVendor'] = 'sqlite'
+        omcl_conf['dbConnectString'] = \
+            'DBI:SQLite:%s' % db_file
+
+    else:
+        omcl_conf['dbVendor'] = 'mysql'
+        omcl_conf['dbConnectString'] = \
+            'dbi:mysql:database=orthomcl;' \
+            'host=%s;' \
+            'port=%s;' \
+            'myisam_sort_buffer_size=%dG;' \
+            'read_buffer_size=%dG;' \
+            'innodb_buffer_pool_size=%dG;' \
+            'mysql_local_infile=1;' % (
+                conf['db_server'],
+                conf['db_port'],
+                memory / 2,
+                memory / 4,
+                memory / 4)
+        omcl_conf['dbLogin'] = conf['db_login']
+        omcl_conf['dbPassword'] = conf['db_password']
+
+        log.debug('Database connection string: ' + omcl_conf['dbConnectString'])
 
     with open(orthomcl_config, 'w') as ocf:
         ocf.writelines('='.join(item) + '\n' for item in omcl_conf.items())

@@ -257,7 +257,6 @@ def find_pairs(suffix):
             'OrthologTaxon',
             'OrthologUniqueId',
             'UniqSimSeqsQueryId',
-            'SimilarSequences'
         ]],
         prod_files=[])  # populates InParalog, Ortholog, CoOrtholog)
 

@@ -268,6 +268,9 @@ class Step:
 
 
     def _run(self, overwrite=False, step_by_step=False):
+        if step_by_step:
+            raw_input('   Proceed?')
+
         # Checking existence of produced tables and files
         ok, existing_prod_tables, code = self.__check_existence(overwrite)
         if not ok:
@@ -277,8 +280,5 @@ class Step:
         ok, code = self.__check_requirements(overwrite, existing_prod_tables)
         if not ok:
             return code
-
-        if step_by_step:
-            raw_input('   Proceed?')
 
         return self.run()

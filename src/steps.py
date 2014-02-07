@@ -1,6 +1,6 @@
 from genericpath import isfile
 from os import remove, listdir
-from os.path import basename, join, relpath, exists, isdir
+from os.path import basename, join, relpath, exists, isdir, realpath
 from shutil import rmtree
 
 from Workflow import Step, cmdline
@@ -95,10 +95,10 @@ def filter_proteomes(min_length=10, max_percent_stop=20):
     return Step(
         'Filtering proteomes',
          run=cmdline(join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
-             parameters=[config.proteomes_dir,
+             parameters=[realpath(config.proteomes_dir),
                          min_length, max_percent_stop,
-                         config.good_proteins,
-                         config.poor_proteins]),
+                         realpath(config.good_proteins),
+                         realpath(config.poor_proteins)]),
          req_files=[config.proteomes_dir],
          prod_files=[config.good_proteins, config.poor_proteins])
 
@@ -108,9 +108,9 @@ def make_blast_db():
          run=cmdline(
              'makeblastdb',
               parameters=[
-                '-in', config.good_proteins,
+                '-in', realpath(config.good_proteins),
                 '-input_type', 'fasta',
-                '-out', config.blast_db,
+                '-out', realpath(config.blast_db),
                 '-dbtype', 'prot'],
               stderr='log'),
          req_files=[config.good_proteins],
@@ -119,9 +119,9 @@ def make_blast_db():
 def blast(threads, new_good_proteomes=None, evalue=1e-5):
     if new_good_proteomes:
         parameters = [
-            '-query', new_good_proteomes,
-            '-db', config.blast_db,
-            '-out', config.blast_out + '_2',
+            '-query', realpath(new_good_proteomes),
+            '-db', realpath(config.blast_db),
+            '-out', realpath(config.blast_out + '_2'),
             '-outfmt', 6,  # tabular
             '-seg', 'yes',
             '-soft_masking', 'true',
@@ -129,9 +129,9 @@ def blast(threads, new_good_proteomes=None, evalue=1e-5):
             '-dbsize', BLAST_DBSIZE]
     else:
         parameters = [
-            '-query', config.good_proteins,
-            '-db', config.blast_db,
-            '-out', config.blast_out,
+            '-query', realpath(config.good_proteins),
+            '-db', realpath(config.blast_db),
+            '-out', realpath(config.blast_out),
             '-outfmt', 6,  # tabular
             '-seg', 'yes',
             '-soft_masking', 'true',
@@ -168,8 +168,8 @@ def parse_blast_results():
     return Step(
         'Parsing blast results',
          run=cmdline(join(orthomcl_bin_dir, 'orthomclBlastParser.pl'),
-                     parameters=[config.blast_out, config.proteomes_dir],
-                     stdout=config.similar_sequences),
+                     parameters=[realpath(config.blast_out), realpath(config.proteomes_dir)],
+                     stdout=realpath(config.similar_sequences)),
          req_files=[config.proteomes_dir, config.blast_out],
          prod_files=[config.similar_sequences])
 
@@ -183,8 +183,8 @@ def install_schema(suffix):
         'Installing schema',
          run=cmdline(join(orthomcl_bin_dir, 'orthomclInstallSchema.pl'),
                      parameters=[
-                         orthomcl_config,
-                         config.sql_log,
+                         realpath(orthomcl_config),
+                         realpath(config.sql_log),
                          suffix],
                      stderr='log'),
          req_files=[orthomcl_config],
@@ -200,8 +200,8 @@ def load_blast_results(suffix):
         'Loading blast results into the database',
          run=cmdline(join(orthomcl_bin_dir, 'orthomclLoadBlast.pl'),
                      parameters=[
-                         orthomcl_config,
-                         config.similar_sequences,
+                         realpath(orthomcl_config),
+                         realpath(config.similar_sequences),
                          suffix],
                      stderr='log'),
          req_files=[orthomcl_config,
@@ -209,14 +209,27 @@ def load_blast_results(suffix):
          prod_files=[])  # loads blast results into the db)
 
 def find_pairs(suffix):
+    def run():
+        #res = cmdline(
+        #    join(orthomcl_bin_dir, 'orthomclPairs.pl'),
+        #    parameters=[
+        #        orthomcl_config,
+        #        config.pairs_log,
+        #        'cleanup=only',
+        #        'suffix=' + (suffix if suffix else '*')])()
+        #log.info('   Cleaning: ' + str(res))
+
+        return cmdline(
+            join(orthomcl_bin_dir, 'orthomclPairs.pl'),
+            parameters=[
+                realpath(orthomcl_config),
+                realpath(config.pairs_log),
+                'cleanup=yes',
+                'suffix=' + (suffix if suffix else '*')])()
+
     return Step(
         'Finding pairs',
-         run=cmdline(
-             join(orthomcl_bin_dir, 'orthomclPairs.pl'),
-             parameters=[orthomcl_config,
-                         config.pairs_log,
-                         'cleanup=no',
-                         'suffix=' + (suffix if suffix else '*')]),
+         run=run,
          req_files=[orthomcl_config],
          #req_tables=[in_paralog_table + suffix,
          #            ortholog_table + suffix,
@@ -227,9 +240,9 @@ def dump_pairs_to_files(suffix):
     return Step(
         'Dumping pairs files',
          run=cmdline(join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
-             parameters=[orthomcl_config,
-                         relpath(config.mcl_input, config.intermediate_dir),
-                         config.intermediate_dir,
+             parameters=[realpath(orthomcl_config),
+                         realpath(config.mcl_input),
+                         realpath(config.intermediate_dir),
                          suffix],
              stderr='log'),
          req_files=[orthomcl_config],  # and populated InParalog, Ortholog, CoOrtholog tables
@@ -251,10 +264,10 @@ def mcl(debug, inflation=1.5):
         return cmdline(
             mcl_bin_path,
             parameters=[
-                config.mcl_input,
+                realpath(config.mcl_input),
                 '--abc',
                 '-I', str(inflation),
-                '-o', config.mcl_output],
+                '-o', realpath(config.mcl_output)],
             start_ignoring_from=r'Please cite:.*',
             stderr='log',
             stdout='log')()

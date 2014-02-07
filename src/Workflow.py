@@ -245,7 +245,7 @@ class Step:
                       ', '.join(missing_req_tables) + ' installed')
             return False, 1
 
-        # Removing existing data of overwrite
+        # Removing existing data if overwrite
         existing_prod_files = list(ifilter(exists, self.prod_files))
         if overwrite and existing_prod_files:
             log.info('   Overwriting existing ' + ', '.join(existing_prod_files))
@@ -259,6 +259,7 @@ class Step:
             with DbCursor() as cursor:
                 for table in existing_prod_files:
                     try:
+                        log.debug('   drop table %s;' % table)
                         cursor.execute('drop table %s;' % table)
                     except sqlite3.OperationalError, err:
                         log.critical(err)

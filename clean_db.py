@@ -47,6 +47,7 @@ def clean_db(suffixes):
             'InplgOrthTaxonAvg',
             'InplgOrthoInplg',
             'InterTaxonMatch',
+            'Ortholog',
             'OrthologAvgScore',
             'OrthologTemp',
             'Ortholog2Way',

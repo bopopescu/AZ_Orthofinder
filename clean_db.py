@@ -30,24 +30,23 @@ def clean_db(suffixes):
             conf = dict(l.split('=', 1) for l in f.readlines() if l[0] != '#')
 
         tables = [t.strip() + suffix for t in [
-            conf['orthologTable'],
-            conf['inParalogTable'],
-            conf['coOrthologTable'],
-            conf['similarSequencesTable'],
             'BestInterTaxonScore',
             'CoOrthNotOrtholog',
             'CoOrthologTaxon',
             'CoOrthologCandidate',
             'CoOrthologAvgScore',
             'CoOrthologTemp',
+            'CoOrtholog',
             'BetterHit',
             'InParalog2Way',
             'InParalogAvgScore',
+            'InParalog',
             'InParalogTemp',
             'InParalogTaxonAvg',
             'InParalogOrtholog',
             'InplgOrthTaxonAvg',
             'InplgOrthoInplg',
+            'InterTaxonMatch',
             'OrthologAvgScore',
             'OrthologTemp',
             'Ortholog2Way',
@@ -55,7 +54,8 @@ def clean_db(suffixes):
             'OrthologUniqueId',
             'UniqSimSeqsQueryId',
             'BestHit',
-            'BestQueryTaxonScore']]
+            'BestQueryTaxonScore',
+            'SimilarSequences']]
 
         with DbCursor(data_fpath=config.sqlite_file) as cursor:
             for table in tables:

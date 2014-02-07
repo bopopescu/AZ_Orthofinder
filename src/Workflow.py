@@ -257,11 +257,9 @@ class Step:
                 if isdir(file):
                     rmtree(file)
 
-        log.debug('2 existing_prod_tables = ' + str(existing_prod_tables))
-        log.debug('2 overwrite = ' + str(overwrite))
         if overwrite and existing_prod_tables:
             with DbCursor() as cursor:
-                for table in existing_prod_files:
+                for table in existing_prod_tables:
                     try:
                         log.debug('   drop table %s;' % table)
                         cursor.execute('drop table %s;' % table)
@@ -278,12 +276,10 @@ class Step:
 
         # Checking existence of produced tables and files
         ok, existing_prod_tables, code = self.__check_existence(overwrite)
-        log.debug('existing_prod_tables = ' + str(existing_prod_tables))
         if not ok:
             return code
 
         # Checking requirements
-        log.debug('overwrite = ' + str(overwrite))
         ok, code = self.__check_requirements(overwrite, existing_prod_tables)
         if not ok:
             return code

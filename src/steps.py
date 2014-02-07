@@ -199,19 +199,21 @@ def install_schema(suffix):
 def load_blast_results(suffix):
     def run():
         with DbCursor() as cursor:
-            try:
-                tbl = similar_sequeces_table + suffix
+            for tbl in [
+                similar_sequeces_table + suffix,
 
-                log.info('   Cleaning the %s table.' % tbl)
-                cursor.execute('select count(*) from %s;' % tbl)
-                log.debug(cursor.fetchone())
-                cursor.execute('delete from %s;' % tbl)
-                cursor.execute('select count(*) from %s;' % tbl)
-                log.debug(cursor.fetchone())
-                log.debug('')
+            ]:
+                try:
+                    log.info('   Cleaning the %s table.' % tbl)
+                    cursor.execute('select count(*) from %s;' % tbl)
+                    log.debug(cursor.fetchone())
+                    cursor.execute('delete from %s;' % tbl)
+                    cursor.execute('select count(*) from %s;' % tbl)
+                    log.debug(cursor.fetchone())
+                    log.debug('')
 
-            except Exception, e:
-                log.exception(e)
+                except Exception, e:
+                    log.exception(e)
 
         return cmdline(join(orthomcl_bin_dir, 'orthomclLoadBlast.pl'),
                 parameters=[
@@ -243,7 +245,7 @@ def find_pairs(suffix):
                     cursor.execute('select count(*) from %s;' % tbl)
                     log.debug(cursor.fetchone())
                     log.debug('')
-                    
+
                 except Exception, e:
                     log.exception(e)
 

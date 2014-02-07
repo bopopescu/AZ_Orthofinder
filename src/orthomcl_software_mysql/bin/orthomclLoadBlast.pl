@@ -31,6 +31,8 @@ sub loadBlastMySQL {
   my $dbh = $base->getDbh();
   my $sst = $base->getConfig("similarSequencesTable");
   my $sql = "
+ DELETE FROM $sst$suffix;
+
  LOAD DATA
  LOCAL INFILE \"$blastFile\"
  REPLACE INTO TABLE $sst$suffix

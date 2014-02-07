@@ -27,6 +27,7 @@ elsif ($dbVendor eq 'oracle') {
   die "Config file '$configFile' contains invalid value '$dbVendor' for dbVendor\n";
 }
 
+
 sub loadBlastMySQL {
   my ($base, $blastFile) = @_;
   require DBD::mysql;
@@ -41,6 +42,8 @@ sub loadBlastMySQL {
   my $stmt = $dbh->prepare($sql) or die DBI::errstr;
   $stmt->execute() or die DBI::errstr;
 }
+
+
 sub loadBlastSQLite {
   my ($base, $blastFile) = @_;
   require DBD::SQLite; # not clear why this is required

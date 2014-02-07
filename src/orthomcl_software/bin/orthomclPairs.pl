@@ -1201,6 +1201,8 @@ sub runSql {
     if ($@) {
       # you might want to use state instead of err but you did not show us the state
       if ($dbh->err =~ /Duplicate entry/) {
+        print $dbh->err;
+        print 'Ignoring.';
         # already registered
       } else {
         die $dbh->err;

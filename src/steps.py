@@ -200,11 +200,16 @@ def load_blast_results(suffix):
     def run():
         with DbCursor() as cursor:
             try:
-                log.info('   Cleaning the %s table.' % (similar_sequeces_table + suffix))
-                log.debug(cursor.execute('select count(*) from %s;' % (similar_sequeces_table + suffix)))
-                cursor.execute('delete from %s;' % (similar_sequeces_table + suffix))
-                log.debug(cursor.execute('select count(*) from %s;' % (similar_sequeces_table + suffix)))
+                tbl = similar_sequeces_table + suffix
+
+                log.info('   Cleaning the %s table.' % tbl)
+                cursor.execute('select count(*) from %s;' % tbl)
+                log.debug(cursor.fetchone())
+                cursor.execute('delete from %s;' % tbl)
+                cursor.execute('select count(*) from %s;' % tbl)
+                log.debug(cursor.fetchone())
                 log.debug('')
+
             except Exception, e:
                 log.exception(e)
 
@@ -232,10 +237,13 @@ def find_pairs(suffix):
             ]:
                 try:
                     log.info('   Cleaning the %s table.' % tbl)
-                    log.debug(cursor.execute('select count(*) from %s;' % tbl))
+                    cursor.execute('select count(*) from %s;' % tbl)
+                    log.debug(cursor.fetchone())
                     cursor.execute('delete from %s;' % tbl)
-                    log.debug(cursor.execute('select count(*) from %s;' % tbl))
+                    cursor.execute('select count(*) from %s;' % tbl)
+                    log.debug(cursor.fetchone())
                     log.debug('')
+                    
                 except Exception, e:
                     log.exception(e)
 

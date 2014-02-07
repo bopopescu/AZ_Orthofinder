@@ -4,6 +4,7 @@ from os.path import basename, join, relpath, exists, isdir, realpath
 from shutil import rmtree
 
 from Workflow import Step, cmdline
+from src.db_connection import DbCursor
 from utils import check_install_mcl, check_installed_tools
 from process_assembly import filter_assembly
 from save_orthogroups import save_orthogroups
@@ -196,14 +197,24 @@ def install_schema(suffix):
             inter_taxon_match_view + suffix])
 
 def load_blast_results(suffix):
+    def run():
+        with DbCursor() as cursor:
+            try:
+                log.info('   Cleaning the %s table.' % (similar_sequeces_table + suffix))
+                cursor.execute('delete from %s;' % (similar_sequeces_table + suffix))
+            except Exception, e:
+                log.exception(e)
+
+        return cmdline(join(orthomcl_bin_dir, 'orthomclLoadBlast.pl'),
+                parameters=[
+                    realpath(orthomcl_config),
+                    realpath(config.similar_sequences),
+                    suffix],
+                stderr='log')()
+
     return Step(
         'Loading blast results into the database',
-        run=cmdline(join(orthomcl_bin_dir, 'orthomclLoadBlast.pl'),
-                    parameters=[
-                        realpath(orthomcl_config),
-                        realpath(config.similar_sequences),
-                        suffix],
-                    stderr='log'),
+        run=run,
         req_files=[orthomcl_config,
                    config.similar_sequences],  # and initialized database
         prod_files=[])  # loads blast results into the db)
@@ -265,11 +276,11 @@ def dump_pairs_to_files(suffix):
     return Step(
         'Dumping pairs files',
         run=cmdline(join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
-            parameters=[realpath(orthomcl_config),
-                        realpath(config.mcl_input),
-                        realpath(config.intermediate_dir),
-                        suffix],
-            stderr='log'),
+                    parameters=[realpath(orthomcl_config),
+                                realpath(config.mcl_input),
+                                realpath(config.intermediate_dir),
+                                suffix],
+                    stderr='log'),
         req_files=[orthomcl_config],  # and populated InParalog, Ortholog, CoOrtholog tables
         #req_tables=[in_paralog_table + suffix,
         #            ortholog_table + suffix,

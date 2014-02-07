@@ -203,11 +203,13 @@ class Step:
                     try:
                         query = 'select count(*) from %s;' % table
                         cursor.execute(query)
+                        log.debug('   %s exists' % table)
                     except (mysql.connector.Error, sqlite3.OperationalError):
                         #log.debug('   err.errno == errorcode.ER_TABLE_EXISTS_ERROR: ' +
                         #          str(err.errno == errorcode.ER_TABLE_EXISTS_ERROR))
                         #log.debug(err.msg)
                         missing_prod_tables.append(table)
+                        log.debug('   %s does not exist' % table)
                     else:
                         existing_prod_tables.append(table)
 

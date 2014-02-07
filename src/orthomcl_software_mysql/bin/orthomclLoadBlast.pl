@@ -30,9 +30,12 @@ sub loadBlastMySQL {
   require DBD::mysql;
   my $dbh = $base->getDbh();
   my $sst = $base->getConfig("similarSequencesTable");
-  my $sql = "
- DELETE FROM $sst$suffix;
 
+  my $sql = "DELETE FROM $sst$suffix";
+  my $stmt = $dbh->prepare($sql) or die DBI::errstr;
+  $stmt->execute() or die DBI::errstr;
+
+  my $sql = "
  LOAD DATA
  LOCAL INFILE \"$blastFile\"
  REPLACE INTO TABLE $sst$suffix

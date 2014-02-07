@@ -94,27 +94,27 @@ with open(orthomcl_config) as f:
 def filter_proteomes(min_length=10, max_percent_stop=20):
     return Step(
         'Filtering proteomes',
-         run=cmdline(join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
-             parameters=[realpath(config.proteomes_dir),
-                         min_length, max_percent_stop,
-                         realpath(config.good_proteins),
-                         realpath(config.poor_proteins)]),
-         req_files=[config.proteomes_dir],
-         prod_files=[config.good_proteins, config.poor_proteins])
+        run=cmdline(join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
+            parameters=[realpath(config.proteomes_dir),
+                        min_length, max_percent_stop,
+                        realpath(config.good_proteins),
+                        realpath(config.poor_proteins)]),
+        req_files=[config.proteomes_dir],
+        prod_files=[config.good_proteins, config.poor_proteins])
 
 def make_blast_db():
     return Step(
         'Making blast database',
-         run=cmdline(
-             'makeblastdb',
-              parameters=[
-                '-in', realpath(config.good_proteins),
-                '-input_type', 'fasta',
-                '-out', realpath(config.blast_db),
-                '-dbtype', 'prot'],
-              stderr='log'),
-         req_files=[config.good_proteins],
-         prod_files=[config.blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']])
+        run=cmdline(
+            'makeblastdb',
+             parameters=[
+               '-in', realpath(config.good_proteins),
+               '-input_type', 'fasta',
+               '-out', realpath(config.blast_db),
+               '-dbtype', 'prot'],
+             stderr='log'),
+        req_files=[config.good_proteins],
+        prod_files=[config.blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']])
 
 def blast(threads, new_good_proteomes=None, evalue=1e-5):
     if new_good_proteomes:
@@ -161,52 +161,52 @@ def blast(threads, new_good_proteomes=None, evalue=1e-5):
 
     return Step(
         'Blasting',
-         run=run,
-         req_files=[config.good_proteins])
+        run=run,
+        req_files=[config.good_proteins])
 
 def parse_blast_results():
     return Step(
         'Parsing blast results',
-         run=cmdline(join(orthomcl_bin_dir, 'orthomclBlastParser.pl'),
-                     parameters=[realpath(config.blast_out), realpath(config.proteomes_dir)],
-                     stdout=realpath(config.similar_sequences)),
-         req_files=[config.proteomes_dir, config.blast_out],
-         prod_files=[config.similar_sequences])
+        run=cmdline(join(orthomcl_bin_dir, 'orthomclBlastParser.pl'),
+                    parameters=[realpath(config.blast_out), realpath(config.proteomes_dir)],
+                    stdout=realpath(config.similar_sequences)),
+        req_files=[config.proteomes_dir, config.blast_out],
+        prod_files=[config.similar_sequences])
 
 def clean_database(suffix):
     return Step(
         'Cleaning database',
-         run=lambda: clean_db(suffix))
+        run=lambda: clean_db(suffix))
 
 def install_schema(suffix):
     return Step(
         'Installing schema',
-         run=cmdline(join(orthomcl_bin_dir, 'orthomclInstallSchema.pl'),
-                     parameters=[
-                         realpath(orthomcl_config),
-                         realpath(config.sql_log),
-                         suffix],
-                     stderr='log'),
-         req_files=[orthomcl_config],
-         prod_tables=[
-             ortholog_table + suffix,
-             in_paralog_table + suffix,
-             coortholog_table + suffix,
-             similar_sequeces_table + suffix,
-             inter_taxon_match_view + suffix])
+        run=cmdline(join(orthomcl_bin_dir, 'orthomclInstallSchema.pl'),
+                    parameters=[
+                        realpath(orthomcl_config),
+                        realpath(config.sql_log),
+                        suffix],
+                    stderr='log'),
+        req_files=[orthomcl_config],
+        prod_tables=[
+            ortholog_table + suffix,
+            in_paralog_table + suffix,
+            coortholog_table + suffix,
+            similar_sequeces_table + suffix,
+            inter_taxon_match_view + suffix])
 
 def load_blast_results(suffix):
     return Step(
         'Loading blast results into the database',
-         run=cmdline(join(orthomcl_bin_dir, 'orthomclLoadBlast.pl'),
-                     parameters=[
-                         realpath(orthomcl_config),
-                         realpath(config.similar_sequences),
-                         suffix],
-                     stderr='log'),
-         req_files=[orthomcl_config,
-                    config.similar_sequences],  # and initialized database
-         prod_files=[])  # loads blast results into the db)
+        run=cmdline(join(orthomcl_bin_dir, 'orthomclLoadBlast.pl'),
+                    parameters=[
+                        realpath(orthomcl_config),
+                        realpath(config.similar_sequences),
+                        suffix],
+                    stderr='log'),
+        req_files=[orthomcl_config,
+                   config.similar_sequences],  # and initialized database
+        prod_files=[])  # loads blast results into the db)
 
 def find_pairs(suffix):
     def run():
@@ -231,9 +231,10 @@ def find_pairs(suffix):
         'Finding pairs',
         run=run,
         req_files=[orthomcl_config],
-        #req_tables=[in_paralog_table + suffix,
-        #            ortholog_table + suffix,
-        #            coortholog_table + suffix],
+        req_tables=[in_paralog_table + suffix,
+                   ortholog_table + suffix,
+                   coortholog_table + suffix,
+                   similar_sequeces_table + suffix],
         prod_tables=[tbl_name + suffix for tbl_name in [
             'BestHit',
             'BestQueryTaxonScore',
@@ -263,21 +264,21 @@ def find_pairs(suffix):
 def dump_pairs_to_files(suffix):
     return Step(
         'Dumping pairs files',
-         run=cmdline(join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
-             parameters=[realpath(orthomcl_config),
-                         realpath(config.mcl_input),
-                         realpath(config.intermediate_dir),
-                         suffix],
-             stderr='log'),
-         req_files=[orthomcl_config],  # and populated InParalog, Ortholog, CoOrtholog tables
-         #req_tables=[in_paralog_table + suffix,
-         #            ortholog_table + suffix,
-         #            coortholog_table + suffix],
-         prod_files=[config.mcl_input,
-                     config.pairs_dir,
-                     config.pairs_orthologs,
-                     config.pairs_inparalogs,
-                     config.pairs_coorthologs])
+        run=cmdline(join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
+            parameters=[realpath(orthomcl_config),
+                        realpath(config.mcl_input),
+                        realpath(config.intermediate_dir),
+                        suffix],
+            stderr='log'),
+        req_files=[orthomcl_config],  # and populated InParalog, Ortholog, CoOrtholog tables
+        #req_tables=[in_paralog_table + suffix,
+        #            ortholog_table + suffix,
+        #            coortholog_table + suffix],
+        prod_files=[config.mcl_input,
+                    config.pairs_dir,
+                    config.pairs_orthologs,
+                    config.pairs_inparalogs,
+                    config.pairs_coorthologs])
 
 def mcl(debug, inflation=1.5):
     def run():
@@ -298,9 +299,9 @@ def mcl(debug, inflation=1.5):
 
     return Step(
         'MCL',
-         run=run,
-         req_files=[config.mcl_input],
-         prod_files=[config.mcl_output])
+        run=run,
+        req_files=[config.mcl_input],
+        prod_files=[config.mcl_output])
 
 def step_save_orthogroups(added_proteomes_dir=None,
                           annotations=None, internet_on=True):
@@ -327,20 +328,20 @@ def step_save_orthogroups(added_proteomes_dir=None,
 
     return Step(
        'Saving orthogroups',
-        run=run,
-        req_files=[config.mcl_output],
-        prod_files=prod_files)
+       run=run,
+       req_files=[config.mcl_output],
+       prod_files=prod_files)
 
 def groups_to_files(prefix, start_id=0):
     return Step(
         'MCL groups to files',
-         run=cmdline(
-             join(orthomcl_bin_dir, 'orthomclMclToGroups.pl'),
-             parameters=[prefix + '_', start_id],
-             stdin=config.mcl_output,
-             stdout=config.groups_file),
-         req_files=[config.mcl_output],
-         prod_files=[config.groups_file])
+        run=cmdline(
+            join(orthomcl_bin_dir, 'orthomclMclToGroups.pl'),
+            parameters=[prefix + '_', start_id],
+            stdin=config.mcl_output,
+            stdout=config.groups_file),
+        req_files=[config.mcl_output],
+        prod_files=[config.groups_file])
 
 #def signletones_to_files():
 #    return Step(

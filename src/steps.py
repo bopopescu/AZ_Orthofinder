@@ -201,7 +201,10 @@ def load_blast_results(suffix):
         with DbCursor() as cursor:
             try:
                 log.info('   Cleaning the %s table.' % (similar_sequeces_table + suffix))
+                log.debug(cursor.execute('select count(*) from %s;' % (similar_sequeces_table + suffix)))
                 cursor.execute('delete from %s;' % (similar_sequeces_table + suffix))
+                log.debug(cursor.execute('select count(*) from %s;' % (similar_sequeces_table + suffix)))
+                log.debug('')
             except Exception, e:
                 log.exception(e)
 
@@ -221,6 +224,21 @@ def load_blast_results(suffix):
 
 def find_pairs(suffix):
     def run():
+        with DbCursor() as cursor:
+            for tbl in [
+                in_paralog_table + suffix,
+                ortholog_table + suffix,
+                coortholog_table + suffix,
+            ]:
+                try:
+                    log.info('   Cleaning the %s table.' % tbl)
+                    log.debug(cursor.execute('select count(*) from %s;' % tbl))
+                    cursor.execute('delete from %s;' % tbl)
+                    log.debug(cursor.execute('select count(*) from %s;' % tbl))
+                    log.debug('')
+                except Exception, e:
+                    log.exception(e)
+
         #res = cmdline(
         #    join(orthomcl_bin_dir, 'orthomclPairs.pl'),
         #    parameters=[
@@ -243,9 +261,9 @@ def find_pairs(suffix):
         run=run,
         req_files=[orthomcl_config],
         req_tables=[in_paralog_table + suffix,
-                   ortholog_table + suffix,
-                   coortholog_table + suffix,
-                   similar_sequeces_table + suffix],
+                    ortholog_table + suffix,
+                    coortholog_table + suffix,
+                    similar_sequeces_table + suffix],
         prod_tables=[tbl_name + suffix for tbl_name in [
             'BestHit',
             'BestQueryTaxonScore',

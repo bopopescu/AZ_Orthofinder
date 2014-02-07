@@ -1195,7 +1195,18 @@ sub runSql {
     #print "runsql:prepare: $sql\n";
     my $stmt = $dbh->prepare($sql);
     #print "runSql:execute\n";
+    $dbh->{RaiseError} = 0;
+    $dbh->{PrintError} = 0;
     $stmt->execute();
+    if ($@) {
+      # you might want to use state instead of err but you did not show us the state
+      if ($dbh->err =~ /Duplicate entry/) {
+        # already registered
+      } else {
+        die $dbh->err;
+        # report what is in $@ - it is a different error
+      }
+    }
 
     &analyzeStats($tableToAnalyze) if ($tableToAnalyze);
 

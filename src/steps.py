@@ -234,6 +234,31 @@ def find_pairs(suffix):
          #req_tables=[in_paralog_table + suffix,
          #            ortholog_table + suffix,
          #            coortholog_table + suffix],
+         prod_tables=[tbl_name + suffix for tbl_name in [
+            'BestInterTaxonScore',
+            'CoOrthNotOrtholog',
+            'CoOrthologTaxon',
+            'CoOrthologCandidate',
+            'CoOrthologAvgScore',
+            'CoOrthologTemp',
+            'BetterHit',
+            'InParalog2Way',
+            'InParalogAvgScore',
+            'InParalogTemp',
+            'InParalogTaxonAvg',
+            'InParalogOrtholog',
+            'InplgOrthTaxonAvg',
+            'InplgOrthoInplg',
+            'OrthologAvgScore',
+            'OrthologTemp',
+            'Ortholog2Way',
+            'OrthologTaxon',
+            'OrthologUniqueId',
+            'UniqSimSeqsQueryId',
+            'BestHit',
+            'BestQueryTaxonScore',
+            'SimilarSequences'
+         ]],
          prod_files=[])  # populates InParalog, Ortholog, CoOrtholog)
 
 def dump_pairs_to_files(suffix):

@@ -489,9 +489,9 @@ def main(args):
                              '(You can run with the --overwrite option to avoid this warning.)')
                     raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
                 rmtree(p.out_dir)
-                makedirs(p.out_dir)
-                rmdir(p.out_dir)
-                copytree(p.directory, p.out_dir)
+            makedirs(p.out_dir)
+            rmdir(p.out_dir)
+            copytree(p.directory, p.out_dir)
 
         working_dir = p.out_dir
 

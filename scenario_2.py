@@ -124,8 +124,6 @@ Optional arguments:
     if isfile(expanduser(p.out_dir)):
         arg_parse_error('%s is a file' % p.out_dir)
     p.out_dir = abspath(expanduser(p.out_dir))
-    if not isdir(p.out_dir):
-        mkdir(p.out_dir)
 
     return p
 

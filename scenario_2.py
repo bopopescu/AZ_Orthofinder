@@ -483,10 +483,11 @@ def main(args):
         if not p.out_dir:
             p.out_dir = p.directory
         if p.out_dir != p.directory:
-            if isdir(p.out_dir) and not p.overwrite:
-                log.warn('The output directory exists. Do you want to overwrite it? '
-                         '(You can run with the --overwrite option to avoid this warning.)')
-                raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
+            if isdir(p.out_dir):
+                if not p.overwrite:
+                    log.warn('The output directory exists. Do you want to overwrite it? '
+                             '(You can run with the --overwrite option to avoid this warning.)')
+                    raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
                 rmtree(p.out_dir)
                 makedirs(p.out_dir)
                 rmdir(p.out_dir)

@@ -90,7 +90,10 @@ def cmdline(command, parameters=None, stdin=None,
     parameters = parameters or []
 
     def callback():
-        commandline = ' '.join([command] + map(str, parameters))
+        if isinstance(command, basestring):
+            commandline = ' '.join([command] + map(str, parameters))
+        else:
+            commandline = ' '.join(command + map(str, parameters))
 
         stdin_f = None
         if stdin:

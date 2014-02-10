@@ -2,7 +2,7 @@
 from shutil import move, copy
 import sys
 import logging
-from os import chdir, mkdir, getcwd, listdir
+from os import chdir, mkdir, getcwd, listdir, makedirs
 from os.path import join, exists, isdir, isfile, dirname, realpath, \
     basename, relpath, splitext, abspath, expanduser
 from Bio import SeqIO
@@ -103,7 +103,7 @@ Optional arguments:
         arg_parse_error('%s is a file' % p.out)
     p.out = abspath(expanduser(p.out))
     if not isdir(p.out):
-        mkdir(p.out)
+        makedirs(p.out)
 
     if p.species_list:
         check_file(expanduser(p.species_list))

@@ -44,8 +44,10 @@ class DbCursor:
                 port=self.db_port,
                 database='orthomcl',
                 buffered=True)
+            self.conn.autocommit = True
         else:
             self.conn = sqlite3.connect(self.data_fpath)
+            self.conn.autocommit = True
 
     def __enter__(self):
         if self.db_vendor == 'mysql':

@@ -218,8 +218,8 @@ sub orthologs {
   my $percentMatchThreshold = $base->getConfig("percentMatchCutoff");
 
   my $sql = "
-create table BestHit$suffix $oracleNoLogging as
-select s.query_id, s.subject_id,
+create table BestHit$suffix (primary key(query_id, subject_id))
+ignore select s.query_id, s.subject_id,
        s.query_taxon_id, s.subject_taxon_id,
        s.evalue_exp, s.evalue_mant
 from $sst$suffix s, BestQueryTaxonScore$suffix cutoff

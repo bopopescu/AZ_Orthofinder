@@ -36,11 +36,31 @@ sub loadBlastMySQL {
   $stmt->execute() or die DBI::errstr;
 
   my $sql = "
- LOAD DATA
- LOCAL INFILE \"$blastFile\"
- REPLACE INTO TABLE $sst$suffix
- FIELDS TERMINATED BY '\\t'
+  LOAD DATA
+  LOCAL INFILE \"$blastFile\"
+  REPLACE INTO TABLE $sst$suffix
+  FIELDS TERMINATED BY '\\t'
 ";
+  my $stmt = $dbh->prepare($sql) or die DBI::errstr;
+  $stmt->execute() or die DBI::errstr;
+
+  my $sql = "create table tmp$suffix like $sst$suffix";
+  my $stmt = $dbh->prepare($sql) or die DBI::errstr;
+  $stmt->execute() or die DBI::errstr;
+
+  my $sql = "alter table tmp$suffix add unique (QUERY_ID, SUBJECT_ID)";
+  my $stmt = $dbh->prepare($sql) or die DBI::errstr;
+  $stmt->execute() or die DBI::errstr;
+
+  my $sql = "insert ignore into tmp$suffix select * from $sst$suffix";
+  my $stmt = $dbh->prepare($sql) or die DBI::errstr;
+  $stmt->execute() or die DBI::errstr;
+
+  my $sql = "rename table $sst$suffix to deleteme, tmp$suffix to $sst$suffix";
+  my $stmt = $dbh->prepare($sql) or die DBI::errstr;
+  $stmt->execute() or die DBI::errstr;
+
+  my $sql = "drop table deleteme";
   my $stmt = $dbh->prepare($sql) or die DBI::errstr;
   $stmt->execute() or die DBI::errstr;
 }

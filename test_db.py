@@ -17,13 +17,21 @@ db_passw = conf['db_password']
 db_port = conf['db_port']
 db_server = conf['db_server']
 
+db_name = 'orthomcl'
+
+print 'server:', db_server
+print 'port:', db_port
+print 'login:', db_login
+print 'password:', db_passw
+print 'database:', db_name
+
 try:
     cnx = connector.connect(
         user=db_login,
         password=db_passw,
         host=db_server,
         port=db_port,
-        database='orthomcl',
+        database=db_name,
         buffered=True)
 except:
     print 'Exception', traceback.print_exc(limit=0)

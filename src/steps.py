@@ -201,15 +201,14 @@ def load_blast_results(suffix):
         with DbCursor() as cursor:
             for tbl in [
                 similar_sequeces_table + suffix,
-
             ]:
                 try:
                     log.info('   Cleaning the %s table.' % tbl)
                     cursor.execute('select count(*) from %s;' % tbl)
-                    log.debug(cursor.fetchone())
+                    log.debug('   ' + str(cursor.fetchone()))
                     cursor.execute('delete from %s;' % tbl)
                     cursor.execute('select count(*) from %s;' % tbl)
-                    log.debug(cursor.fetchone())
+                    log.debug('   ' + str(cursor.fetchone()))
                     log.debug('')
 
                 except Exception, e:
@@ -240,10 +239,10 @@ def find_pairs(suffix):
                 try:
                     log.info('   Cleaning the %s table.' % tbl)
                     cursor.execute('select count(*) from %s;' % tbl)
-                    log.debug(cursor.fetchone())
+                    log.debug('   ' + str(cursor.fetchone()))
                     cursor.execute('delete from %s;' % tbl)
                     cursor.execute('select count(*) from %s;' % tbl)
-                    log.debug(cursor.fetchone())
+                    log.debug('   ' + str(cursor.fetchone()))
                     log.debug('')
 
                 except Exception, e:
@@ -301,14 +300,36 @@ def find_pairs(suffix):
         prod_files=[])  # populates InParalog, Ortholog, CoOrtholog)
 
 def dump_pairs_to_files(suffix):
-    return Step(
-        'Dumping pairs files',
-        run=cmdline(join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
+    def run():
+        res = cmdline(join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
                     parameters=[realpath(orthomcl_config),
                                 realpath(config.mcl_input),
                                 realpath(config.intermediate_dir),
                                 suffix],
-                    stderr='log'),
+                    stderr='log')()
+
+        with DbCursor() as cursor:
+            for tbl in [
+                in_paralog_table + suffix,
+                ortholog_table + suffix,
+                coortholog_table + suffix,
+            ]:
+                try:
+                    log.info('   Cleaning the %s table.' % tbl)
+                    cursor.execute('select count(*) from %s;' % tbl)
+                    log.debug('   ' + str(cursor.fetchone()))
+                    cursor.execute('delete from %s;' % tbl)
+                    cursor.execute('select count(*) from %s;' % tbl)
+                    log.debug('   ' + str(cursor.fetchone()))
+                    log.debug('')
+
+                except Exception, e:
+                    log.exception(e)
+        return res
+
+    return Step(
+        'Dumping pairs files',
+        run=run,
         req_files=[orthomcl_config],  # and populated InParalog, Ortholog, CoOrtholog tables
         #req_tables=[in_paralog_table + suffix,
         #            ortholog_table + suffix,

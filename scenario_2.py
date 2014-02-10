@@ -5,10 +5,11 @@ from shutil import copyfile, rmtree, copy, copytree
 
 import sys
 import logging
-from os import chdir, mkdir, getcwd, listdir, symlink
+from os import chdir, mkdir, getcwd, listdir, symlink, makedirs
 from os.path import join, exists, isdir, dirname, realpath,\
     basename, splitext, abspath, expanduser
 import urllib2
+from Cython.Includes.posix.unistd import rmdir
 from src.fetch_annotations import fetch_annotations_for_ids
 from src.process_assembly import filter_assembly
 from src.make_proteomes import adjust_proteomes, make_proteomes
@@ -488,6 +489,8 @@ def main(args):
                          '(You can run with the --overwrite option to avoid this warning.)')
                 raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
                 rmtree(p.out_dir)
+                makedirs(p.out_dir)
+                rmdir(p.out_dir)
                 copytree(p.directory, p.out_dir)
 
         working_dir = p.out_dir

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from collections import namedtuple
 from genericpath import isfile
-from shutil import copyfile, rmtree, copy
+from shutil import copyfile, rmtree, copy, copytree
 
 import sys
 import logging
@@ -38,7 +38,9 @@ def parse_args(args):
 
     op.add_argument(dest='directory')
 
-    op.add_argument('-o', '--out', dest='out_dir', required=False)
+    #op.add_argument('-s1o', dest='directory', required=True)
+    op.add_argument('-s2o', '-o', dest='out_dir', required=False)
+
     op.add_argument('-a', '--assemblies', dest='assemblies')
     op.add_argument('-g', '--annotations', '--gbs', dest='annotations')
     op.add_argument('-p', '--proteomes', '--proteins', dest='proteomes')
@@ -53,17 +55,19 @@ def parse_args(args):
 First argument is a fath to existed Scenario 1 output.
 
 Test runs:
-    python scenario_2.py test_ids --ids test_input/new_ids.txt
+    python scenario_2.py -s1o test_ids -s2o test_ids_new_ids --ids test_input/new_ids.txt
 
-    python scenario_2.py test_proteomes --proteomes test_input/new_proteins
+    python scenario_2.py -s1o test_proteomes -s2o test_prots_new_prots --proteomes test_input/new_proteins
 
-Usage: %s <directory> [--assemblies dir] [--proteomes dir]
+Usage: %s -s1o <scenario_1 directory> -s2o <out_dir> [--assemblies dir] [--proteomes dir]
                                  [--gbs dir] [--ids-list file] [--species-list file]
                                  [-t num] [--start-from step] [--blast-db]
 
-    First argument <directory> is a fath to existed Scenario 1 output.
+First argument - path to existed Scenario 1 output.
 
 Optional arguments:
+    -o                   Output directory (optional, if ommited - the input directory will be used.
+
     -a --assemblies:     Directory with assemblies in fasta format.
 
     -g --gbs:            Directory with gb files.
@@ -113,6 +117,15 @@ Optional arguments:
     if not isdir(expanduser(p.directory)):
         arg_parse_error('Directory %s does not exist.' % p.directory)
     p.directory = abspath(expanduser(p.directory))
+
+    if not p.out_dir:
+        p.out_dir = p.directory
+        #arg_parse_error('Specify output directory with -o.')
+    if isfile(expanduser(p.out_dir)):
+        arg_parse_error('%s is a file' % p.out_dir)
+    p.out_dir = abspath(expanduser(p.out_dir))
+    if not isdir(p.out_dir):
+        mkdir(p.out_dir)
 
     return p
 
@@ -469,12 +482,22 @@ def main(args):
     log.info('')
 
     try:
-        working_dir = p.directory
+        if not p.out_dir:
+            p.out_dir = p.directory
+        if p.out_dir != p.directory:
+            if isdir(p.out_dir) and not p.overwrite:
+                log.warn('The output directory exists. Do you want to overwrite it? '
+                         '(You can run with the --overwrite option to avoid this warning.)')
+                raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
+                rmtree(p.out_dir)
+                copytree(p.directory, p.out_dir)
+
+        working_dir = p.out_dir
 
         check_and_install_tools(p.debug, log_fpath)
         set_up_config(working_dir)
 
-        start_from, start_after = get_starting_step(p.start_from, join(p.directory, log_fname))
+        start_from, start_after = get_starting_step(p.start_from, join(working_dir, log_fname))
 
         log.info('Changing to %s' % working_dir)
         chdir(working_dir)

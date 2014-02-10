@@ -204,11 +204,19 @@ def load_blast_results(suffix):
             ]:
                 try:
                     log.info('   Cleaning the %s table.' % tbl)
-                    cursor.execute('select count(*) from %s;' % tbl)
-                    log.debug('   ' + str(cursor.fetchone()))
-                    cursor.execute('delete from %s;' % tbl)
-                    cursor.execute('select count(*) from %s;' % tbl)
-                    log.debug('   ' + str(cursor.fetchone()))
+                    try:
+                        cursor.execute('select count(*) from %s;' % tbl)
+                    except:
+                        pass
+                    log.debug('   select count(*) from ' + tbl + '; '
+                              'result=' + str(cursor.fetchone()))
+                    try:
+                        cursor.execute('delete from %s;' % tbl)
+                        cursor.execute('select count(*) from %s;' % tbl)
+                    except:
+                        pass
+                    log.debug('   select count(*) from ' + tbl + '; '
+                              'result=' + str(cursor.fetchone()))
                     log.debug('')
 
                 except Exception, e:
@@ -238,11 +246,19 @@ def find_pairs(suffix):
             ]:
                 try:
                     log.info('   Cleaning the %s table.' % tbl)
-                    cursor.execute('select count(*) from %s;' % tbl)
-                    log.debug('   ' + str(cursor.fetchone()))
-                    cursor.execute('delete from %s;' % tbl)
-                    cursor.execute('select count(*) from %s;' % tbl)
-                    log.debug('   ' + str(cursor.fetchone()))
+                    try:
+                        cursor.execute('select count(*) from %s;' % tbl)
+                    except:
+                        pass
+                    log.debug('   select count(*) from ' + tbl + '; '
+                              'result=' + str(cursor.fetchone()))
+                    try:
+                        cursor.execute('delete from %s;' % tbl)
+                        cursor.execute('select count(*) from %s;' % tbl)
+                    except:
+                        pass
+                    log.debug('   select count(*) from ' + tbl + '; '
+                              'result=' + str(cursor.fetchone()))
                     log.debug('')
 
                 except Exception, e:

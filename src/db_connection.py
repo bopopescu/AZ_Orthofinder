@@ -47,7 +47,6 @@ class DbCursor:
             self.conn.autocommit = True
         else:
             self.conn = sqlite3.connect(self.data_fpath)
-            self.conn.autocommit = True
 
     def __enter__(self):
         if self.db_vendor == 'mysql':

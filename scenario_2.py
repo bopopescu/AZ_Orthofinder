@@ -5,11 +5,10 @@ from shutil import copyfile, rmtree, copy, copytree
 
 import sys
 import logging
-from os import chdir, mkdir, getcwd, listdir, symlink, makedirs
+from os import chdir, mkdir, getcwd, listdir, symlink, makedirs, rmdir
 from os.path import join, exists, isdir, dirname, realpath,\
     basename, splitext, abspath, expanduser
 import urllib2
-from Cython.Includes.posix.unistd import rmdir
 from src.fetch_annotations import fetch_annotations_for_ids
 from src.process_assembly import filter_assembly
 from src.make_proteomes import adjust_proteomes, make_proteomes

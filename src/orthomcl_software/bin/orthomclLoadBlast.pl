@@ -58,8 +58,8 @@ sub loadBlastSQLite {
   } else {
     die "orthomcl.conf $dbString should be dbConnectString=DBI:SQLite:YOUR_DATABASE_NAME\n";
   }
-  $dbh->do("DROP INDEX ss_qtaxexp_ix");
-  $dbh->do("DROP INDEX ss_seqs_ix");
+  $dbh->do("DROP INDEX if exists ss_qtaxexp_ix");
+  $dbh->do("DROP INDEX if exists ss_seqs_ix");
   #my @database = split(/:/, $dbString);
   #my $dbInstance = $database[2];
   my $import_stmt = 'PRAGMA synchronous=OFF;\n'.'PRAGMA journal_mode = OFF;\n'.'PRAGMA locking_mode = EXCLUSIVE;\n'.

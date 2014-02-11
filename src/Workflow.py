@@ -198,23 +198,47 @@ class Step:
     def __check_existence(self, overwrite):
         missing_prod_files = list(ifilterfalse(exists, self.prod_files))
 
+        with open(config.config_file) as f:
+            conf = dict(l.strip().lower().split('=', 1) for l
+                        in f.readlines() if l.strip()[0] != '#')
+        db_vendor = conf['db_vendor']
+
         missing_prod_tables = []
         existing_prod_tables = []
         if self.prod_tables:
             with DbCursor() as cursor:
                 for table in self.prod_tables:
+                    #if db_vendor == 'sqlite':
+                    #    try:
+                    #        cursor.execute("SELECT name FROM sqlite_master "
+                    #                       "WHERE type='table' AND name='%s';" % table)
+                    #        if cursor.fetchone():
+                    #            existing_prod_tables.append(table)
+                    #            log.debug('   %s exists' % table)
+                    #        else:
+                    #            missing_prod_tables.append(table)
+                    #            log.debug('   %s does not exist' % table)
+                    #            continue
+                    #    except sqlite3.OperationalError:
+                    #        missing_prod_tables.append(table)
+                    #        log.debug('   %s does not exist' % table)
+                    #    else:
+                    #        existing_prod_tables.append(table)
+                    #        log.debug('   %s exists' % table)
+                    #else:
                     try:
-                        query = 'select count(*) from %s;' % table
-                        cursor.execute(query)
-                        log.debug('   %s exists' % table)
+                        q = 'SELECT 1 FROM %s LIMIT 1;' % table
+                        log.debug(q)
+                        cursor.execute(q)
+                        res = cursor.fetchall()
+                        log.debug(res)
                     except (mysql.connector.Error, sqlite3.OperationalError):
-                        #log.debug('   err.errno == errorcode.ER_TABLE_EXISTS_ERROR: ' +
-                        #          str(err.errno == errorcode.ER_TABLE_EXISTS_ERROR))
-                        #log.debug(err.msg)
                         missing_prod_tables.append(table)
                         log.debug('   %s does not exist' % table)
                     else:
                         existing_prod_tables.append(table)
+                        log.debug('   %s exists' % table)
+            log.debug('')
 
         if not overwrite:
             if self.prod_files and not missing_prod_files:
@@ -237,17 +261,42 @@ class Step:
                       ', '.join(missing_req_files))
             return False, 1
 
+        with open(config.config_file) as f:
+            conf = dict(l.strip().lower().split('=', 1) for l
+                        in f.readlines() if l.strip()[0] != '#')
+        db_vendor = conf['db_vendor']
+
         missing_req_tables = []
         if self.req_tables:
             with DbCursor() as cursor:
                 for table in self.req_tables:
+                    #if db_vendor == 'sqlite':
+                    #    try:
+                    #        q = "SELECT name FROM sqlite_master " + \
+                    #            "WHERE type='table' AND name='%s';" % table
+                    #        log.debug(q)
+                    #        cursor.execute(q)
+                    #        res = cursor.fetchall()
+                    #        log.debug(res)
+                    #        if not res:
+                    #            missing_req_tables.append(table)
+                    #            continue
+                    #    except sqlite3.OperationalError:
+                    #        missing_req_tables.append(table)
+                    #else:
                     try:
-                        cursor.execute('select count(*) from %s;' % table)
+                        q = 'SELECT 1 FROM %s LIMIT 1;' % table
+                        log.debug(q)
+                        cursor.execute(q)
+                        res = cursor.fetchall()
+                        log.debug(res)
                     except (mysql.connector.Error, sqlite3.OperationalError):
+                        log.exception('aaa')
                         missing_req_tables.append(table)
+
         if missing_req_tables:
             log.error('   ' + self.name + ' requires tables ' +
-                      ', '.join(missing_req_tables) + ' installed')
+                      ', '.join(missing_req_tables))
             return False, 1
 
         # Removing existing data if overwrite

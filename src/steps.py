@@ -205,17 +205,17 @@ def load_blast_results(suffix):
                 try:
                     log.info('   Cleaning the %s table.' % tbl)
                     try:
-                        cursor.execute('select count(*) from %s;' % tbl)
+                        cursor.execute('select 1 from %s limit 1;' % tbl)
                     except:
                         pass
-                    log.debug('   select count(*) from ' + tbl + '; '
+                    log.debug('   select 1 from ' + tbl + ' limit 1; '
                               'result=' + str(cursor.fetchone()))
                     try:
                         cursor.execute('delete from %s;' % tbl)
-                        cursor.execute('select count(*) from %s;' % tbl)
+                        cursor.execute('select 1 from %s limit 1;' % tbl)
                     except:
                         pass
-                    log.debug('   select count(*) from ' + tbl + '; '
+                    log.debug('   select 1 from ' + tbl + ' limit 1; '
                               'result=' + str(cursor.fetchone()))
                     log.debug('')
 
@@ -247,17 +247,17 @@ def find_pairs(suffix):
                 try:
                     log.info('   Cleaning the %s table.' % tbl)
                     try:
-                        cursor.execute('select count(*) from %s;' % tbl)
+                        cursor.execute('select 1 from %s limit 1;' % tbl)
                     except:
                         pass
-                    log.debug('   select count(*) from ' + tbl + '; '
+                    log.debug('   select 1 from ' + tbl + ' limit 1; '
                               'result=' + str(cursor.fetchone()))
                     try:
                         cursor.execute('delete from %s;' % tbl)
-                        cursor.execute('select count(*) from %s;' % tbl)
+                        cursor.execute('select 1 from %s limit 1;' % tbl)
                     except:
                         pass
-                    log.debug('   select count(*) from ' + tbl + '; '
+                    log.debug('   select 1 from ' + tbl + ' limit 1; '
                               'result=' + str(cursor.fetchone()))
                     log.debug('')
 
@@ -278,7 +278,7 @@ def find_pairs(suffix):
             parameters=[
                 realpath(orthomcl_config),
                 realpath(config.pairs_log),
-                'cleanup=yes',
+                'cleanup=no',
                 'suffix=' + (suffix if suffix else '*')])()
 
     return Step(
@@ -332,10 +332,10 @@ def dump_pairs_to_files(suffix):
             ]:
                 try:
                     log.info('   Cleaning the %s table.' % tbl)
-                    cursor.execute('select count(*) from %s;' % tbl)
+                    cursor.execute('select 1 from %s limit 1;' % tbl)
                     log.debug('   ' + str(cursor.fetchone()))
                     cursor.execute('delete from %s;' % tbl)
-                    cursor.execute('select count(*) from %s;' % tbl)
+                    cursor.execute('select 1 from %s limit 1;' % tbl)
                     log.debug('   ' + str(cursor.fetchone()))
                     log.debug('')
 

@@ -1197,6 +1197,7 @@ sub runSql {
     #print "runSql:execute\n";
     $dbh->{RaiseError} = 0;
     $dbh->{PrintError} = 0;
+    print LOGFILE "$sql";
     $stmt->execute();
     if ($@) {
       # you might want to use state instead of err but you did not show us the state

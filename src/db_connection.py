@@ -15,7 +15,7 @@ sys.path = [config.src_dir] + sys.path
 
 
 class DbCursor:
-    def __init__(self, data_fpath='', step=''):
+    def __init__(self, data_fpath=config.sqlite_file, step=''):
         with open(config.config_file) as f:
             conf = dict(l.strip().lower().split('=', 1) for l
                         in f.readlines() if l.strip()[0] != '#')
@@ -28,7 +28,7 @@ class DbCursor:
             self.db_port = conf['db_port']
             self.db_server = conf['db_server']
         else:
-            self.data_fpath = data_fpath
+            self.data_fpath = config.sqlite_file
 
         self.conn = None
         self.cursor = None

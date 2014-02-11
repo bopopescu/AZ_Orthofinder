@@ -56,7 +56,9 @@ def clean_db(suffixes):
             'OrthologTaxon',
             'OrthologUniqueId',
             'UniqSimSeqsQueryId',
-            'SimilarSequences']]
+            'SimilarSequences',
+            'tmp',
+            'deleteme']]
 
         with DbCursor(data_fpath=config.sqlite_file) as cursor:
             for table in tables:

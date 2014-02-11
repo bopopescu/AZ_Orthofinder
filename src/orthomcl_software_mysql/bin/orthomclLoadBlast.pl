@@ -44,6 +44,10 @@ sub loadBlastMySQL {
   my $stmt = $dbh->prepare($sql) or die DBI::errstr;
   $stmt->execute() or die DBI::errstr;
 
+  my $sql = "drop table if exists tmp$suffix";
+  my $stmt = $dbh->prepare($sql) or die DBI::errstr;
+  $stmt->execute() or die DBI::errstr;
+
   my $sql = "create table tmp$suffix like $sst$suffix";
   my $stmt = $dbh->prepare($sql) or die DBI::errstr;
 #  print "$sql";

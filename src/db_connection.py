@@ -37,16 +37,23 @@ class DbCursor:
 
     def __connect(self):
         if self.db_vendor == 'mysql':
-            self.conn = mysql.connector.connect(
-                user=self.db_login,
-                password=self.db_passw,
-                host=self.db_server,
-                port=self.db_port,
-                database='orthomcl',
-                buffered=True)
+            try:
+                self.conn = mysql.connector.connect(
+                    user=self.db_login,
+                    password=self.db_passw,
+                    host=self.db_server,
+                    port=self.db_port,
+                    database='orthomcl',
+                    buffered=True)
+            except:
+                log.exception('Error connecting to the database.')
+                raise
             self.conn.autocommit = True
-        else:
+        elif self.db_vendor == 'sqlite':
             self.conn = sqlite3.connect(self.data_fpath)
+        else:
+            log.error('Error database vendor. Options are mysql and sqlite.')
+            raise
 
     def __enter__(self):
         if self.db_vendor == 'mysql':

@@ -223,11 +223,11 @@ def load_blast_results(suffix):
                     log.exception(e)
 
         return cmdline(join(orthomcl_bin_dir, 'orthomclLoadBlast.pl'),
-                parameters=[
-                    realpath(orthomcl_config),
-                    realpath(config.similar_sequences),
-                    suffix],
-                stderr='log')()
+            parameters=[
+                realpath(orthomcl_config),
+                realpath(config.similar_sequences),
+                suffix,
+                ])()
 
     return Step(
         'Loading blast results into the database',

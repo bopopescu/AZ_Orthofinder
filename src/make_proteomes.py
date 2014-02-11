@@ -26,7 +26,14 @@ def adjust_proteomes(proteomes, proteomes_dir, prot_id_field):
         ext = '.fasta'
         for seq in SeqIO.parse(proteome, 'fasta'):
             fields = seq.id.replace('|', ' ').split()
-            prot_id = fields[prot_id_field]
+            if len(fields) > prot_id_field:
+                prot_id = fields[prot_id_field]
+            elif len(fields) > 0:
+                prot_id = fields[-1]
+            else:
+                log.error('Incorrect fasta id: ' + str(seq.id))
+                exit(1)
+
             if len(prot_id) > 30:
                 prot_id = prot_id[:17] + '...' + prot_id[-10:]
             if prot_id in prot_ids:

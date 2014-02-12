@@ -396,12 +396,12 @@ def set_up_config(working_dir):
     with open(config_file) as cf:
         conf = dict(
             l.strip().split('=', 1) for l
-            in cf.readlines() if l.strip()[0] != '#')
+            in cf.readlines() if l.strip() and l.strip()[0] != '#')
         log.debug('Read conf: ' + str(conf))
 
     with open(orthomcl_config) as ocf:
         omcl_conf = dict(l.strip().split('=', 1) for l
-                         in ocf.readlines() if l.strip()[0] != '#')
+                         in ocf.readlines() if l.strip() and l.strip()[0] != '#')
 
     memory = int(conf['memory'])
 

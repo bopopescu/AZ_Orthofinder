@@ -11,7 +11,7 @@ from site import addsitedir
 addsitedir(join(realpath(__file__), 'src', 'mysql'))
 
 with open(config.config_file) as f:
-    conf = dict(l.strip().split('=', 1) for l in f.readlines() if l.strip()[0] != '#')
+    conf = dict(l.strip().split('=', 1) for l in f.readlines() if l.strip() and l.strip()[0] != '#')
 db_login = conf['db_login']
 db_passw = conf['db_password']
 db_port = conf['db_port']

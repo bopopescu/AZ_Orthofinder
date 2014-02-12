@@ -200,7 +200,7 @@ class Step:
 
         with open(config.config_file) as f:
             conf = dict(l.strip().lower().split('=', 1) for l
-                        in f.readlines() if l.strip()[0] != '#')
+                        in f.readlines() if l.strip() and l.strip()[0] != '#')
         db_vendor = conf['db_vendor']
 
         missing_prod_tables = []
@@ -263,7 +263,7 @@ class Step:
 
         with open(config.config_file) as f:
             conf = dict(l.strip().lower().split('=', 1) for l
-                        in f.readlines() if l.strip()[0] != '#')
+                        in f.readlines() if l.strip() and l.strip()[0] != '#')
         db_vendor = conf['db_vendor']
 
         missing_req_tables = []

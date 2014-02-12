@@ -513,7 +513,7 @@ def main(args):
 
         with open(config.config_file) as f:
             conf = dict(l.strip().lower().split('=', 1)
-                        for l in f.readlines() if l.strip()[0] != '#')
+                        for l in f.readlines() if l.strip() and l.strip()[0] != '#')
             if conf['db_vendor'] == 'sqlite':
                 suffix = ''
             else:

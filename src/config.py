@@ -11,7 +11,7 @@ orthomcl_mysql_bin_dir = join(dirname(realpath(__file__)), 'orthomcl_software_my
 orthomcl_bin_dir = orthomcl_sqlite_bin_dir
 with open(config_file) as f:
     conf = dict(l.strip().lower().split('=', 1)
-                for l in f.readlines() if l.strip()[0] != '#')
+                for l in f.readlines() if l.strip() and l.strip()[0] != '#')
     if conf['db_vendor'] == 'sqlite':
         orthomcl_bin_dir = orthomcl_sqlite_bin_dir
     else:

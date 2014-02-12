@@ -192,11 +192,18 @@ def save_orthogroups(new_prot_fpaths, annotations, mcl_output,
                         known_genes_in_this_group.append(prot_id)
 
                     if taxon_id not in strains:
-                        log.warn('   No annotations for "' + taxon_id + '"')
-                        return 1
+                        log.warn('   Warning: no annotations for "' + taxon_id + '"')
+                        vals = repeat('NA')
+                    else:
+                        strain_prots = strains[taxon_id]
+                        if prot_id not in strain_prots:
+                            log.warn('   Warning: no protein id "' + prot_id + '"')
+                            vals = repeat('NA')
+                        else:
+                            vals = strain_prots[prot_id]
 
                     for l, val in izip(chain([len(str(groups_total))], max_lengths),
-                                       chain([group_nunber], strains[taxon_id][prot_id])):
+                                       chain([group_nunber], vals)):
                         out_f.write(str(val) + '\t')
                         nice_f.write(str(val) + ' ' * (l - len(str(val))) + '\t')
                     out_f.write('\n')

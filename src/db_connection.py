@@ -18,7 +18,7 @@ class DbCursor:
     def __init__(self, data_fpath=config.sqlite_file, step=''):
         with open(config.config_file) as f:
             conf = dict(l.strip().lower().split('=', 1) for l
-                        in f.readlines() if l.strip()[0] != '#')
+                        in f.readlines() if l.strip() and l.strip()[0] != '#')
 
         self.db_vendor = conf['db_vendor']
 
@@ -67,7 +67,7 @@ class DbCursor:
                     #log.info('   MySql server must not be running, trying to start.')
                     with open(config.config_file) as cf:
                         conf = dict(l.strip().split('=', 1) for l
-                                    in cf.readlines() if l.strip()[0] != '#')
+                                    in cf.readlines() if l.strip() and l.strip()[0] != '#')
 
                     log.warn('   ' + str(traceback.format_exc(limit=0)))
 

@@ -167,6 +167,15 @@ def step_blast_singletones(blastdb=None, debug=False, rewrite=False):
         from Bio.Blast import NCBIWWW, NCBIXML
         from Bio import SeqIO
 
+        if isdir(config.singletone_dir) and \
+            [join(config.singletone_dir, fname)
+             for fname in listdir(config.singletone_dir)
+             if fname and fname[0] != '.']:
+            pass
+        else:
+            log.error('   No singletones, skipping the step')
+            return 0
+
         if blastdb:
             log.info('   Using local NCBI database: ' + blastdb)
         else:
@@ -296,9 +305,8 @@ def step_blast_singletones(blastdb=None, debug=False, rewrite=False):
         return 0
 
     return Step(
-       'Blasting singletones',
-        run=lambda: run(config.assembly_singletones_file, new_proteomes_dir),
-        req_files=[config.assembly_singletones_file])
+        'Blasting singletones',
+        run=lambda: run(config.assembly_singletones_file, new_proteomes_dir))
 
 
 new_proteomes_dir = 'new_proteomes'

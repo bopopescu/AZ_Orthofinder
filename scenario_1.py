@@ -47,8 +47,10 @@ def parse_args(args):
 
     op.add_argument('-g', '--annotations', '--gbs', dest='annotations')
     op.add_argument('-p', '--proteins', '--proteomes', dest='proteomes')
+    op.add_argument('-f', '--fetch', dest='fetch', action='store_true', default=False)
     op.add_argument('-s', '--species', '--species-list', dest='species_list')
     op.add_argument('-i', '--ids', '--ids-list', dest='ids_list')
+
 
     op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
 
@@ -59,7 +61,7 @@ Test runs:
 
     python scenario_1.py --proteomes test_input/proteins -o test_proteomes
 
-Usage: %s [--proteomes dir] [--annotations dir] [--ids-list file] [--species-list file]
+Usage: %s [--proteomes dir] [--fetch] [--annotations dir] [--ids-list file] [--species-list file]
                      [-o] [-t num] [--start-from step]
 
     -o:                  Output directory.
@@ -69,6 +71,9 @@ Optional arguments:
 
     -p --proteomes:      Directory with fasta (or faa) protein files, named by their reference ids
                          (i.e. NC_005816.1.fasta). Can contain annotations from Prodigal.
+
+    --fetch              Fetch annotations for proteomes. Assuming that the filenames are the reference IDs
+                         (accession number or GI).
 
     -s --species-list:   File with a list of organism names as in Genbank.
 
@@ -220,17 +225,18 @@ def step_prepare_proteomes_and_annotations(p, internet_is_on):
                 if not isdir(config.proteomes_dir):
                     mkdir(config.proteomes_dir)
 
-                if not internet_is_on:
-                    log.warn('   Warning: no internet connection, cannot fetch annotations. '
-                             'A reduced version of orthogroups.txt with no annotations will be produced.')
-                else:
-                    ref_ids = [splitext(basename(prot_file))[0] for prot_file in proteomes]
-                    fetch_annotations_for_ids(config.annotations_dir, ref_ids)
+                if p.fetch:
+                    if not internet_is_on:
+                        log.warn('   Warning: no internet connection, cannot fetch annotations. '
+                                 'A reduced version of orthogroups.txt with no annotations will be produced.')
+                    else:
+                        ref_ids = [splitext(basename(prot_file))[0] for prot_file in proteomes]
+                        fetch_annotations_for_ids(config.annotations_dir, ref_ids)
 
                 return adjust_proteomes(proteomes, config.proteomes_dir, p.prot_id_field)
 
     return Step(
-       'Preparing proteomes and annotations',
+        'Preparing proteomes and annotations',
         run=run,
         prod_files=[config.proteomes_dir, config.annotations_dir])
 

@@ -285,10 +285,11 @@ def find_pairs(suffix):
         'Finding pairs',
         run=run,
         req_files=[orthomcl_config],
-        req_tables=[in_paralog_table + suffix,
-                    ortholog_table + suffix,
-                    coortholog_table + suffix,
-                    similar_sequeces_table + suffix],
+        req_tables=[
+            in_paralog_table + suffix,
+            ortholog_table + suffix,
+            coortholog_table + suffix,
+            similar_sequeces_table + suffix],
         prod_tables=[tbl_name + suffix for tbl_name in [
             'BestHit',
             'BestQueryTaxonScore',

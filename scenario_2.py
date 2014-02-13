@@ -544,6 +544,8 @@ def main(args):
         start_from, start_after = get_starting_step(p.start_from, join(working_dir, log_fname))
 
         log.info('Changing to %s' % working_dir)
+        if not isdir(working_dir):
+            makedirs(working_dir)
         chdir(working_dir)
 
         workflow = Workflow(working_dir, id=make_workflow_id(working_dir),

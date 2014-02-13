@@ -346,7 +346,7 @@ def step_prepare_input(p):
                     if not p.overwrite:
                         files = [f for f in listdir(p.out_dir) if f and f[0] != '.']
                         log.debug(files)
-                        if not files:
+                        if files:
                             log.warn('The output directory exists. Do you want to overwrite it? '
                                      '(You can run with the --overwrite option to avoid this warning.)')
                             raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
@@ -426,7 +426,7 @@ def step_prepare_input(p):
                     if not p.overwrite:
                         files = [f for f in listdir(p.out_dir) if f and f[0] != '.']
                         log.debug(files)
-                        if not files:
+                        if files:
                             log.warn('The output directory exists. Do you want to overwrite it? '
                                      '(You can run with the --overwrite option to avoid this warning.)')
                             raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
@@ -480,7 +480,7 @@ def step_prepare_input(p):
                     if not p.overwrite:
                         files = [f for f in listdir(p.out_dir) if f and f[0] != '.']
                         log.debug(files)
-                        if not files:
+                        if files:
                             log.warn('The output directory exists. Do you want to overwrite it? '
                                      '(You can run with the --overwrite option to avoid this warning.)')
                             raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')

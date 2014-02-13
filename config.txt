@@ -1,15 +1,15 @@
 # db_vendor is either mysql, oracle or sqlite (for sqlite you don't have to specify anything else)
-db_vendor=mysql
-db_server=127.0.0.1
-db_login=root
-db_password=1234
-db_port=3307
-
 #db_vendor=mysql
-#db_server=172.18.72.88
-#db_login=orthomcl
-#db_password=12345
+#db_server=127.0.0.1
+#db_login=root
+#db_password=1234
 #db_port=3307
+
+db_vendor=mysql
+db_server=172.18.72.88
+db_login=orthomcl
+db_password=12345
+db_port=3307
 
 # memory available in gigabytes
 memory=16

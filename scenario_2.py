@@ -36,9 +36,8 @@ def parse_args(args):
     import argparse
     op = argparse.ArgumentParser(description='Find groups of orthologous genes.')
 
-    op.add_argument(dest='directory')
-
-    #op.add_argument('-s1o', dest='directory', required=True)
+    #op.add_argument(dest='directory', required=False)
+    op.add_argument('-s1o', dest='directory', required=True)
     op.add_argument('-s2o', '-o', dest='out_dir', required=False)
 
     op.add_argument('-a', '--assemblies', dest='assemblies')
@@ -63,10 +62,11 @@ Usage: %s -s1o <scenario_1 directory> -s2o <out_dir> [--assemblies dir] [--prote
                                  [--gbs dir] [--ids-list file] [--species-list file]
                                  [-t num] [--start-from step] [--blast-db]
 
-First argument - path to existed Scenario 1 output.
+    -s1o                 Path to existed Scenario 1 output.
+
+    -s2o                 Output directory (optional, if ommited, the input directory will be used).
 
 Optional arguments:
-    -o                   Output directory (optional, if ommited - the input directory will be used.
 
     -a --assemblies:     Directory with assemblies in fasta format.
 
@@ -351,6 +351,7 @@ def step_prepare_input(p):
                 makedirs(p.out_dir)
                 rmdir(p.out_dir)
                 copytree(p.directory, p.out_dir)
+                chdir(p.out_dir)
 
             assemblies = [
                 join(p.assemblies, f)
@@ -478,6 +479,7 @@ def step_prepare_input(p):
                 makedirs(p.out_dir)
                 rmdir(p.out_dir)
                 copytree(p.directory, p.out_dir)
+                chdir(p.out_dir)
 
             log.debug('   Using ref ids: ' + str(p.ids_list))
             ref_ids = read_list(p.ids_list)

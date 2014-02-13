@@ -344,9 +344,10 @@ def step_prepare_input(p):
             if p.out_dir != p.directory:
                 if isdir(p.out_dir):
                     if not p.overwrite:
-                        log.warn('The output directory exists. Do you want to overwrite it? '
-                                 '(You can run with the --overwrite option to avoid this warning.)')
-                        raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
+                        if not listdir(p.out_dir):
+                            log.warn('The output directory exists. Do you want to overwrite it? '
+                                     '(You can run with the --overwrite option to avoid this warning.)')
+                            raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
                     rmtree(p.out_dir)
                 makedirs(p.out_dir)
                 rmdir(p.out_dir)
@@ -421,9 +422,10 @@ def step_prepare_input(p):
             if p.out_dir != p.directory:
                 if isdir(p.out_dir):
                     if not p.overwrite:
-                        log.warn('The output directory exists. Do you want to overwrite it? '
-                                 '(You can run with the --overwrite option to avoid this warning.)')
-                        raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
+                        if not listdir(p.out_dir):
+                            log.warn('The output directory exists. Do you want to overwrite it? '
+                                     '(You can run with the --overwrite option to avoid this warning.)')
+                            raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
                     rmtree(p.out_dir)
                 makedirs(p.out_dir)
                 rmdir(p.out_dir)
@@ -472,9 +474,10 @@ def step_prepare_input(p):
             if p.out_dir != p.directory:
                 if isdir(p.out_dir):
                     if not p.overwrite:
-                        log.warn('The output directory exists. Do you want to overwrite it? '
-                                 '(You can run with the --overwrite option to avoid this warning.)')
-                        raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
+                        if not listdir(p.out_dir):
+                            log.warn('The output directory exists. Do you want to overwrite it? '
+                                     '(You can run with the --overwrite option to avoid this warning.)')
+                            raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
                     rmtree(p.out_dir)
                 makedirs(p.out_dir)
                 rmdir(p.out_dir)

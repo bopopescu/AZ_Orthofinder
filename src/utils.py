@@ -399,6 +399,7 @@ def test_internet_conn(url):
     try:
         response = urllib2.urlopen(url, timeout=1)
     except urllib2.URLError as err:
+        log.debug('test_internet_conn fail. Url=' + url + ', error=' + str(err))
         return False
     else:
         return True

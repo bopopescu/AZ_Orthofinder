@@ -383,15 +383,15 @@ def read_list(file, where_to_save=None):
 
 
 def test_entrez_conn():
-    test_internet_conn('http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi')
+    return test_internet_conn('http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi')
 
 
 def test_blast_conn():
-    test_internet_conn('http://blast.ncbi.nlm.nih.gov/Blast.cgi')
+    return test_internet_conn('http://blast.ncbi.nlm.nih.gov/Blast.cgi')
 
 
 def test_ftp_conn():
-    test_internet_conn('ftp.ncbi.nih.gov')
+    return test_internet_conn('ftp.ncbi.nih.gov')
 
 
 def test_internet_conn(url):

@@ -315,18 +315,25 @@ def main(args):
                              join(working_dir, config.nice_orthogroups_file))
             else:
                 log.info('Groups in short format are in ' + join(working_dir, config.short_orthogroups_file))
-                log.info('')
+
+            if isfile(log_fname):
+                with open(log_fname, 'a') as f:
+                    f.write('\n')
 
         return result
 
     except (KeyboardInterrupt, SystemExit, GeneratorExit):
-        log.info('')
+        if isfile(log_fname):
+            with open(log_fname, 'a') as f:
+                f.write('\n')
         return 1
 
     except Exception as e:
         log.error('')
         log.exception('Unexpected error!')
-        log.info('')
+        if isfile(log_fname):
+            with open(log_fname, 'a') as f:
+                f.write('\n')
         return 2
 
 

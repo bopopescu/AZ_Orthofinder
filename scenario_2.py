@@ -198,7 +198,7 @@ def step_blast_singletones(blastdb=None, debug=False, rewrite=False):
                 (join(config.singletone_dir, fname)
                  for fname in listdir(config.singletone_dir)
                  if fname and fname[0] != '.')):
-            log.debug('   ' + str(i) + '. ' + group_singletones_file)
+            log.debug('   ' + str(i + 1) + '. ' + group_singletones_file)
             rec = next(SeqIO.parse(group_singletones_file, 'fasta'))
             log.info('     Reading ' + rec.id)
 

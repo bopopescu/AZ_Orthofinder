@@ -91,7 +91,7 @@ def check_install_mysql(only_warn=False, internet_ok=False):
     else:
         if only_warn:
             log.warn('WARNING: MySQL is not installed. It is required for some steps.')
-            intenet_ok = test_internet_conn()
+            intenet_ok = test_internet_conn(url='http://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.15-linux-glibc2.5-x86_64.tar.gz')
             try:
                 if intenet_ok:
                     raw_input('Install mysql manually? It will be downloaded from the Internet, '
@@ -382,10 +382,22 @@ def read_list(file, where_to_save=None):
     return results
 
 
-def test_internet_conn():
+def test_entrez_conn():
+    test_internet_conn('http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi')
+
+
+def test_blast_conn():
+    test_internet_conn('http://blast.ncbi.nlm.nih.gov/Blast.cgi')
+
+
+def test_ftp_conn():
+    test_internet_conn('ftp.ncbi.nih.gov')
+
+
+def test_internet_conn(url):
     import urllib2
     try:
-        response = urllib2.urlopen('http://74.125.228.100', timeout=1)
+        response = urllib2.urlopen(url, timeout=1)
     except urllib2.URLError as err:
         return False
     else:

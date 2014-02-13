@@ -15,8 +15,9 @@ from src import steps
 from src.argparse import ArgumentParser
 
 from src.utils import make_workflow_id, read_list, set_up_config, \
-    get_starting_step, interrupt, register_ctrl_c, test_internet_conn, \
-    check_and_install_tools
+    get_starting_step, interrupt, register_ctrl_c, \
+    test_entrez_conn, test_blast_conn, test_ftp_conn, check_and_install_tools
+
 from src.parse_args import arg_parse_error, check_file, check_dir, \
     add_common_arguments, check_common_args
 from src.logger import set_up_logging
@@ -168,10 +169,10 @@ def collect_proteomes_and_annotaitons(input_dir):
     return proteomes, annotations
 
 
-def step_prepare_proteomes_and_annotations(p, internet_is_on):
+def step_prepare_proteomes_and_annotations(p):
     def run():
         if p.species_list:
-            if not internet_is_on:
+            if not test_entrez_conn():
                 log.error('   No internet connection: cannot fetch annotations.')
                 return 4
 
@@ -183,7 +184,7 @@ def step_prepare_proteomes_and_annotations(p, internet_is_on):
             return make_proteomes(config.annotations_dir, config.proteomes_dir)
 
         elif p.ids_list:
-            if not internet_is_on:
+            if not test_entrez_conn():
                 log.error('No internet connection: cannot fetch annotations.')
                 return 4
 
@@ -226,9 +227,11 @@ def step_prepare_proteomes_and_annotations(p, internet_is_on):
                     mkdir(config.proteomes_dir)
 
                 if p.fetch:
-                    if not internet_is_on:
-                        log.warn('   Warning: no internet connection, cannot fetch annotations. '
-                                 'A reduced version of orthogroups.txt with no annotations will be produced.')
+                    if not test_entrez_conn():
+                        log.error('   Error: no internet connection, cannot fetch annotations. '
+                                 'You can start without a --fetch option, in this case '
+                                 'a reduced version of orthogroups.txt with no annotations will be produced.')
+                        return 1
                     else:
                         ref_ids = [splitext(basename(prot_file))[0] for prot_file in proteomes]
                         fetch_annotations_for_ids(config.annotations_dir, ref_ids)
@@ -280,10 +283,8 @@ def main(args):
         if not exists(config.intermediate_dir):
             mkdir(config.intermediate_dir)
 
-        internet_is_on = test_internet_conn()
-
         workflow.extend([
-            step_prepare_proteomes_and_annotations(p, internet_is_on),
+            step_prepare_proteomes_and_annotations(p),
 
             steps.filter_proteomes(
                 min_length=int(p.min_length),
@@ -314,15 +315,18 @@ def main(args):
                              join(working_dir, config.nice_orthogroups_file))
             else:
                 log.info('Groups in short format are in ' + join(working_dir, config.short_orthogroups_file))
+                log.info('')
 
         return result
 
     except (KeyboardInterrupt, SystemExit, GeneratorExit):
+        log.info('')
         return 1
 
     except Exception as e:
         log.error('')
         log.exception('Unexpected error!')
+        log.info('')
         return 2
 
 

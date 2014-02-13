@@ -5,7 +5,7 @@ from os.path import join
 from config import log_fname
 
 
-def set_up_logging(debug, working_dir):
+def set_up_logging(debug, working_dir, mode='a'):
     logger = logging.getLogger(log_fname)
     logger.setLevel(logging.DEBUG if debug else logging.INFO)
 
@@ -29,11 +29,14 @@ def set_up_logging(debug, working_dir):
     logger.addHandler(err)
 
     log_fpath = join(working_dir, log_fname)
-    fh = logging.FileHandler(log_fpath, 'a')
+    fh = logging.FileHandler(log_fpath, mode)
     fh.setLevel(logging.DEBUG if debug else logging.INFO)
     fh.setFormatter(logging.Formatter(
         '%(asctime)-15s  %(message)s',
         datefmt='%c'))
     logger.addHandler(fh)
+
+    with open(log_fpath, 'a') as f:
+        f.write('*' * 50)
 
     return log_fpath

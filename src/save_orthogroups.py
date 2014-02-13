@@ -39,7 +39,7 @@ def save_compact(mcl_output, out):
 
 def get_assembly_genes(assembly_proteins_fpath, max_lengths):
     assembly_proteins_recs = dict()
-    log.debug('   Reading ' + assembly_proteins_fpath)
+    log.debug('   Reading additional proteins: ' + assembly_proteins_fpath)
     assembly_name = splitext(basename(assembly_proteins_fpath))[0]
     strain = assembly_name
 
@@ -146,9 +146,16 @@ def save_orthogroups(new_prot_fpaths, annotations, mcl_output,
 
     if not gb_fpaths:
         with open(mcl_output) as mcl_f, \
-             open(out_short, 'w') as out_f:
+             open(out_short, 'w') as out_f, \
+             open(out_nice, 'w') as nice_f, \
+             open(assembly_singletones, 'a') as singletones_f:
+
+            singletone_assembly_recs = []
+
             gene_number = 0
             group_nunber = 0
+            singletone_gene_number = 0
+            singletone_group_number = 0
 
             for group_line in mcl_f:
                 group_nunber += 1
@@ -165,8 +172,31 @@ def save_orthogroups(new_prot_fpaths, annotations, mcl_output,
                 out_f.write(' ')
                 out_f.write(group_line)
                 out_f.write('\n')
+
+                if new_protein_records and known_genes_in_this_group == []:
+                    group = []
+                    singletone_group_number += 1
+
+                    singletones_f.write('Group %d\n' % group_nunber)
+                    for rec_id in group_line.split():
+                        singletone_gene_number += 1
+                        group.append(new_protein_records[rec_id])
+                        singletones_f.write(rec_id + ' ')
+                    singletones_f.write('\n')
+
+                    singletone_assembly_recs.append(group)
+
+                    a_singletone_filepath = join(
+                        singletone_dir,
+                        splitext(assembly_singletones)[0] + '_group_'
+                        + str(group_nunber) + '.fasta')
+                    SeqIO.write(group, a_singletone_filepath, 'fasta')
+
         log.info('   Saved in short format %d groups, totally containing %d genes.' % (group_nunber, gene_number))
 
+        if singletone_assembly_recs:
+            log.info('   Saved %d singletone groups for the assembly, totally containing %d genes.' %
+                     (singletone_group_number, singletone_gene_number))
     else:
         with open(mcl_output) as mcl_f, \
              open(out, 'w') as out_f, \

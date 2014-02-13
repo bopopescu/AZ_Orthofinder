@@ -17,8 +17,8 @@ from src import steps
 
 from src.utils import which, make_workflow_id, read_list, \
     set_up_config, get_starting_step, register_ctrl_c, \
-    check_installed_tools, test_internet_conn, \
-    check_install_mcl, check_perl_modules, check_and_install_tools
+    check_installed_tools, test_entrez_conn, \
+    check_install_mcl, check_perl_modules, check_and_install_tools, test_blast_conn
 from src.parse_args import arg_parse_error, check_file,\
     check_dir, add_common_arguments, check_common_args
 from src.logger import set_up_logging
@@ -173,17 +173,20 @@ def step_blast_singletones(blastdb=None, debug=False, rewrite=False):
              if fname and fname[0] != '.']:
             pass
         else:
-            log.error('   No singletones, skipping the step')
+            log.error('   No singletones in additional genomes, skipping the step.')
+            log.debug('   ' + realpath(config.singletone_dir))
             return 0
 
         if blastdb:
             log.info('   Using local NCBI database: ' + blastdb)
         else:
-            if test_internet_conn():
+            if test_blast_conn():
                 log.info('   Using remote NCBI database.')
             else:
-                log.error('   No Blast database and no internet connection'
-                          ' to use the remote NCBI database.')
+                log.error('   No Blast database and no Internet connection '
+                          'to use the remote NCBI database. Please, provide '
+                          'a path to blast database (with the --blast-db option) '
+                          'or verify your Internet connection.')
                 return 1
 
             if rewrite and exists(blasted_singletones_dir):
@@ -338,6 +341,17 @@ all_considered_warning = '   Notice: all proteomes are already considered in thi
 def step_prepare_input(p):
     if p.assemblies:
         def run():
+            if p.out_dir != p.directory:
+                if isdir(p.out_dir):
+                    if not p.overwrite:
+                        log.warn('The output directory exists. Do you want to overwrite it? '
+                                 '(You can run with the --overwrite option to avoid this warning.)')
+                        raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
+                    rmtree(p.out_dir)
+                makedirs(p.out_dir)
+                rmdir(p.out_dir)
+                copytree(p.directory, p.out_dir)
+
             assemblies = [
                 join(p.assemblies, f)
                 for f in listdir(p.assemblies)
@@ -403,6 +417,18 @@ def step_prepare_input(p):
 
     elif p.proteomes:
         def run():
+            if p.out_dir != p.directory:
+                if isdir(p.out_dir):
+                    if not p.overwrite:
+                        log.warn('The output directory exists. Do you want to overwrite it? '
+                                 '(You can run with the --overwrite option to avoid this warning.)')
+                        raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
+                    rmtree(p.out_dir)
+                makedirs(p.out_dir)
+                rmdir(p.out_dir)
+                copytree(p.directory, p.out_dir)
+                chdir(p.out_dir)
+
             input_proteomes = [
                 join(p.proteomes, prot)
                 for prot in listdir(p.proteomes)
@@ -416,10 +442,13 @@ def step_prepare_input(p):
 
             new_prot_names = [splitext(basename(prot))[0] for prot in input_proteomes]
 
+            new_proteomes_dir = 'new_proteomes'
+            new_annotations_dir = 'new_annotations'
             new_proteomes = [
                 join(new_proteomes_dir, prot_name + '.fasta')
                 for prot_name in new_prot_names]
 
+            new_proteomes_dir = join(getcwd(), new_proteomes_dir)
             if not isdir(new_proteomes_dir):
                 mkdir(new_proteomes_dir)
 
@@ -435,9 +464,20 @@ def step_prepare_input(p):
 
     elif p.ids_list:
         def run():
-            if not test_internet_conn():
+            if not test_entrez_conn():
                 log.error('No internet connection: cannot fetch annotations.')
                 return 4
+
+            if p.out_dir != p.directory:
+                if isdir(p.out_dir):
+                    if not p.overwrite:
+                        log.warn('The output directory exists. Do you want to overwrite it? '
+                                 '(You can run with the --overwrite option to avoid this warning.)')
+                        raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
+                    rmtree(p.out_dir)
+                makedirs(p.out_dir)
+                rmdir(p.out_dir)
+                copytree(p.directory, p.out_dir)
 
             log.debug('   Using ref ids: ' + str(p.ids_list))
             ref_ids = read_list(p.ids_list)
@@ -483,23 +523,16 @@ def main(args):
     register_ctrl_c()
 
     p = parse_args(args)
-    log_fpath = set_up_logging(p.debug, p.directory)
+    log_fpath = set_up_logging(p.debug, p.directory, 'w')
     log.info('python ' + basename(__file__) + ' ' + ' '.join(args))
     log.info('')
 
     try:
+        if not exists(join(p.directory, 'intermediate')):
+            arg_parse_error('You need to run Scenario 1 on this directory first.')
+
         if not p.out_dir:
             p.out_dir = p.directory
-        if p.out_dir != p.directory:
-            if isdir(p.out_dir):
-                if not p.overwrite:
-                    log.warn('The output directory exists. Do you want to overwrite it? '
-                             '(You can run with the --overwrite option to avoid this warning.)')
-                    raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
-                rmtree(p.out_dir)
-            makedirs(p.out_dir)
-            rmdir(p.out_dir)
-            copytree(p.directory, p.out_dir)
 
         working_dir = p.out_dir
 
@@ -510,9 +543,6 @@ def main(args):
 
         log.info('Changing to %s' % working_dir)
         chdir(working_dir)
-
-        if not exists('intermediate'):
-            arg_parse_error('You need to run Scenario 1 on this directory first.')
 
         workflow = Workflow(working_dir, id=make_workflow_id(working_dir),
                             cmdline_args=['python', basename(__file__)] + args)

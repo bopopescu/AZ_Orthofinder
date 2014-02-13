@@ -114,6 +114,7 @@ def fetch_annotations_for_ids(annotations_dir, ref_ids):
             try:
                 fetch_handle = Entrez.efetch(db='nucleotide', id=ref_id,
                                              retmode='text', rettype='gbwithparts')
+
             except urllib2.HTTPError as e:
                 log.error('   Error: cannot fetch data for reference id ' + ref_id + '.')
                 log.error('   Http error code: %s, reason: %s' % (str(e.code), str(e.reason)))

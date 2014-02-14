@@ -46,6 +46,8 @@ def parse_args(args):
     op.add_argument('-i', '--ids', '--ids-list', dest='ids_list')
 
     op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
+    op.add_argument('--blast-singletones', dest='blast_singletones',
+                    action='store_true', default=False)
     op.add_argument('--blastdb', dest='blastdb')
 
     #-o:                  Output directory (if not specified, the input directory will be used).
@@ -60,7 +62,7 @@ Test runs:
 
 Usage: %s -s1o <scenario_1 directory> -s2o <out_dir> [--assemblies dir] [--proteomes dir]
                                  [--gbs dir] [--ids-list file] [--species-list file]
-                                 [-t num] [--start-from step] [--blast-db]
+                                 [-t num] [--start-from step] [--blast-singletones] [--blast-db]
 
     -s1o                 Path to existed Scenario 1 output.
 
@@ -81,6 +83,9 @@ Optional arguments:
     --prot-id-field:     When specifying proteomes, use this fasta id field number
                          to retrieve protein ids (default if 1, like
                          >NC_005816.1|NP_995567.1 ...).
+
+    --blast-singletones  Search newly added proteins agains NCBI database, if they did
+                         not fit any group with known proteins.
 
     --blast-db           Local Blast database path. If not set, remote NCBI will be used.
     ''' % basename(__file__)
@@ -588,9 +593,9 @@ def main(args):
             steps.find_pairs(suffix),
             steps.dump_pairs_to_files(suffix),
             steps.mcl(p.debug),
-            steps.step_save_orthogroups(new_proteomes_dir if not p.ids_list else None)
+            steps.step_save_orthogroups(new_proteomes_dir if not p.ids_list and p.blast_singletones else None)
         ])
-        if not p.ids_list:
+        if not p.ids_list and p.blast_singletones:
             workflow.extend([step_blast_singletones(p.blastdb, p.debug)])
 
         result = workflow.run(

@@ -235,7 +235,7 @@ def check_perl_modules(debug, only_warn=False):
     cpan> install Data::Dumper
     cpan> install DBI
     cpan> force install DBD::mysql
-    ''' % mysql_cnf
+    '''
         if only_warn:
             return 0
         else:

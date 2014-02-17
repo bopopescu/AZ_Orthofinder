@@ -166,8 +166,15 @@ def step_finding_genes(assembly_names):
 blasted_singletones_dir = 'blasted_singletones'
 
 
-def step_blast_singletones(blastdb=None, debug=False, rewrite=False):
+def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, rewrite=False):
     def run(singletones_file, new_proteomes_dir):
+
+        #if not blast_singletones:
+        #    raw_input('Blast added proteomes? ' +
+        #              (('Local database ' + blastdb + ' will be used')
+        #               if blastdb
+        #               else 'Remote database will be used.')
+
         from Bio.Blast.Applications import NcbiblastxCommandline
         from Bio.Blast import NCBIWWW, NCBIXML
         from Bio import SeqIO
@@ -186,6 +193,11 @@ def step_blast_singletones(blastdb=None, debug=False, rewrite=False):
             log.info('   Using local NCBI database: ' + blastdb)
         else:
             if test_blast_conn():
+                if not blast_singletones:
+                    raw_input('Blast added proteomes? '
+                              'Remote database will be used. '
+                              'Press any key to overwrite and continue, '
+                              'or Ctrl-C to interrupt.\n>')
                 log.info('   Using remote NCBI database.')
             else:
                 log.error('   No Blast database and no Internet connection '
@@ -233,8 +245,15 @@ def step_blast_singletones(blastdb=None, debug=False, rewrite=False):
 
                         except urllib2.HTTPError as e:
                             log.warn('')
-                            log.warn('   Warning: could not blast through web. %s. '
-                                     'Retrying... (You can type Ctrl-C to interrupt and continue later).' % e.msg)
+                            log.warn('   Warning: could not blast through web. HTTPError: %s. Code: %s.'
+                                     'Retrying... (You can type Ctrl-C to interrupt and continue later).'
+                                     % (e.msg, str(e.code)))
+                            retrying = True
+
+                        except urllib2.URLError, e:
+                            log.warn('')
+                            log.warn('   Warning: could not blast through web. URLError: %s. '
+                                     'Retrying... (You can type Ctrl-C to interrupt and continue later).' % e.args)
                             retrying = True
 
                         except (KeyboardInterrupt, SystemExit, GeneratorExit):
@@ -595,8 +614,8 @@ def main(args):
             steps.mcl(p.debug),
             steps.step_save_orthogroups(new_proteomes_dir if not p.ids_list and p.blast_singletones else None)
         ])
-        if not p.ids_list and p.blast_singletones:
-            workflow.extend([step_blast_singletones(p.blastdb, p.debug)])
+        if not p.ids_list:
+            workflow.extend([step_blast_singletones(p.blast_singletones, p.blastdb, p.debug)])
 
         result = workflow.run(
             start_after, start_from,

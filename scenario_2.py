@@ -262,6 +262,9 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
                                          'the process will continue from here.' % blasted_singletones_dir)
                                 return 1
 
+                        import time
+                        time.sleep(2)
+
                     log.info('   Try running from this step again.')
 
             # Searching best hit

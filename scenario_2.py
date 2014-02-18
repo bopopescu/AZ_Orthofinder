@@ -228,7 +228,7 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
                 pass
             else:
                 log.info('     Blasting against the refseq_proteins database.')
-                log.info('     Writing result to ' + full_xml_f)
+                log.info('     Writing result to ' + full_xml_fpath)
 
                 if blastdb:
                     blast_cmdline = NcbiblastxCommandline(

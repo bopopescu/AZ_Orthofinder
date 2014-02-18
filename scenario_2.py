@@ -294,7 +294,7 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
                 short_f.write(rec.description + '\n')
                 short_f.write(str(rec.seq) + '\n\n')
 
-                blast_record = NCBIXML.read(full_xml_f)
+                blast_record = next(NCBIXML.parse(full_xml_f))
 
                 for i, alignment in enumerate(blast_record.alignments):
                     short_f.write(str(i + 1) + '. Alignment\n'

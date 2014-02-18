@@ -14,6 +14,7 @@ from src.process_assembly import filter_assembly
 from src.make_proteomes import adjust_proteomes, make_proteomes
 from src.steps import check_results_existence
 from src import steps
+import time
 
 from src.utils import which, make_workflow_id, read_list, \
     set_up_config, get_starting_step, register_ctrl_c, \
@@ -220,12 +221,14 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
             log.info('     Reading ' + rec.id)
 
             # Blasting against NCBI
-            full_xml_fpath = join(blasted_singletones_dir, 'refseq_blasted_' + rec.id + '.xml')
-            short_fpath = join(blasted_singletones_dir, 'refseq_blasted_' + rec.id + '.txt')
+            full_xml_fpath = join(blasted_singletones_dir, str(i) + '_refseq_blasted_' + rec.id + '.xml')
+            short_fpath = join(blasted_singletones_dir, str(i) + 'refseq_blasted_' + rec.id + '.txt')
+
             if isfile(full_xml_fpath):
                 pass
             else:
-                log.info('     Blasting against the refseq_proteins database...')
+                log.info('     Blasting against the refseq_proteins database.')
+                log.info('     Writing result to ' + full_xml_f)
 
                 if blastdb:
                     blast_cmdline = NcbiblastxCommandline(
@@ -237,35 +240,44 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
 
                 else:
                     retrying = False
+                    to_the_next = False
+                    attempt_number = 1
                     while True:
                         try:
-                            full_xml_f = NCBIWWW.qblast('blastp', 'refseq_protein', rec.format('fasta'))
+                            full_xml_f = NCBIWWW.qblast('blastp', 'refseq_protein', rec.format('fasta'),
+                                                        hitlist_size=10)
                             with open(full_xml_fpath, 'w') as save_f:
                                 save_f.write(full_xml_f.read())
 
                         except urllib2.HTTPError as e:
-                            log.warn('')
-                            log.warn('   Warning: could not blast through web. HTTPError: %s. Code: %s.'
-                                     'Retrying... (You can type Ctrl-C to interrupt and continue later).'
+                            log.warn('     Warning: could not blast through web. HTTPError: %s. Code %s. '
+                                     '(You can press Ctrl+C to interrupt and continue later).'
                                      % (e.msg, str(e.code)))
                             retrying = True
 
                         except urllib2.URLError, e:
-                            log.warn('')
-                            log.warn('   Warning: could not blast through web. URLError: %s. '
-                                     'Retrying... (You can type Ctrl-C to interrupt and continue later).' % e.args)
+                            log.warn('     Warning: could not blast through web. URLError: %s. '
+                                     '(You can press Ctrl+C to interrupt and continue later).'
+                                     % (e.args))
                             retrying = True
 
                         except (KeyboardInterrupt, SystemExit, GeneratorExit):
                             if retrying:
-                                log.info('   If you restart from this step and do not remove the "%s" directory, '
+                                log.info('     If you restart from this step and do not remove the "%s" directory, '
                                          'the process will continue from here.' % blasted_singletones_dir)
                                 return 1
-
-                        import time
                         time.sleep(2)
+                        if attempt_number >= 3:
+                            to_the_next = True
+                            break
+                        else:
+                            attempt_number += 1
+                            log.info('     Attempt %d/3' % attempt_number)
 
-                    log.info('   Try running from this step again.')
+                    if to_the_next:
+                        continue
+                    else:
+                        time.sleep(0.5)
 
             # Searching best hit
             LEN_FACTOR = 0.05

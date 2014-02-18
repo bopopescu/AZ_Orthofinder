@@ -49,7 +49,7 @@ def parse_args(args):
     op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
     op.add_argument('--blast-singletones', dest='blast_singletones',
                     action='store_true', default=False)
-    op.add_argument('--blastdb', dest='blastdb')
+    op.add_argument('--blastdb', '--blast-db', dest='blastdb')
 
     #-o:                  Output directory (if not specified, the input directory will be used).
 
@@ -119,6 +119,9 @@ Optional arguments:
     if p.annotations:
         check_dir(expanduser(p.annotations))
         p.annotations = abspath(expanduser(p.annotations))
+
+    if p.blastdb:
+        p.blastdb = abspath(expanduser(p.blastdb))
 
     if not isdir(expanduser(p.directory)):
         arg_parse_error('Directory %s does not exist.' % p.directory)
@@ -221,21 +224,22 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
             log.info('     Reading ' + rec.id)
 
             # Blasting against NCBI
-            full_xml_fpath = join(blasted_singletones_dir, str(i) + '_refseq_blasted_' + rec.id + '.xml')
-            short_fpath = join(blasted_singletones_dir, str(i) + 'refseq_blasted_' + rec.id + '.txt')
+            full_xml_fpath = join(blasted_singletones_dir, str(i + 1) + '_refseq_blasted_' + rec.id + '.xml')
+            short_fpath = join(blasted_singletones_dir, str(i + 1) + '_refseq_blasted_' + rec.id + '.txt')
 
             if isfile(full_xml_fpath):
+                log.info('     Reading results from ' + abspath(full_xml_fpath))
                 pass
             else:
                 log.info('     Blasting against the refseq_proteins database.')
-                log.info('     Writing result to ' + full_xml_fpath)
+                log.info('     Writing result to ' + abspath(full_xml_fpath))
 
                 if blastdb:
                     blast_cmdline = NcbiblastxCommandline(
                         query=group_singletones_file,
-                        db='refseq_protein',
+                        db=blastdb,
                         outfmt=5,
-                        out=full_xml_fpath)
+                        out='"' + full_xml_fpath + '"')
                     stdout, stderr = blast_cmdline()
 
                 else:

@@ -192,19 +192,19 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
         if blastdb:
             log.info('   Using local NCBI database: ' + blastdb)
         else:
-            if test_blast_conn():
-                if not blast_singletones:
-                    raw_input('Blast added proteomes? '
-                              'Remote database will be used. '
-                              'Press any key to overwrite and continue, '
-                              'or Ctrl-C to interrupt.\n>')
-                log.info('   Using remote NCBI database.')
-            else:
-                log.error('   No Blast database and no Internet connection '
-                          'to use the remote NCBI database. Please, provide '
-                          'a path to blast database (with the --blast-db option) '
-                          'or verify your Internet connection.')
-                return 1
+            #if test_blast_conn():
+            if not blast_singletones:
+                raw_input('Blast added proteomes? '
+                          'Remote database will be used. '
+                          'Press any key to overwrite and continue, '
+                          'or Ctrl-C to interrupt.\n>')
+            log.info('   Using remote NCBI database.')
+            #else:
+            #    log.error('   No Blast database and no Internet connection '
+            #              'to use the remote NCBI database. Please, provide '
+            #              'a path to blast database (with the --blast-db option) '
+            #              'or verify your Internet connection.')
+            #    return 1
 
             if rewrite and exists(blasted_singletones_dir):
                 rmtree(blasted_singletones_dir)

@@ -5,7 +5,7 @@ from shutil import copyfile, rmtree, copy, copytree
 
 import sys
 import logging
-from os import chdir, mkdir, getcwd, listdir, symlink, makedirs, rmdir
+from os import chdir, mkdir, getcwd, listdir, symlink, makedirs, rmdir, remove
 from os.path import join, exists, isdir, dirname, realpath,\
     basename, splitext, abspath, expanduser
 import urllib2
@@ -227,10 +227,19 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
             full_xml_fpath = join(blasted_singletones_dir, str(i + 1) + '_refseq_blasted_' + rec.id + '.xml')
             short_fpath = join(blasted_singletones_dir, str(i + 1) + '_refseq_blasted_' + rec.id + '.txt')
 
+            do_blast = True
             if isfile(full_xml_fpath):
-                log.info('     Reading results from ' + abspath(full_xml_fpath))
-                pass
-            else:
+                with open(full_xml_fpath) as full_xml_f:
+                    try:
+                        next(NCBIXML.parse(full_xml_f))
+                    except:
+                        log.info('     File ' + abspath(full_xml_fpath) + ' is empty.')
+                        remove(full_xml_fpath)
+                    else:
+                        log.info('     Reading results from ' + abspath(full_xml_fpath))
+                        do_blast = False
+
+            if do_blast:
                 log.info('     Blasting against the refseq_proteins database.')
                 log.info('     Writing result to ' + abspath(full_xml_fpath))
 

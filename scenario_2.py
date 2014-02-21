@@ -643,7 +643,7 @@ def main(args):
             steps.step_save_orthogroups(new_proteomes_dir if not p.ids_list and p.blast_singletones else None)
         ])
         if not p.ids_list:
-            workflow.extend([step_blast_singletones(p.blast_singletones, p.blastdb, p.debug)])
+            workflow.extend([step_blast_singletones(p.blast_singletones, p.blastdb, p.debug, p.overwrite)])
 
         result = workflow.run(
             start_after, start_from,

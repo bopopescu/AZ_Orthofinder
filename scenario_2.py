@@ -278,14 +278,16 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
                             if retrying:
                                 log.info('     If you restart from this step and do not remove the "%s" directory, '
                                          'the process will continue from here.' % blasted_singletones_dir)
-                                return 1
+                            return 1
                         time.sleep(2)
-                        if attempt_number >= 3:
-                            to_the_next = True
-                            break
-                        else:
-                            attempt_number += 1
-                            log.info('     Attempt %d/3' % attempt_number)
+
+                        if retrying:
+                            if attempt_number >= 3:
+                                to_the_next = True
+                                break
+                            else:
+                                attempt_number += 1
+                                log.info('     Attempt %d/3' % attempt_number)
 
                     if to_the_next:
                         continue

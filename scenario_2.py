@@ -5,10 +5,11 @@ from shutil import copyfile, rmtree, copy, copytree
 
 import sys
 import logging
-from os import chdir, mkdir, getcwd, listdir, symlink, makedirs, rmdir, remove
+from os import chdir, mkdir, getcwd, listdir, symlink, makedirs, rmdir, remove, environ
 from os.path import join, exists, isdir, dirname, realpath,\
     basename, splitext, abspath, expanduser
 import urllib2
+from Bio.Blast.Applications import NcbiblastpCommandline
 from src.fetch_annotations import fetch_annotations_for_ids
 from src.process_assembly import filter_assembly
 from src.make_proteomes import adjust_proteomes, make_proteomes
@@ -31,6 +32,8 @@ from src.config import log_fname
 log = logging.getLogger(log_fname)
 
 script_path = dirname(realpath(__file__))
+
+max_attempts = 1
 
 
 def parse_args(args):
@@ -172,6 +175,7 @@ blasted_singletones_dir = 'blasted_singletones'
 
 def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, rewrite=False):
     def run(singletones_file, new_proteomes_dir):
+        #environ["http_proxy"] = "http://192.168.0.2:3128"
 
         #if not blast_singletones:
         #    raw_input('Blast added proteomes? ' +
@@ -198,10 +202,13 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
         else:
             #if test_blast_conn():
             if not blast_singletones:
-                raw_input('Blast added proteomes? '
-                          'Remote database will be used. '
-                          'Press any key to overwrite and continue, '
-                          'or Ctrl-C to interrupt.\n>')
+                try:
+                    raw_input('Blast added proteomes? '
+                              'Remote database will be used. '
+                              'Press any key to overwrite and continue, '
+                              'or Ctrl-C to interrupt.\n> ')
+                except (EOFError, KeyboardInterrupt, SystemExit, GeneratorExit):
+                    exit(1)
             log.info('   Using remote NCBI database.')
             #else:
             #    log.error('   No Blast database and no Internet connection '
@@ -224,7 +231,9 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
             log.info('     Reading ' + rec.id)
 
             # Blasting against NCBI
-            full_xml_fpath = join(blasted_singletones_dir, str(i + 1) + '_refseq_blasted_' + rec.id + '.xml')
+            full_xml_fpath = join(blasted_singletones_dir,
+                                  str(i + 1) +
+                                  '_refseq_blasted_' + rec.id.replace('|', '_') + '.xml')
             short_fpath = join(blasted_singletones_dir, str(i + 1) + '_refseq_blasted_' + rec.id + '.txt')
 
             do_blast = True
@@ -244,11 +253,11 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
                 log.info('     Writing result to ' + abspath(full_xml_fpath))
 
                 if blastdb:
-                    blast_cmdline = NcbiblastxCommandline(
+                    blast_cmdline = NcbiblastpCommandline(
                         query=group_singletones_file,
                         db=blastdb,
                         outfmt=5,
-                        out='"' + full_xml_fpath + '"')
+                        out=full_xml_fpath)
                     stdout, stderr = blast_cmdline()
 
                 else:
@@ -257,6 +266,7 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
                     attempt_number = 1
                     while True:
                         try:
+                            print rec.format('fasta')
                             full_xml_f = NCBIWWW.qblast('blastp', 'refseq_protein', rec.format('fasta'),
                                                         hitlist_size=10)
                             with open(full_xml_fpath, 'w') as save_f:
@@ -282,7 +292,7 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
                         time.sleep(2)
 
                         if retrying:
-                            if attempt_number >= 3:
+                            if attempt_number >= max_attempts:
                                 to_the_next = True
                                 break
                             else:
@@ -403,7 +413,9 @@ def step_prepare_input(p):
                         if files:
                             log.warn('The output directory exists. Do you want to overwrite it? '
                                      '(You can run with the --overwrite option to avoid this warning.)')
+
                             raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
+                            exit(1)
                     rmtree(p.out_dir)
                 makedirs(p.out_dir)
                 rmdir(p.out_dir)
@@ -537,7 +549,10 @@ def step_prepare_input(p):
                         if files:
                             log.warn('The output directory exists. Do you want to overwrite it? '
                                      '(You can run with the --overwrite option to avoid this warning.)')
-                            raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
+                            try:
+                                raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
+                            except (EOFError, KeyboardInterrupt, SystemExit, GeneratorExit):
+                                exit(1)
                     rmtree(p.out_dir)
                 makedirs(p.out_dir)
                 rmdir(p.out_dir)

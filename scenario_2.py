@@ -363,7 +363,7 @@ def step_blast_singletones(threads, blast_singletones=True, blastdb=None, debug=
                     raw_input('Blast added proteomes? '
                               'Remote database will be used. '
                               'Press any key to overwrite and continue, '
-                              'or Ctrl-C to interrupt.\n> ')
+                              'or Ctrl+C to interrupt.\n> ')
                 except (EOFError, KeyboardInterrupt, SystemExit, GeneratorExit):
                     exit(1)
             log.info('   Using remote NCBI database.')
@@ -434,9 +434,10 @@ def step_prepare_input(p):
                         if files:
                             log.warn('The output directory exists. Do you want to overwrite it? '
                                      '(You can run with the --overwrite option to avoid this warning.)')
-
-                            raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
-                            exit(1)
+                            try:
+                                raw_input('Press any key to overwrite and continue, or Ctrl+C to interrupt.\n> ')
+                            except (EOFError, KeyboardInterrupt, SystemExit, GeneratorExit):
+                                exit(1)
                     rmtree(p.out_dir)
                 makedirs(p.out_dir)
                 rmdir(p.out_dir)

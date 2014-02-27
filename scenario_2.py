@@ -286,12 +286,12 @@ def search_for_best_hit(rec, res_xml_fpath, short_fpath):
     log.info('')
 
 
-def process_record(rec, group_i, blastdb):
+def process_record(rec, group_i, blastdb, threads):
     from Bio.Blast import NCBIXML
     from Bio import SeqIO
     from Bio.Blast.Applications import NcbiblastpCommandline
 
-    log.info('      Reading sequence ' + rec.id)
+    log.info('     Reading sequence ' + rec.id)
 
     # Blasting against NCBI
     res_xml_fpath = join(
@@ -323,7 +323,8 @@ def process_record(rec, group_i, blastdb):
             blast_cmdline = NcbiblastpCommandline(
                 db=blastdb,
                 outfmt=5,
-                out=res_xml_fpath)
+                out=res_xml_fpath,
+                num_threads=threads)
             out, err = blast_cmdline(stdin=str(rec.seq))
         else:
             res = blast_online(rec, res_xml_fpath)
@@ -333,7 +334,7 @@ def process_record(rec, group_i, blastdb):
     search_for_best_hit(rec, res_xml_fpath, short_fpath)
 
 
-def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, rewrite=False):
+def step_blast_singletones(threads, blast_singletones=True, blastdb=None, debug=False, rewrite=False):
     def run(singletones_file, new_proteomes_dir):
         #environ["http_proxy"] = "http://192.168.0.2:3128"
 
@@ -385,7 +386,7 @@ def step_blast_singletones(blast_singletones=True, blastdb=None, debug=False, re
             log.debug('   Group ' + str(group_i + 1) + '. ' + group_singletones_file)
 
             for rec in SeqIO.parse(group_singletones_file, 'fasta'):
-                res = process_record(rec, group_i, blastdb)
+                res = process_record(rec, group_i, blastdb, threads)
                 if res == 1:
                     return 1
 
@@ -680,7 +681,7 @@ def main(args):
             steps.step_save_orthogroups(new_proteomes_dir if not p.ids_list and p.blast_singletones else None)
         ])
         if not p.ids_list:
-            workflow.extend([step_blast_singletones(p.blast_singletones, p.blastdb, p.debug, p.overwrite)])
+            workflow.extend([step_blast_singletones(p.threads, p.blast_singletones, p.blastdb, p.debug, p.overwrite)])
 
         result = workflow.run(
             start_after, start_from,

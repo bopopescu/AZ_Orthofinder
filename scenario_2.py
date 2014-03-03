@@ -49,8 +49,8 @@ def parse_args(args):
     op.add_argument('-i', '--ids', '--ids-list', dest='ids_list')
 
     op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
-    op.add_argument('--blast-singletones', dest='blast_singletones',
-                    action='store_true', default=False)
+    op.add_argument('--skip-blast-singletones', dest='blast_singletones',
+                    action='store_false', default=True)
     op.add_argument('--blastdb', '--blast-db', dest='blastdb')
 
     #-o:                  Output directory (if not specified, the input directory will be used).
@@ -477,6 +477,7 @@ def step_prepare_input(p):
             if res != 0:
                 return res
 
+            # Recreate new_proteomes_directory
             if exists(new_proteomes_dir):
                 rmtree(new_proteomes_dir)
             if not isdir(new_proteomes_dir):

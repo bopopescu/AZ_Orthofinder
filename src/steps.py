@@ -40,10 +40,10 @@ def check_results_existence():
             rmtree(obj)
 
 
-ortholog_table = 'OrthologTable'
-in_paralog_table = 'InParalogTable'
-coortholog_table = 'CoOrthologTable'
-similar_sequeces_table = 'SimilarSequencesTable'
+ortholog_table = 'Ortholog'
+in_paralog_table = 'InParalog'
+coortholog_table = 'CoOrtholog'
+similar_sequeces_table = 'SimilarSequences'
 inter_taxon_match_view = 'interTaxonMatchView'
 best_hit_table = 'BestHit'
 best_hit_taxon_score_table = 'BestQueryTaxonScore'

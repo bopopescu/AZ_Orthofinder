@@ -84,7 +84,7 @@ Fine tuning:
 
     --max-percent_stop     Maximum percent stop codons (default: 20)
 
-    --evalue               Blast e-value (default: 1e-5)
+    --evalue               Blast e-value cut-off (default: 1e-5)
     '''
 
 def check_common_args(params):

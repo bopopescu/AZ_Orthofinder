@@ -1,6 +1,6 @@
 from genericpath import isfile, isdir
 from itertools import izip, count, ifilterfalse, ifilter
-from os import remove
+from os import remove, getcwd
 from os.path import basename, exists
 from shutil import rmtree
 import sqlite3
@@ -74,8 +74,9 @@ class Workflow:
                 self.cmdline_args.append(str(i))
 
                 log.warn('')
-                log.warn('   Process was not complete. You can restart from this point with the following:')
-                log.warn('      ' + ' '.join(self.cmdline_args))
+                log.warn('   The pipeline is not complete. You can use intermediate results in ' + getcwd() +
+                         ', or restart from this point using the --start-from option:')
+                log.warn('   ' + ' '.join(self.cmdline_args))
                 return 1
 
             log.info('   Done.')
@@ -171,7 +172,12 @@ def cmdline(command, parameters=None, stdin=None,
         except KeyboardInterrupt:
             return 1
 
-        except:
+        except OSError, e:
+            log.error('')
+            log.error('   OS Error when executing "%s":' % commandline)
+            log.error('   ' + e.strerror)
+            if e.filename:
+                log.error('   For ' + e.filename)
             return 1
 
     return callback

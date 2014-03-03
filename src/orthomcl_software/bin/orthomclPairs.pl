@@ -380,8 +380,8 @@ select bh1.query_id as sequence_id_a, bh1.subject_id as sequence_id_b,
            (log(10, bh1.evalue_mant * bh2.evalue_mant)
             + bh1.evalue_exp + bh2.evalue_exp) / -2
        end as unnormalized_score
-from BestHit$suffix bh1, BestHit$suffix bh2
-where bh1.query_id < bh1.subject_id
+where bh1.query_id < bh1.subject_idfrom BestHit$suffix bh1, BestHit$suffix bh2
+
   and bh1.query_id = bh2.subject_id
   and bh1.subject_id = bh2.query_id
 ";

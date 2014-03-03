@@ -9,7 +9,7 @@ import re
 import tarfile
 import shutil
 import config
-from config import config_file, orthomcl_config, log_fname, mcl_dir, \
+from config import config_file, orthomcl_config_fname, log_fname, mcl_dir, \
     mysql_cnf, mysql_linux_tar, mysql_osx_tar, mysql_extracted_dir, src_dir
 import logging
 from Workflow import cmdline
@@ -412,7 +412,7 @@ def set_up_config(working_dir):
             in cf.readlines() if l.strip() and l.strip()[0] != '#')
         log.debug('Read conf: ' + str(conf))
 
-    with open(orthomcl_config) as ocf:
+    with open(join(src_dir, orthomcl_config_fname)) as ocf:
         omcl_conf = dict(l.strip().split('=', 1) for l
                          in ocf.readlines() if l.strip() and l.strip()[0] != '#')
 
@@ -445,7 +445,7 @@ def set_up_config(working_dir):
 
         log.debug('Database connection string: ' + omcl_conf['dbConnectString'])
 
-    with open(orthomcl_config, 'w') as ocf:
+    with open(join(working_dir, orthomcl_config_fname), 'w') as ocf:
         ocf.writelines('='.join(item) + '\n' for item in omcl_conf.items())
 
 

@@ -1,6 +1,8 @@
 import logging
 import sys
 from os.path import join
+import time
+import datetime
 
 from config import log_fname
 
@@ -17,6 +19,14 @@ def set_up_logging(debug, working_dir, mode='a'):
         '%(asctime)-15s  %(message)s',
         datefmt='%c')
 
+    log_fpath = join(working_dir, log_fname)
+    fh = logging.FileHandler(log_fpath, mode)
+    fh.setLevel(logging.DEBUG)
+    fh.setFormatter(logging.Formatter(
+        '%(asctime)-15s  %(message)s',
+        datefmt='%c'))
+    logger.addHandler(fh)
+
     std = logging.StreamHandler(sys.stdout)
     std.setLevel(logging.DEBUG if debug else logging.INFO)
     std.addFilter(InfoFilter())
@@ -28,15 +38,23 @@ def set_up_logging(debug, working_dir, mode='a'):
     err.setFormatter(console_formatter)
     logger.addHandler(err)
 
+    with open(join(working_dir, log_fpath), 'a') as f:
+        f.write('\n')
+        f.write('*' * 30)
+        today = datetime.datetime.now()
+        f.write(' ' + today.strftime('%c') + ' ')
+        f.write('*' * 30)
+        f.write('\n\n')
+
+    return log_fpath
+
+
+def add_file_handler(working_dir, mode='a'):
+    logger = logging.getLogger(log_fname)
     log_fpath = join(working_dir, log_fname)
     fh = logging.FileHandler(log_fpath, mode)
-    fh.setLevel(logging.DEBUG if debug else logging.INFO)
+    fh.setLevel(logging.DEBUG)
     fh.setFormatter(logging.Formatter(
         '%(asctime)-15s  %(message)s',
         datefmt='%c'))
     logger.addHandler(fh)
-
-    with open(log_fpath, 'a') as f:
-        f.write('*' * 50)
-
-    return log_fpath

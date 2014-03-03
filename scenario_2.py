@@ -22,7 +22,7 @@ from src.utils import which, make_workflow_id, read_list, \
     check_install_mcl, check_perl_modules, check_and_install_tools, test_blast_conn
 from src.parse_args import arg_parse_error, check_file,\
     check_dir, add_common_arguments, check_common_args
-from src.logger import set_up_logging
+from src.logger import set_up_logging, add_file_handler
 from src.Workflow import Workflow, Step, cmdline
 
 from src import config
@@ -426,24 +426,6 @@ all_considered_warning = '   Notice: all proteomes are already considered in thi
 def step_prepare_input(p):
     if p.assemblies:
         def run():
-            if p.out_dir != p.directory:
-                if isdir(p.out_dir):
-                    if not p.overwrite:
-                        files = [f for f in listdir(p.out_dir) if f and f[0] != '.']
-                        log.debug(files)
-                        if files:
-                            log.warn('The output directory exists. Do you want to overwrite it? '
-                                     '(You can run with the --overwrite option to avoid this warning.)')
-                            try:
-                                raw_input('Press any key to overwrite and continue, or Ctrl+C to interrupt.\n> ')
-                            except (EOFError, KeyboardInterrupt, SystemExit, GeneratorExit):
-                                exit(1)
-                    rmtree(p.out_dir)
-                makedirs(p.out_dir)
-                rmdir(p.out_dir)
-                copytree(p.directory, p.out_dir)
-                chdir(p.out_dir)
-
             assemblies = [
                 join(p.assemblies, f)
                 for f in listdir(p.assemblies)
@@ -509,21 +491,6 @@ def step_prepare_input(p):
 
     elif p.proteomes:
         def run():
-            if p.out_dir != p.directory:
-                if isdir(p.out_dir):
-                    if not p.overwrite:
-                        files = [f for f in listdir(p.out_dir) if f and f[0] != '.']
-                        log.debug(files)
-                        if files:
-                            log.warn('The output directory exists. Do you want to overwrite it? '
-                                     '(You can run with the --overwrite option to avoid this warning.)')
-                            raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
-                    rmtree(p.out_dir)
-                makedirs(p.out_dir)
-                rmdir(p.out_dir)
-                copytree(p.directory, p.out_dir)
-                chdir(p.out_dir)
-
             input_proteomes = [
                 join(p.proteomes, prot)
                 for prot in listdir(p.proteomes)
@@ -562,24 +529,6 @@ def step_prepare_input(p):
             if not test_entrez_conn():
                 log.error('No internet connection: cannot fetch annotations.')
                 return 4
-
-            if p.out_dir != p.directory:
-                if isdir(p.out_dir):
-                    if not p.overwrite:
-                        files = [f for f in listdir(p.out_dir) if f and f[0] != '.']
-                        log.debug(files)
-                        if files:
-                            log.warn('The output directory exists. Do you want to overwrite it? '
-                                     '(You can run with the --overwrite option to avoid this warning.)')
-                            try:
-                                raw_input('Press any key to overwrite and continue, or Ctrl-C to interrupt.\n> ')
-                            except (EOFError, KeyboardInterrupt, SystemExit, GeneratorExit):
-                                exit(1)
-                    rmtree(p.out_dir)
-                makedirs(p.out_dir)
-                rmdir(p.out_dir)
-                copytree(p.directory, p.out_dir)
-                chdir(p.out_dir)
 
             log.debug('   Using ref ids: ' + str(p.ids_list))
             ref_ids = read_list(p.ids_list)
@@ -625,9 +574,6 @@ def main(args):
     register_ctrl_c()
 
     p = parse_args(args)
-    log_fpath = set_up_logging(p.debug, p.directory, 'w')
-    log.info('python ' + basename(__file__) + ' ' + ' '.join(args))
-    log.info('')
 
     try:
         if not exists(join(p.directory, 'intermediate')):
@@ -638,6 +584,38 @@ def main(args):
 
         working_dir = p.out_dir
 
+        if p.out_dir != p.directory:
+            log_text = ''
+
+            if isdir(p.out_dir):
+                if not p.overwrite:
+                    files = [f for f in listdir(p.out_dir) if f and f[0] != '.']
+                    #log.debug(files)
+                    if files:
+                        print('The output directory exists. Do you want to overwrite it? ' +
+                              '(You can run with the --overwrite option to avoid this warning.)')
+                        try:
+                            raw_input('Press any key to overwrite and continue, or Ctrl+C to interrupt.\n> ')
+                        except (EOFError, KeyboardInterrupt, SystemExit, GeneratorExit):
+                            return 1
+                if exists(join(p.out_dir, log_fname)):
+                    with open(join(p.out_dir, log_fname)) as log_f:
+                        log_text = log_f.read()
+                rmtree(p.out_dir)
+
+            makedirs(p.out_dir)
+            rmdir(p.out_dir)
+            copytree(p.directory, p.out_dir)
+            if isfile(join(p.out_dir, log_fname)):
+                remove(join(p.out_dir, log_fname))
+            chdir(p.out_dir)
+            if log_text:
+                with open(join(p.out_dir, log_fname), 'w') as log_f:
+                    log_f.write(log_text)
+
+        log_fpath = set_up_logging(p.debug, p.out_dir, 'a')
+        log.info('python ' + basename(__file__) + ' ' + ' '.join(args))
+        log.info('')
         check_and_install_tools(p.debug, log_fpath)
         set_up_config(working_dir)
 

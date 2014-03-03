@@ -5,7 +5,7 @@ BLAST_DBSIZE = 100000
 config_file = join(dirname(realpath(__file__)), '../config.txt')
 
 src_dir = dirname(realpath(__file__))
-orthomcl_config = join(dirname(realpath(__file__)), 'orthomcl.config')
+orthomcl_config_fname = 'orthomcl.config'
 orthomcl_sqlite_bin_dir = join(dirname(realpath(__file__)), 'orthomcl_software/bin')
 orthomcl_mysql_bin_dir = join(dirname(realpath(__file__)), 'orthomcl_software_mysql/bin')
 orthomcl_bin_dir = orthomcl_sqlite_bin_dir

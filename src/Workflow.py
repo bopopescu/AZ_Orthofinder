@@ -13,9 +13,6 @@ import config
 import logging
 log = logging.getLogger(config.log_fname)
 
-orthomcl_config = config.orthomcl_config
-orthomcl_bin_dir = config.orthomcl_bin_dir
-
 
 class Workflow:
     def __init__(self, working_dir, id, cmdline_args):

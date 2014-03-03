@@ -10,7 +10,7 @@ from process_assembly import filter_assembly
 from save_orthogroups import save_orthogroups
 from make_proteomes import make_proteomes, adjust_proteomes
 from fetch_annotations import fetch_annotations_for_species_from_ftp, fetch_annotations_for_ids
-from config import orthomcl_config, orthomcl_bin_dir, BLAST_DBSIZE
+from config import orthomcl_config_fname, orthomcl_bin_dir, BLAST_DBSIZE
 import config
 from clean_db import clean_db
 
@@ -40,15 +40,13 @@ def check_results_existence():
             rmtree(obj)
 
 
-with open(orthomcl_config) as f:
-    conf = dict(l.split('=', 1) for l in f.readlines() if l[0] != '#')
-    ortholog_table = conf['orthologTable'].strip()
-    in_paralog_table = conf['inParalogTable'].strip()
-    coortholog_table = conf['coOrthologTable'].strip()
-    similar_sequeces_table = conf['similarSequencesTable'].strip()
-    inter_taxon_match_view = conf['interTaxonMatchView'].strip()
-    best_hit_table = 'BestHit'
-    best_hit_taxon_score_table = 'BestQueryTaxonScore'
+ortholog_table = 'OrthologTable'
+in_paralog_table = 'InParalogTable'
+coortholog_table = 'CoOrthologTable'
+similar_sequeces_table = 'SimilarSequencesTable'
+inter_taxon_match_view = 'interTaxonMatchView'
+best_hit_table = 'BestHit'
+best_hit_taxon_score_table = 'BestQueryTaxonScore'
 
 
 #def step_fetching_annotations_for_species(specied_list, proxy):
@@ -184,11 +182,11 @@ def install_schema(suffix):
         'Installing schema',
         run=cmdline(join(orthomcl_bin_dir, 'orthomclInstallSchema.pl'),
                     parameters=[
-                        realpath(orthomcl_config),
+                        realpath(orthomcl_config_fname),
                         realpath(config.sql_log),
                         suffix],
                     stderr='log'),
-        req_files=[orthomcl_config],
+        req_files=[orthomcl_config_fname],
         prod_tables=[
             ortholog_table + suffix,
             in_paralog_table + suffix,
@@ -224,7 +222,7 @@ def load_blast_results(suffix):
 
         return cmdline(join(orthomcl_bin_dir, 'orthomclLoadBlast.pl'),
             parameters=[
-                realpath(orthomcl_config),
+                realpath(orthomcl_config_fname),
                 realpath(config.similar_sequences),
                 suffix,
                 ])()
@@ -232,7 +230,7 @@ def load_blast_results(suffix):
     return Step(
         'Loading blast results into the database',
         run=run,
-        req_files=[orthomcl_config,
+        req_files=[orthomcl_config_fname,
                    config.similar_sequences],  # and initialized database
         prod_files=[])  # loads blast results into the db)
 
@@ -276,7 +274,7 @@ def find_pairs(suffix):
         return cmdline(
             join(orthomcl_bin_dir, 'orthomclPairs.pl'),
             parameters=[
-                realpath(orthomcl_config),
+                realpath(orthomcl_config_fname),
                 realpath(config.pairs_log),
                 'cleanup=no',
                 'suffix=' + (suffix if suffix else '*')])()
@@ -284,7 +282,7 @@ def find_pairs(suffix):
     return Step(
         'Finding pairs',
         run=run,
-        req_files=[orthomcl_config],
+        req_files=[orthomcl_config_fname],
         req_tables=[
             in_paralog_table + suffix,
             ortholog_table + suffix,
@@ -319,7 +317,7 @@ def find_pairs(suffix):
 def dump_pairs_to_files(suffix):
     def run():
         res = cmdline(join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
-                    parameters=[realpath(orthomcl_config),
+                    parameters=[realpath(orthomcl_config_fname),
                                 realpath(config.mcl_input),
                                 realpath(config.intermediate_dir),
                                 suffix],
@@ -347,7 +345,7 @@ def dump_pairs_to_files(suffix):
     return Step(
         'Dumping pairs files',
         run=run,
-        req_files=[orthomcl_config],  # and populated InParalog, Ortholog, CoOrtholog tables
+        req_files=[orthomcl_config_fname],  # and populated InParalog, Ortholog, CoOrtholog tables
         #req_tables=[in_paralog_table + suffix,
         #            ortholog_table + suffix,
         #            coortholog_table + suffix],

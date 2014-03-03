@@ -21,6 +21,7 @@ def filter_assembly(assembly, out, minimal_seq=1, skip=(), skip_after=None):
 
     if records:
         SeqIO.write(records, open(out, 'w'), 'fasta')
+        log.debug('   filter_assembly: writing to ' + assembly)
         return 0
     else:
         log.error('No sequences in %s are at least %d long.' % (assembly, minimal_seq))

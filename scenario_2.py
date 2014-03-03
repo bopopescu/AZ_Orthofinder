@@ -448,6 +448,7 @@ def step_prepare_input(p):
                 for asm_name in assembly_names]
 
             if not isdir(assemblies_dir): mkdir(assemblies_dir)
+            log.debug('   Created assemblies_dir ' + assemblies_dir)
 
             total_successful_filters = 0
             for assembly, filtered_asm in zip(assemblies, filtered_assemblies):

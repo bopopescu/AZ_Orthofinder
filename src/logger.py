@@ -40,10 +40,10 @@ def set_up_logging(debug, working_dir, mode='a'):
 
     with open(join(working_dir, log_fpath), 'a') as f:
         f.write('\n')
-        f.write('*' * 30)
+        f.write('*' * 24)
         today = datetime.datetime.now()
         f.write(' ' + today.strftime('%c') + ' ')
-        f.write('*' * 30)
+        f.write('*' * 24)
         f.write('\n\n')
 
     return log_fpath

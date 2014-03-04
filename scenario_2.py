@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from collections import namedtuple
 from genericpath import isfile
+import os
 from shutil import copyfile, rmtree, copy, copytree
 
 import sys
@@ -320,8 +321,9 @@ def process_record(rec, group_i, blastdb, threads):
         log.info('     Writing result to ' + abspath(res_xml_fpath))
 
         if blastdb:
+            os.environ['BLASTDB'] = dirname(blastdb)
             blast_cmdline = NcbiblastpCommandline(
-                db=blastdb,
+                db=basename(blastdb),
                 outfmt=5,
                 out=res_xml_fpath,
                 num_threads=threads)
@@ -601,7 +603,7 @@ def main(args):
                         try:
                             raw_input('Press any key to overwrite and continue, or Ctrl+C to interrupt.\n> ')
                         except (EOFError, KeyboardInterrupt, SystemExit, GeneratorExit):
-                            return 1
+                            exit(1)
                 if exists(join(p.out_dir, log_fname)):
                     with open(join(p.out_dir, log_fname)) as log_f:
                         log_text = log_f.read()

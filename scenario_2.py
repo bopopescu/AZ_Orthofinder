@@ -322,6 +322,11 @@ def process_record(rec, group_i, blastdb, threads):
         log.info('     Writing result to ' + abspath(res_xml_fpath))
 
         if blastdb:
+            if not isfile(blastdb + '.pal'):
+                log.error('Incorrect path blast database. Make sure '
+                          '%s file exists.' % (blastdb + '.pal'))
+                return 1
+
             os.environ['BLASTDB'] = dirname(blastdb)
             blast_cmdline = NcbiblastpCommandline(
                 db=basename(blastdb),

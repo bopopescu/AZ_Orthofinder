@@ -14,3 +14,5 @@ db_port=3307
 
 # memory available in gigabytes
 memory=16
+
+blastdb=/gpfs/group/infection_translation/orthoMCL/app/refseq-proteins/refseq_protein.pal

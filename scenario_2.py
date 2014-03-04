@@ -15,8 +15,6 @@ from src.fetch_annotations import fetch_annotations_for_ids
 from src.process_assembly import filter_assembly
 from src.make_proteomes import adjust_proteomes, make_proteomes
 from src import steps
-import time
-
 from src.utils import which, make_workflow_id, read_list, \
     set_up_config, get_starting_step, register_ctrl_c, \
     check_installed_tools, test_entrez_conn, \
@@ -28,7 +26,9 @@ from src.Workflow import Workflow, Step, cmdline
 
 from src import config
 
-from src.config import log_fname
+import time
+
+from src.config import log_fname, config_file
 log = logging.getLogger(log_fname)
 
 script_path = dirname(realpath(__file__))
@@ -91,7 +91,8 @@ Optional arguments:
     --blast-singletones  Search newly added proteins agains NCBI database, if they did
                          not fit any group with known proteins.
 
-    --blast-db           Local Blast database path. If not set, remote NCBI will be used.
+    --blastdb           Local Blast database path. If not set, "blastdb" value in
+                        config.txt will be checked. If it was not set either, remote NCBI will be used.
     ''' % basename(__file__)
 
     #indent = ' ' * len('usage: ' + basename(__file__) + ' ')
@@ -321,9 +322,9 @@ def process_record(rec, group_i, blastdb, threads):
         log.info('     Writing result to ' + abspath(res_xml_fpath))
 
         if blastdb:
-            os.environ['BLASTDB'] = dirname(blastdb)
+            #os.environ['BLASTDB'] = dirname(blastdb)
             blast_cmdline = NcbiblastpCommandline(
-                db=basename(blastdb),
+                db=blastdb,
                 outfmt=5,
                 out=res_xml_fpath,
                 num_threads=threads)
@@ -663,8 +664,15 @@ def main(args):
             steps.mcl(p.debug),
             steps.step_save_orthogroups(new_proteomes_dir if not p.ids_list and p.blast_singletones else None)
         ])
+
+        with open(config_file) as cf:
+            conf = dict(
+                l.strip().split('=', 1) for l
+                in cf.readlines() if l.strip() and l.strip()[0] != '#')
+            blastdb = p.blastdb or conf.get('blastdb', None)
+
         if not p.ids_list:
-            workflow.extend([step_blast_singletones(p.threads, p.blast_singletones, p.blastdb, p.debug, p.overwrite)])
+            workflow.extend([step_blast_singletones(p.threads, p.blast_singletones, blastdb, p.debug, p.overwrite)])
 
         result = workflow.run(
             start_after, start_from,

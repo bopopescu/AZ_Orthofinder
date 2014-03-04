@@ -374,10 +374,10 @@ def step_blast_singletones(threads, blast_singletones=True, blastdb=None, debug=
             #              'or verify your Internet connection.')
             #    return 1
 
-            if rewrite and exists(blasted_singletones_dir):
-                rmtree(blasted_singletones_dir)
-            if not isdir(blasted_singletones_dir):
-                mkdir(blasted_singletones_dir)
+        if rewrite and exists(blasted_singletones_dir):
+            rmtree(blasted_singletones_dir)
+        if not isdir(blasted_singletones_dir):
+            mkdir(blasted_singletones_dir)
 
         for group_i, group_singletones_file in enumerate(
                 (join(config.singletone_dir, fname)

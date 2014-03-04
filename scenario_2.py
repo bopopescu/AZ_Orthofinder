@@ -322,9 +322,9 @@ def process_record(rec, group_i, blastdb, threads):
         log.info('     Writing result to ' + abspath(res_xml_fpath))
 
         if blastdb:
-            #os.environ['BLASTDB'] = dirname(blastdb)
+            os.environ['BLASTDB'] = dirname(blastdb)
             blast_cmdline = NcbiblastpCommandline(
-                db=blastdb,
+                db=basename(blastdb),
                 outfmt=5,
                 out=res_xml_fpath,
                 num_threads=threads)

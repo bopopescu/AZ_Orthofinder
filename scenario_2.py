@@ -586,7 +586,9 @@ def main(args):
 
         working_dir = p.out_dir
 
-        if p.out_dir != p.directory:
+        start_from, start_after = get_starting_step(p.start_from, join(working_dir, log_fname))
+
+        if (not start_from or start_from == 1) and p.out_dir != p.directory:
             log_text = ''
 
             if isdir(p.out_dir):
@@ -620,8 +622,6 @@ def main(args):
         log.info('')
         check_and_install_tools(p.debug, log_fpath)
         set_up_config(working_dir)
-
-        start_from, start_after = get_starting_step(p.start_from, join(working_dir, log_fname))
 
         log.info('Changing to %s' % working_dir)
         if not isdir(working_dir):

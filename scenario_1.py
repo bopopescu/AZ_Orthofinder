@@ -256,7 +256,11 @@ def main(args):
     try:
         working_dir = p.out
 
-        check_and_install_tools(p.debug, log_path)
+        with open(config.config_file) as f:
+            conf = dict(l.strip().lower().split('=', 1)
+                        for l in f.readlines() if l.strip() and l.strip()[0] != '#')
+
+        check_and_install_tools(p.debug, conf.get('db_vendor', 'sqlite') == 'sqlite', log_path)
         set_up_config(working_dir)
 
         start_from, start_after = get_starting_step(p.start_from, join(p.out, log_fname))
@@ -269,13 +273,7 @@ def main(args):
         log.info('Workflow id is "' + workflow.id + '"')
         log.info('')
 
-        with open(config.config_file) as f:
-            conf = dict(l.strip().lower().split('=', 1)
-                        for l in f.readlines() if l.strip() and l.strip()[0] != '#')
-            if conf['db_vendor'] == 'sqlite':
-                suffix = ''
-            else:
-                suffix = '_' + workflow.id
+        suffix = '' if conf.get('db_vendor', 'sqlite') == 'sqlite' else '_' + workflow.id
 
         if not p.overwrite:
             check_results_existence()

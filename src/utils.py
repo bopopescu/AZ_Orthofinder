@@ -47,14 +47,14 @@ def register_ctrl_c():
     signal(SIGINT, lambda s, f: interrupt('', 0))
 
 
-def check_and_install_tools(debug, log_path):
+def check_and_install_tools(debug, is_sqlite, log_path):
     check_installed_tools(['blastp'], only_warn=True)
 
     check_install_mcl(debug, log_path=log_path, only_warn=False)
 
     #prepare_mysql_config()
 
-    check_perl_modules(debug, only_warn=True)
+    check_perl_modules(debug, is_sqlite, only_warn=True)
 
 
 def which(program):
@@ -204,9 +204,9 @@ def check_install_mcl(debug, log_path=log_fname, only_warn=False):
     return mcl_bin_path, 0
 
 
-def check_perl_modules(debug, only_warn=False):
+def check_perl_modules(debug, is_sqlite, only_warn=False):
     def check(env=None):
-        dbimysql = call(
+        dbimysql = is_sqlite or call(
             'perl -MDBD::mysql -e 1'.split(),
              stderr=open(devnull, 'w'),
              stdout=open(devnull, 'w'),
@@ -230,37 +230,18 @@ def check_perl_modules(debug, only_warn=False):
         else:
             log.error('ERROR: Could not find or install Perl modules. ')
 
-        print '''Pleasy, try the following manually:
-    $ perl -MCPAN -e shell
-    cpan> install Data::Dumper
-    cpan> install DBI
-    cpan> force install DBD::mysql
-    '''
+        print 'Pleasy, try the following manually:'
+        print '    $ perl -MCPAN -e shell'
+        if not is_sqlite:
+            print '    cpan> o conf makepl_arg "mysql_config=%s"' % mysql_cnf
+        print '    cpan> install Data::Dumper'
+        print '    cpan> install DBI'
+        if not is_sqlite:
+            print '    cpan> force install DBD::mysql'
         if only_warn:
             return 0
         else:
             exit(4)
-
-
-def check_perl_modules_mysql(debug, only_warn=False):
-    def check(env=None):
-        dbimysql = call(
-            'perl -MDBD::mysql -e 1'.split(),
-             stderr=open(devnull, 'w'),
-             stdout=open(devnull, 'w'),
-             env=env) == 0
-        if not dbimysql:
-            log.debug('DBD::mysql is not installed.')
-
-        dbd = call(
-            'perl -MDBI -e 1'.split(),
-             stderr=open(devnull, 'w'),
-             stdout=open(devnull, 'w'),
-             env=env) == 0
-        if not dbd:
-            log.debug('DBI is not installed.')
-
-        return dbimysql and dbd
 
     # tool_patb = join(dirname(realpath(__file__)), '../')
     # assert isdir(tool_patb)
@@ -351,24 +332,6 @@ def check_perl_modules_mysql(debug, only_warn=False):
         #else:
         #    log.error('Cannot install DBD::mysql for your system.')
 
-    if not check():  # (env):
-        if only_warn:
-            log.warning('WARNING: Could not find or install Perl modules.')
-        else:
-            log.error('ERROR: Could not find or install Perl modules. ')
-
-        print '''Pleasy, try the following manually:
-    $ perl -MCPAN -e shell
-    cpan> o conf makepl_arg "mysql_config=%s"
-    cpan> install Data::Dumper
-    cpan> install DBI
-    cpan> force install DBD::mysql
-    ''' % mysql_cnf
-        if only_warn:
-            return 0
-        else:
-            exit(4)
-
 
 def read_list(file, where_to_save=None):
     if not file:
@@ -383,11 +346,11 @@ def read_list(file, where_to_save=None):
 
 
 def test_entrez_conn():
-    return test_internet_conn('http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi')
+    return test_internet_conn('http://eutils.ncbi.nlm.nih.gov/entrez/eutils')
 
 
 def test_blast_conn():
-    return test_internet_conn('http://blast.ncbi.nlm.nih.gov/Blast.cgi')
+    return test_internet_conn('http://blast.ncbi.nlm.nih.gov')
 
 
 def test_ftp_conn():

@@ -54,7 +54,7 @@ def parse_args(args):
     #-o:                  Output directory (if not specified, the input directory will be used).
 
     op.usage = '''Extends an orthogroup database and orthogroups files.
-First argument is a fath to existed Scenario 1 output.
+First argument is a path to existed Scenario 1 output.
 
 Test runs:
     python scenario_2.py -s1o test_ids -s2o test_ids_new_ids --ids test_input/new_ids.txt
@@ -460,7 +460,7 @@ def main(args):
     except Exception as e:
         log.error('')
         log.exception('Unexpected error!')
-        return 2
+        raise
 
 
 if __name__ == '__main__':

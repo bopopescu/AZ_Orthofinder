@@ -190,6 +190,7 @@ all_considered_warning = '   Notice: all proteomes are already considered in thi
                          'you will need to rename the input files.\nNote that proteomes are identified ' + \
                          'by their filenames, so it is not desired to just removed those files and restart.'
 
+
 def step_prepare_input(p):
     if p.assemblies:
         def run():
@@ -273,8 +274,6 @@ def step_prepare_input(p):
 
             new_prot_names = [splitext(basename(prot))[0] for prot in input_proteomes]
 
-            new_proteomes_dir = 'new_proteomes'
-            new_annotations_dir = 'new_annotations'
             new_proteomes = [
                 join(new_proteomes_dir, prot_name + '.fasta')
                 for prot_name in new_prot_names]
@@ -298,6 +297,8 @@ def step_prepare_input(p):
             if not test_entrez_conn():
                 log.error('No internet connection: cannot fetch annotations.')
                 return 4
+
+            new_annotations_dir = 'new_annotations'
 
             log.debug('   Using ref ids: ' + str(p.ids_list))
             ref_ids = read_list(p.ids_list)

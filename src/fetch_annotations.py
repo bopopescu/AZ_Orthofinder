@@ -151,7 +151,7 @@ def fetch_annotations_species_name_entrez(save_dir, species_names, clip=100000):
             continue
 
         term = '(%s[Organism] AND (complete genome[Title] OR ' \
-               'complete sequence[Title])) NOT (partial[Title])' % species_name
+               'complete sequence[Title] OR whole genome[Title])) NOT (partial[Title])' % species_name
         log.info('   Query: %s' % term)
         search_handle = Entrez.esearch(db='nuccore', retmax=100000, term=term)
         ids = Entrez.read(search_handle)['IdList']

@@ -48,7 +48,7 @@ def parse_args(args):
 
     op.add_argument('-g', '--annotations', '--gbs', dest='annotations')
     op.add_argument('-p', '--proteins', '--proteomes', dest='proteomes')
-    op.add_argument('-f', '--fetch', dest='fetch', action='store_true', default=False)
+    op.add_argument('-f', '--fetch', dest='fetch', action='store_true', default=True)
     op.add_argument('-s', '--species', '--species-list', dest='species_list')
     op.add_argument('-i', '--ids', '--ids-list', dest='ids_list')
 
@@ -229,12 +229,20 @@ def step_prepare_proteomes_and_annotations(p):
                 if p.fetch:
                     if not test_entrez_conn():
                         log.error('   Error: no internet connection, cannot fetch annotations. '
-                                 'You can start without a --fetch option, in this case '
-                                 'a reduced version of orthogroups.txt with no annotations will be produced.')
+                                  'You can start without a --fetch option, in this case '
+                                  'a reduced version of orthogroups.txt with no annotations will be produced.')
                         return 1
                     else:
-                        ref_ids = [splitext(basename(prot_file))[0] for prot_file in proteomes]
-                        fetch_annotations_for_ids(config.annotations_dir, ref_ids)
+                        # ref_ids = [splitext(basename(prot_file))[0] for prot_file in proteomes]
+                        # fetch_annotations_for_ids(config.annotations_dir, ref_ids)
+
+                        species_list = [splitext(basename(prot_file))[0] for prot_file in proteomes]
+                        log.debug('species_list: ' + str(species_list))
+                        res = fetch_annotations_species_name_entrez(
+                            config.annotations_dir,
+                            species_list, p.proxy)
+                        if res != 0:
+                            return res
 
                 return adjust_proteomes(proteomes, config.proteomes_dir, p.prot_id_field)
 

@@ -346,7 +346,7 @@ def read_list(file, where_to_save=None):
 
 
 def test_entrez_conn():
-    return test_internet_conn('http://eutils.ncbi.nlm.nih.gov')
+    return test_internet_conn('http://eutils.ncbi.nlm.nih.gov/entrez')
 
 
 def test_blast_conn():

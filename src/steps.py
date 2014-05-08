@@ -10,7 +10,7 @@ from process_assembly import filter_assembly
 from save_orthogroups import save_orthogroups
 from make_proteomes import make_proteomes, adjust_proteomes
 from fetch_annotations import fetch_annotations_for_species_from_ftp, fetch_annotations_for_ids
-from config import orthomcl_config_fname, orthomcl_bin_dir, BLAST_DBSIZE
+from config import orthomcl_config_final_path, orthomcl_bin_dir, BLAST_DBSIZE
 import config
 from clean_db import clean_db
 
@@ -184,11 +184,11 @@ def install_schema(suffix):
         'Installing schema',
         run=cmdline(join(orthomcl_bin_dir, 'orthomclInstallSchema.pl'),
                     parameters=[
-                        realpath(orthomcl_config_fname),
+                        realpath(orthomcl_config_final_path),
                         realpath(config.sql_log),
                         suffix],
                     stderr='log'),
-        req_files=[orthomcl_config_fname],
+        req_files=[orthomcl_config_final_path],
         prod_tables=[
             ortholog_table + suffix,
             in_paralog_table + suffix,
@@ -224,7 +224,7 @@ def load_blast_results(suffix):
 
         return cmdline(join(orthomcl_bin_dir, 'orthomclLoadBlast.pl'),
             parameters=[
-                realpath(orthomcl_config_fname),
+                realpath(orthomcl_config_final_path),
                 realpath(config.similar_sequences),
                 suffix,
                 ])()
@@ -232,7 +232,7 @@ def load_blast_results(suffix):
     return Step(
         'Loading blast results into the database',
         run=run,
-        req_files=[orthomcl_config_fname,
+        req_files=[orthomcl_config_final_path,
                    config.similar_sequences],  # and initialized database
         prod_files=[])  # loads blast results into the db)
 
@@ -276,7 +276,7 @@ def find_pairs(suffix):
         return cmdline(
             join(orthomcl_bin_dir, 'orthomclPairs.pl'),
             parameters=[
-                realpath(orthomcl_config_fname),
+                realpath(orthomcl_config_final_path),
                 realpath(config.pairs_log),
                 'cleanup=no',
                 'suffix=' + (suffix if suffix else '*')])()
@@ -284,7 +284,7 @@ def find_pairs(suffix):
     return Step(
         'Finding pairs',
         run=run,
-        req_files=[orthomcl_config_fname],
+        req_files=[orthomcl_config_final_path],
         req_tables=[
             in_paralog_table + suffix,
             ortholog_table + suffix,
@@ -319,7 +319,7 @@ def find_pairs(suffix):
 def dump_pairs_to_files(suffix):
     def run():
         res = cmdline(join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
-                    parameters=[realpath(orthomcl_config_fname),
+                    parameters=[realpath(orthomcl_config_final_path),
                                 realpath(config.mcl_input),
                                 realpath(config.intermediate_dir),
                                 suffix],
@@ -347,7 +347,7 @@ def dump_pairs_to_files(suffix):
     return Step(
         'Dumping pairs files',
         run=run,
-        req_files=[orthomcl_config_fname],  # and populated InParalog, Ortholog, CoOrtholog tables
+        req_files=[orthomcl_config_final_path],  # and populated InParalog, Ortholog, CoOrtholog tables
         #req_tables=[in_paralog_table + suffix,
         #            ortholog_table + suffix,
         #            coortholog_table + suffix],

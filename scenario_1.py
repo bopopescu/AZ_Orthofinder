@@ -266,25 +266,27 @@ def main(args):
                         for l in f.readlines() if l.strip() and l.strip()[0] != '#')
 
         check_and_install_tools(p.debug, conf.get('db_vendor', 'sqlite') == 'sqlite', log_path)
-        set_up_config(working_dir)
 
         start_from, start_after = get_starting_step(p.start_from, join(p.out, log_fname))
 
         log.debug('Changing to %s' % working_dir)
         chdir(working_dir)
 
+        if not p.overwrite:
+            check_results_existence()
+
+        if not exists(config.intermediate_dir):
+            mkdir(config.intermediate_dir)
+
+        set_up_config(working_dir)
+
+        # Building the workflow
         workflow = Workflow(working_dir, id=make_workflow_id(working_dir),
                             cmdline_args=['python', __file__] + args)
         log.debug('Workflow id is "' + workflow.id + '"')
         log.debug('')
 
         suffix = '' if conf.get('db_vendor', 'sqlite') == 'sqlite' else '_' + workflow.id
-
-        if not p.overwrite:
-            check_results_existence()
-
-        if not exists(config.intermediate_dir):
-            mkdir(config.intermediate_dir)
 
         workflow.extend([
             step_prepare_proteomes_and_annotations(p),

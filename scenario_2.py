@@ -394,13 +394,15 @@ def main(args):
         log.info('python ' + basename(__file__) + ' ' + ' '.join(args))
         log.info('')
         check_and_install_tools(p.debug, conf.get('db_vendor', 'sqlite'), log_fpath)
-        set_up_config(working_dir)
 
         log.info('Changing to %s' % working_dir)
         if not isdir(working_dir):
             makedirs(working_dir)
         chdir(working_dir)
 
+        set_up_config(working_dir)
+
+        # Building the workflow
         workflow = Workflow(working_dir, id=make_workflow_id(working_dir),
                             cmdline_args=['python', __file__] + args)
         log.info('Workflow id is "' + workflow.id + '"')

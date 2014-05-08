@@ -8,8 +8,9 @@ from subprocess import call, Popen, PIPE
 import re
 import tarfile
 import shutil
+import sys
 import config
-from config import config_file, orthomcl_config_fname, log_fname, mcl_dir, \
+from config import config_file, orthomcl_config_final_path, log_fname, mcl_dir, \
     mysql_cnf, mysql_linux_tar, mysql_osx_tar, mysql_extracted_dir, src_dir
 import logging
 from Workflow import cmdline
@@ -54,7 +55,9 @@ def check_and_install_tools(debug, is_sqlite, log_path):
 
     #prepare_mysql_config()
 
-    check_perl_modules(debug, is_sqlite, only_warn=True)
+    # check_perl_modules(debug, is_sqlite, only_warn=True)
+
+    os.environ['PERL5LIB'] = src_dir + 'perl_modules/:' + os.environ['PERL5LIB']
 
 
 def which(program):
@@ -375,7 +378,7 @@ def set_up_config(output_dir):
             in cf.readlines() if l.strip() and l.strip()[0] != '#')
         log.debug('Read conf: ' + str(conf))
 
-    with open(join(src_dir, orthomcl_config_fname)) as ocf:
+    with open(join(src_dir, config.orthomcl_config_fname)) as ocf:
         omcl_conf = dict(l.strip().split('=', 1) for l
                          in ocf.readlines() if l.strip() and l.strip()[0] != '#')
 
@@ -408,7 +411,7 @@ def set_up_config(output_dir):
 
         log.debug('Database connection string: ' + omcl_conf['dbConnectString'])
 
-    with open(join(output_dir, orthomcl_config_fname), 'w') as ocf:
+    with open(orthomcl_config_final_path, 'w') as ocf:
         ocf.writelines('='.join(item) + '\n' for item in omcl_conf.items())
 
 

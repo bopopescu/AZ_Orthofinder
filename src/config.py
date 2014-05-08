@@ -5,7 +5,6 @@ BLAST_DBSIZE = 100000
 config_file = join(dirname(realpath(__file__)), '../config.txt')
 
 src_dir = dirname(realpath(__file__))
-orthomcl_config_fname = 'orthomcl.config'
 orthomcl_sqlite_bin_dir = join(dirname(realpath(__file__)), 'orthomcl_software/bin')
 orthomcl_mysql_bin_dir = join(dirname(realpath(__file__)), 'orthomcl_software_mysql/bin')
 orthomcl_bin_dir = orthomcl_sqlite_bin_dir
@@ -51,3 +50,7 @@ nice_orthogroups_file     = 'orthogroups_nice.txt'
 short_orthogroups_file    = 'orthogroups_short.tsv'
 assembly_singletones_file = 'assembly_singletones.txt'
 singletone_dir            = 'new_singletones'
+
+
+orthomcl_config_fname = 'orthomcl.config'
+orthomcl_config_final_path = join(intermediate_dir, orthomcl_config_fname)

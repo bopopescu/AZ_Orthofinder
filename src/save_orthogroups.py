@@ -238,9 +238,11 @@ def save_orthogroups(new_prot_fpaths, annotations, mcl_output,
                                        chain([group_nunber], vals)):
                         out_line += str(val) + '\t'
                         nice_line += str(val) + ' ' * (l - len(str(val))) + '\t'
-                    if out_line.strip():
+                    out_line = out_line.strip()
+                    nice_line = nice_line.strip()
+                    if out_line:
                         out_f.write(out_line + '\n')
-                    if nice_line.strip():
+                    if nice_line:
                         nice_f.write(nice_line + '\n')
                 nice_f.write('\n')
 

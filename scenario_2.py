@@ -402,7 +402,7 @@ def main(args):
         chdir(working_dir)
 
         workflow = Workflow(working_dir, id=make_workflow_id(working_dir),
-                            cmdline_args=['python', basename(__file__)] + args)
+                            cmdline_args=['python', __file__] + args)
         log.info('Workflow id is "' + workflow.id + '"')
         log.info('')
 

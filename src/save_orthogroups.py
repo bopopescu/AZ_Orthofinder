@@ -237,7 +237,7 @@ def save_orthogroups(new_prot_fpaths, annotations, mcl_output,
                         out_f.write(str(val) + '\t')
                         nice_f.write(str(val) + ' ' * (l - len(str(val))) + '\t')
                     out_f.write('\n')
-                    nice_f.write('\n')
+                    # nice_f.write('\n')
                 nice_f.write('\n')
 
                 if new_protein_records and known_genes_in_this_group == []:

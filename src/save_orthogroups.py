@@ -232,12 +232,16 @@ def save_orthogroups(new_prot_fpaths, annotations, mcl_output,
                         else:
                             vals = strain_prots[prot_id]
 
+                    out_line = ''
+                    nice_line = ''
                     for l, val in izip(chain([len(str(groups_total))], max_lengths),
                                        chain([group_nunber], vals)):
-                        out_f.write(str(val) + '\t')
-                        nice_f.write(str(val) + ' ' * (l - len(str(val))) + '\t')
-                    out_f.write('\n')
-                    # nice_f.write('\n')
+                        out_line += str(val) + '\t'
+                        nice_line += str(val) + ' ' * (l - len(str(val))) + '\t'
+                    if out_line.strip():
+                        out_f.write(out_line + '\n')
+                    if nice_line.strip():
+                        nice_f.write(nice_line + '\n')
                 nice_f.write('\n')
 
                 if new_protein_records and known_genes_in_this_group == []:

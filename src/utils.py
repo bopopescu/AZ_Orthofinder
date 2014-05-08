@@ -383,6 +383,7 @@ def set_up_config(output_dir):
                          in ocf.readlines() if l.strip() and l.strip()[0] != '#')
 
     memory = int(conf['memory'])
+    tmp_dir = join(config.intermediate_dir, 'tmp')
 
     if conf['db_vendor'] == 'sqlite':
         db_file = join(output_dir, config.sqlite_file)
@@ -395,12 +396,14 @@ def set_up_config(output_dir):
         omcl_conf['dbVendor'] = 'mysql'
         omcl_conf['dbConnectString'] = \
             'dbi:mysql:database=orthomcl;' \
+            'tmpdir=%s;' \
             'host=%s;' \
             'port=%s;' \
             'myisam_sort_buffer_size=%dG;' \
             'read_buffer_size=%dG;' \
             'innodb_buffer_pool_size=%dG;' \
             'mysql_local_infile=1;' % (
+                tmp_dir,
                 conf['db_server'],
                 conf['db_port'],
                 memory / 2,

@@ -46,12 +46,11 @@ def parse_args(args):
     #op.add_argument(dest='directory')
     op.add_argument('-o', '--out', '--dir', dest='out', required=True)
 
-    op.add_argument('-g', '--annotations', '--gbs', dest='annotations')
+    op.add_argument('-g', '--gbs', '--annotations', dest='annotations')
     op.add_argument('-p', '--proteins', '--proteomes', dest='proteomes')
-    op.add_argument('-f', '--fetch', dest='fetch', action='store_true', default=True)
+    op.add_argument('-f', '--fetch', '--download-anno', dest='fetch', action='store_true', default=True)
     op.add_argument('-s', '--species', '--species-list', dest='species_list')
     op.add_argument('-i', '--ids', '--ids-list', dest='ids_list')
-
 
     op.add_argument('--prot-id-field', dest='prot_id_field', default=1)
 
@@ -177,9 +176,9 @@ def step_prepare_proteomes_and_annotations(p):
                 return 4
 
             log.debug('   Using species list: ' + str(p.species_list))
-            species_list = read_list(p.species_list)
-            log.debug('species_list: ' + str(species_list))
-            res = fetch_annotations_species_name_entrez(config.annotations_dir, species_list, p.proxy)
+            gb_ids = read_list(p.species_list)
+            log.debug('species_list: ' + str(gb_ids))
+            res = fetch_annotations_species_name_entrez(config.annotations_dir, gb_ids, p.proxy)
             if res != 0: return res
             return make_proteomes(config.annotations_dir, config.proteomes_dir)
 
@@ -236,11 +235,9 @@ def step_prepare_proteomes_and_annotations(p):
                         # ref_ids = [splitext(basename(prot_file))[0] for prot_file in proteomes]
                         # fetch_annotations_for_ids(config.annotations_dir, ref_ids)
 
-                        species_list = [splitext(basename(prot_file))[0] for prot_file in proteomes]
-                        log.debug('species_list: ' + str(species_list))
-                        res = fetch_annotations_species_name_entrez(
-                            config.annotations_dir,
-                            species_list, p.proxy)
+                        gb_ids = [splitext(basename(prot_file))[0] for prot_file in proteomes]
+                        log.debug('ids_list: ' + str(gb_ids))
+                        res = fetch_annotations_for_ids(config.annotations_dir, gb_ids, p.proxy)
                         if res != 0:
                             return res
 
@@ -257,7 +254,7 @@ def main(args):
 
     p = parse_args(args)
     log_path = set_up_logging(p.debug, p.out)
-    log.info('python ' + basename(__file__) + ' ' + ' '.join(args))
+    log.info('python ' + __file__ + ' ' + ' '.join(args))
     log.info('logging to ' + log_path)
     log.info('')
 
@@ -273,13 +270,13 @@ def main(args):
 
         start_from, start_after = get_starting_step(p.start_from, join(p.out, log_fname))
 
-        log.info('Changing to %s' % working_dir)
+        log.debug('Changing to %s' % working_dir)
         chdir(working_dir)
 
         workflow = Workflow(working_dir, id=make_workflow_id(working_dir),
                             cmdline_args=['python', basename(__file__)] + args)
-        log.info('Workflow id is "' + workflow.id + '"')
-        log.info('')
+        log.debug('Workflow id is "' + workflow.id + '"')
+        log.debug('')
 
         suffix = '' if conf.get('db_vendor', 'sqlite') == 'sqlite' else '_' + workflow.id
 
@@ -320,7 +317,8 @@ def main(args):
                     log.info('Groups with aligned columns are in ' +
                              join(working_dir, config.nice_orthogroups_file))
             else:
-                log.info('Groups in short format are in ' + join(working_dir, config.short_orthogroups_file))
+                log.info('Groups in short format are in ' +
+                         join(working_dir, config.short_orthogroups_file))
 
             if isfile(log_fname):
                 with open(log_fname, 'a') as f:

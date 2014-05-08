@@ -305,7 +305,7 @@ class Step:
         # Removing existing data if overwrite
         existing_prod_files = list(ifilter(exists, self.prod_files))
         if overwrite and existing_prod_files:
-            log.info('   Overwriting existing ' + ', '.join(existing_prod_files))
+            log.info('   overwriting ' + ', '.join(existing_prod_files))
             for file in existing_prod_files:
                 if isfile(file):
                     remove(file)

@@ -90,13 +90,16 @@ def __range_of_ref_ids(rng):
         return ids
 
 
-def fetch_annotations_for_ids(annotations_dir, ref_ids):
+def fetch_annotations_for_ids(annotations_dir, ref_ids, proxy=None):
     ref_ids = list(chain(*[__range_of_ref_ids(line) for line in ref_ids]))
     if None in ref_ids:
         return 1
 
     if not isdir(annotations_dir):
         mkdir(annotations_dir)
+
+    if proxy:
+        setup_http_proxy(*proxy.split(':'))
 
     if ref_ids == []:
         log.info('   No references have been found.')
@@ -125,11 +128,18 @@ def fetch_annotations_for_ids(annotations_dir, ref_ids):
                     file.write(fetch_handle.read())
 
                 rec = SeqIO.read(gb_fpath, 'genbank')
-                genes_number = len([f for f in rec.features if f.type == 'CDS'])
+                genes_number = 0
+                cds_number = 0
+                for f in rec.features:
+                    if f.type == 'gene':
+                        genes_number += 1
+                    if f.type == 'CDS':
+                        cds_number += 1
                 log.info('       ' + rec.description)
-                log.info('       %d genes found.' % genes_number)
+                log.info('       %d genes, %d coding regions found.' % (genes_number, cds_number))
                 log.info('       saved %s' % gb_fpath)
-                log.info('')
+                if i + 1 < len(ref_ids):
+                    log.info('')
 
         except KeyboardInterrupt, e:
             return 1

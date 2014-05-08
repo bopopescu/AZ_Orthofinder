@@ -368,7 +368,7 @@ def test_internet_conn(url):
         return True
 
 
-def set_up_config(working_dir):
+def set_up_config(output_dir):
     with open(config_file) as cf:
         conf = dict(
             l.strip().split('=', 1) for l
@@ -382,7 +382,7 @@ def set_up_config(working_dir):
     memory = int(conf['memory'])
 
     if conf['db_vendor'] == 'sqlite':
-        db_file = join(working_dir, config.sqlite_file)
+        db_file = join(output_dir, config.sqlite_file)
 
         omcl_conf['dbVendor'] = 'sqlite'
         omcl_conf['dbConnectString'] = \
@@ -408,7 +408,7 @@ def set_up_config(working_dir):
 
         log.debug('Database connection string: ' + omcl_conf['dbConnectString'])
 
-    with open(join(working_dir, orthomcl_config_fname), 'w') as ocf:
+    with open(join(output_dir, orthomcl_config_fname), 'w') as ocf:
         ocf.writelines('='.join(item) + '\n' for item in omcl_conf.items())
 
 

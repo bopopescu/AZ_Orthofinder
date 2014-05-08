@@ -92,7 +92,8 @@ best_hit_taxon_score_table = 'BestQueryTaxonScore'
 
 def filter_proteomes(min_length=10, max_percent_stop=20):
     return Step(
-        'Filtering proteomes',
+        'Filtering proteomes: min length = ' + str(min_length) +
+        ', max percent of stop codons = ' + str(max_percent_stop),
         run=cmdline(join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
             parameters=[realpath(config.proteomes_dir),
                         min_length, max_percent_stop,
@@ -111,6 +112,7 @@ def make_blast_db():
                '-input_type', 'fasta',
                '-out', realpath(config.blast_db),
                '-dbtype', 'prot'],
+             stdout='log',
              stderr='log'),
         req_files=[config.good_proteins],
         prod_files=[config.blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']])
@@ -143,7 +145,7 @@ def blast(threads, new_good_proteomes=None, evalue=1e-5):
 
         res = cmdline(
             'blastp', parameters + ['-num_threads', threads],
-             ignore_lines_by_pattern=r'.* at position .* replaced by .*')()
+            ignore_lines_by_pattern=r'.* at position .* replaced by .*')()
         if res == -6:
             log.warn('')
             log.warn('   WARNING: blast refused to run multithreaded, '
@@ -201,7 +203,7 @@ def load_blast_results(suffix):
                 similar_sequeces_table + suffix,
             ]:
                 try:
-                    log.info('   Cleaning the %s table.' % tbl)
+                    log.debug('   Cleaning the %s table.' % tbl)
                     try:
                         cursor.execute('select 1 from %s limit 1;' % tbl)
                     except:
@@ -243,7 +245,7 @@ def find_pairs(suffix):
                 coortholog_table + suffix,
             ]:
                 try:
-                    log.info('   Cleaning the %s table.' % tbl)
+                    log.debug('   Cleaning the %s table.' % tbl)
                     try:
                         cursor.execute('select 1 from %s limit 1;' % tbl)
                     except:
@@ -330,7 +332,7 @@ def dump_pairs_to_files(suffix):
                 coortholog_table + suffix,
             ]:
                 try:
-                    log.info('   Cleaning the %s table.' % tbl)
+                    log.debug('   Cleaning the %s table.' % tbl)
                     cursor.execute('select 1 from %s limit 1;' % tbl)
                     log.debug('   ' + str(cursor.fetchone()))
                     cursor.execute('delete from %s;' % tbl)

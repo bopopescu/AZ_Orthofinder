@@ -1,7 +1,6 @@
 import logging
 import sys
 from os.path import join
-import time
 import datetime
 
 from config import log_fname
@@ -13,10 +12,10 @@ def set_up_logging(debug, working_dir, mode='a'):
 
     class InfoFilter(logging.Filter):
         def filter(self, rec):
-            return rec.levelno in (logging.DEBUG, logging.INFO)
+            return rec.levelno in [logging.INFO]
 
     console_formatter = logging.Formatter(
-        '%(asctime)-15s  %(message)s',
+        '%(asctime)-15s  ' + ('%(levelname)s   ' if debug else '') + '%(message)s',
         datefmt='%c')
 
     log_fpath = join(working_dir, log_fname)

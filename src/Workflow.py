@@ -143,9 +143,9 @@ def cmdline(command, parameters=None, stdin=None,
                     if stdout == 'log':
                         log.debug('   ' + line.strip())
 
-            if stderr_f == subprocess.PIPE:
+            stderr_output = []
+            if p.stderr:
                 for line in iter(p.stderr.readline, ''):
-
                     if start_ignoring_from:
                         import re
                         a = re.compile(start_ignoring_from)
@@ -157,13 +157,20 @@ def cmdline(command, parameters=None, stdin=None,
                         a = re.compile(ignore_lines_by_pattern)
                         if a.match(line.strip()):
                             continue
-                            
+
                     if stderr == 'pipe':
                         log.info('   ' + line.strip())
+                    else:
+                        stderr_output.append(line)
                     if stderr == 'log':
                         log.debug('   ' + line.strip())
+
             ret_code = p.wait()
             log.debug('      Ret ' + str(ret_code))
+            if ret_code != 0:
+                for line in stderr_output:
+                    log.error('   ' + line.strip())
+                    log.error('')
             return ret_code
 
         except KeyboardInterrupt:

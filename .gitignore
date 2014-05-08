@@ -50,3 +50,4 @@ src/mcl_software/*
 .idea/*
 .idea/az_orthofinder.iml
 .idea/inspectionProfiles/profiles_settings.xml
+/Users/vladsaveliev/az_orthofinder/src/orthomcl_software/lib/perl/DBD-SQLite-1.43_02/*

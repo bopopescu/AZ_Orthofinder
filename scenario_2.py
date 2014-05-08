@@ -274,6 +274,8 @@ def step_prepare_input(p):
 
             new_prot_names = [splitext(basename(prot))[0] for prot in input_proteomes]
 
+            new_proteomes_dir = 'new_proteomes'
+
             new_proteomes = [
                 join(new_proteomes_dir, prot_name + '.fasta')
                 for prot_name in new_prot_names]

@@ -383,7 +383,7 @@ def set_up_config(output_dir):
                          in ocf.readlines() if l.strip() and l.strip()[0] != '#')
 
     memory = int(conf['memory'])
-    tmp_dir = join(config.intermediate_dir, 'tmp')
+    tmp_dir = realpath(join(config.intermediate_dir, 'tmp'))
 
     if conf['db_vendor'] == 'sqlite':
         db_file = join(output_dir, config.sqlite_file)

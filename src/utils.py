@@ -57,7 +57,8 @@ def check_and_install_tools(debug, is_sqlite, log_path):
 
     # check_perl_modules(debug, is_sqlite, only_warn=True)
 
-    os.environ['PERL5LIB'] = src_dir + 'perl_modules/:' + os.environ['PERL5LIB']
+    # os.environ['PERL5LIB'] = join(src_dir, 'perl_modules') + ':'\
+    #                          + os.environ['PERL5LIB']
 
 
 def which(program):

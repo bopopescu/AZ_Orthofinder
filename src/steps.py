@@ -94,11 +94,13 @@ def filter_proteomes(min_length=10, max_percent_stop=20):
     return Step(
         'Filtering proteomes: min length = ' + str(min_length) +
         ', max percent of stop codons = ' + str(max_percent_stop),
-        run=cmdline(join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
-            parameters=[realpath(config.proteomes_dir),
-                        min_length, max_percent_stop,
-                        realpath(config.good_proteins),
-                        realpath(config.poor_proteins)]),
+        run=cmdline(
+            'perl' + join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
+            parameters=[
+                realpath(config.proteomes_dir),
+                min_length, max_percent_stop,
+                realpath(config.good_proteins),
+                realpath(config.poor_proteins)]),
         req_files=[config.proteomes_dir],
         prod_files=[config.good_proteins, config.poor_proteins])
 
@@ -168,9 +170,10 @@ def blast(threads, new_good_proteomes=None, evalue=1e-5):
 def parse_blast_results():
     return Step(
         'Parsing blast results',
-        run=cmdline(join(orthomcl_bin_dir, 'orthomclBlastParser.pl'),
-                    parameters=[realpath(config.blast_out), realpath(config.proteomes_dir)],
-                    stdout=realpath(config.similar_sequences)),
+        run=cmdline(
+            'perl' + join(orthomcl_bin_dir, 'orthomclBlastParser.pl'),
+            parameters=[realpath(config.blast_out), realpath(config.proteomes_dir)],
+            stdout=realpath(config.similar_sequences)),
         req_files=[config.proteomes_dir, config.blast_out],
         prod_files=[config.similar_sequences])
 
@@ -182,12 +185,13 @@ def clean_database(suffix):
 def install_schema(suffix):
     return Step(
         'Installing schema',
-        run=cmdline(join(orthomcl_bin_dir, 'orthomclInstallSchema.pl'),
-                    parameters=[
-                        realpath(orthomcl_config_final_path),
-                        realpath(config.sql_log),
-                        suffix],
-                    stderr='log'),
+        run=cmdline(
+            'perl' + join(orthomcl_bin_dir, 'orthomclInstallSchema.pl'),
+            parameters=[
+                realpath(orthomcl_config_final_path),
+                realpath(config.sql_log),
+                suffix],
+            stderr='log'),
         req_files=[orthomcl_config_final_path],
         prod_tables=[
             ortholog_table + suffix,
@@ -222,7 +226,7 @@ def load_blast_results(suffix):
                 except Exception, e:
                     log.exception(e)
 
-        return cmdline(join(orthomcl_bin_dir, 'orthomclLoadBlast.pl'),
+        return cmdline('perl' + join(orthomcl_bin_dir, 'orthomclLoadBlast.pl'),
             parameters=[
                 realpath(orthomcl_config_final_path),
                 realpath(config.similar_sequences),
@@ -274,7 +278,7 @@ def find_pairs(suffix):
         #log.info('   Cleaning: ' + str(res))
 
         return cmdline(
-            join(orthomcl_bin_dir, 'orthomclPairs.pl'),
+            'perl' + join(orthomcl_bin_dir, 'orthomclPairs.pl'),
             parameters=[
                 realpath(orthomcl_config_final_path),
                 realpath(config.pairs_log),
@@ -318,12 +322,13 @@ def find_pairs(suffix):
 
 def dump_pairs_to_files(suffix):
     def run():
-        res = cmdline(join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
-                    parameters=[realpath(orthomcl_config_final_path),
-                                realpath(config.mcl_input),
-                                realpath(config.intermediate_dir),
-                                suffix],
-                    stderr='log')()
+        res = cmdline(
+            'perl' + join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
+             parameters=[realpath(orthomcl_config_final_path),
+                         realpath(config.mcl_input),
+                         realpath(config.intermediate_dir),
+                         suffix],
+             stderr='log')()
 
         with DbCursor() as cursor:
             for tbl in [
@@ -413,7 +418,7 @@ def groups_to_files(prefix, start_id=0):
     return Step(
         'MCL groups to files',
         run=cmdline(
-            join(orthomcl_bin_dir, 'orthomclMclToGroups.pl'),
+            'perl' + join(orthomcl_bin_dir, 'orthomclMclToGroups.pl'),
             parameters=[prefix + '_', start_id],
             stdin=config.mcl_output,
             stdout=config.groups_file),

@@ -20,7 +20,7 @@ my $rejectRates = [];
 open(GOOD, ">$goodProteinsFile");
 open(BAD, ">$poorProteinsFile");
 foreach my $file (@files) {
-  if ($file =~ /(\S+)\.fasta$/ and $file =~ /(\S+)\.faa$/ and $file =~ /(\S+)\.fa$/) {
+  if (!($file =~ /(\S+)\.fasta$/ or $file =~ /(\S+)\.faa$/ or $file =~ /(\S+)\.fa$/)) {
     print STDERR "skipping file '$file' that is not in .faa or .fa or .fasta format\n";
     next;
   }

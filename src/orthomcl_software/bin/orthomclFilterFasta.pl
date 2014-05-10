@@ -20,7 +20,7 @@ my $rejectRates = [];
 open(GOOD, ">$goodProteinsFile");
 open(BAD, ">$poorProteinsFile");
 foreach my $file (@files) {
-  if ($file =~ /(\S+)\.fasta$/ or $file =~ /\.faa$/ or $file =~ /\.fa$/) {
+  if ($file =~ /(\S+)\.fasta$/ and $file =~ /\.faa$/ and $file =~ /\.fa$/) {
     print STDERR "skipping file '$file' that is not in .faa or .fa or .fasta format\n";
     next;
   }
@@ -79,13 +79,19 @@ if (scalar(@$rejectRates)) {
 sub handleSeq {
   my ($seq, $len, $stopCnt) = @_;
   my $isBad = 0;
-  my $stopPercent = (($len - $stopCnt)/$len)* 100;
 
-  if ($len < $minLength || $stopPercent > $maxStopPercent) {
+  if ($len < $minLength){
     print BAD $seq;
     $isBad = 1;
   } else {
-    print GOOD $seq;
+    my $stopPercent = (($len - $stopCnt)/$len)* 100;
+    if ($stopPercent > $maxStopPercent) {
+      print BAD $seq;
+      $isBad = 1;
+
+    } else {
+      print GOOD $seq;
+    }
   }
   return $isBad;
 }

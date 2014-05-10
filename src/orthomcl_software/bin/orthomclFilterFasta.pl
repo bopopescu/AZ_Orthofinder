@@ -20,8 +20,10 @@ my $rejectRates = [];
 open(GOOD, ">$goodProteinsFile");
 open(BAD, ">$poorProteinsFile");
 foreach my $file (@files) {
-  next unless $file =~ /\.fasta$/ or $file =~ /\.faa$/ or $file =~ /\.fa$/;
-  $file =~ /(\S+)\.fasta$/ || die "File '$file' does not have a name in xxxx.fasta format\n";;
+  if ($file =~ /(\S+)\.fasta$/ or $file =~ /\.faa$/ or $file =~ /\.fa$/) {
+    print STDERR "skipping file '$file' that is not in .faa or .fa or .fasta format\n";
+    next;
+  }
   my $abbrev = $1;
   open(F, "$inputDir/$file") || die "Can't open input file '$file'\n";
   print STDERR "processing file $file\n";

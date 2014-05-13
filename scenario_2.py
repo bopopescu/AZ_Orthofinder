@@ -58,38 +58,34 @@ First argument is a path to existed Scenario 1 output.
 
 Test runs:
     python scenario_2.py -s1o test_ids -s2o test_ids_new_ids --ids test_input/new_ids.txt
-
     python scenario_2.py -s1o test_proteomes -s2o test_prots_new_prots --proteomes test_input/new_proteins
 
-Usage: %s -s1o <scenario_1 directory> -s2o <out_dir> [--assemblies dir] [--proteomes dir]
-                                 [--gbs dir] [--ids-list file] [--species-list file]
-                                 [-t num] [--start-from step] [--blast-singletones] [--blast-db]
-
+Usage: %s -s1o <scenario_1 result dir> -s2o <new output dir> [-a <assembies dir>] [-p <proteomes dir]
+                                 [-a <.gb files dir>] [-i <gb ids file>] [-s <strain names file>]
+                                 [--jobs 30] [--start-from <step num>]
+                                 [--blast-singletones] [--blast-db <path>]
     -s1o                 Path to existed Scenario 1 output.
-
     -s2o                 Output directory (optional, if ommited, the input directory will be used).
 
-Optional arguments:
-
     -a --assemblies:     Directory with assemblies in fasta format.
+    -g  Directory with .gb files for references with annotations.
+    -p  Directory with fasta (or faa, fa) files of protein sequences. If they
+        are named by their reference ids (i.e. NC_005816.1.fasta), annotations
+        will be downloaded from NCBI.
+    -i  File with reference ids (will be fetched from NCBI).
+    -s  File with a list of organism names as in Genbank.
 
-    -g --gbs:            Directory with gb files.
+    --prot-id-field
+        When specifying proteomes, use this fasta id field number
+        to retrieve protein ids (default if 1, like >NC_005816.1|NP_995567.1 ...).
 
-    -p --proteomes:      Directory with fasta (or faa) protein files,
-                         named by their reference ids (i.e. NC_005816.1.fasta).
-                         Can contain annotations from Prodigal.
+    --blast-singletones
+        Search newly added proteins agains NCBI database, if they did not fit
+        any group with known proteins.
 
-    -i --ids-list:       File with reference ids (will be fetched from Genbank).
-
-    --prot-id-field:     When specifying proteomes, use this fasta id field number
-                         to retrieve protein ids (default if 1, like
-                         >NC_005816.1|NP_995567.1 ...).
-
-    --blast-singletones  Search newly added proteins agains NCBI database, if they did
-                         not fit any group with known proteins.
-
-    --blastdb           Local Blast database path. If not set, "blastdb" value in
-                        config.txt will be checked. If it was not set either, remote NCBI will be used.
+    --blastdb
+        Local BLAST database path. If not set, "blastdb" value in config.txt will be used.
+        If it was not set either, remote NCBI will be used.
     ''' % basename(__file__)
 
     #indent = ' ' * len('usage: ' + basename(__file__) + ' ')

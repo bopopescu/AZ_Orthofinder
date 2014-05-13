@@ -89,13 +89,15 @@ def cmdline(command, parameters=None, stdin=None,
 
     def callback():
         if isinstance(command, basestring):
-            commandline = ' '.join([command] + map(str, parameters))
+            command_list = command.split()
         else:
-            commandline = ' '.join(command + map(str, parameters))
+            command_list = command
+        command_list = command_list + map(str, parameters)
+        command_str = ' '.join(command_list)
 
         stdin_f = None
         if stdin:
-            commandline += ' < ' + stdin
+            command_str += ' < ' + stdin
             stdin_f = open(stdin)
 
         stdout_f = None
@@ -106,7 +108,7 @@ def cmdline(command, parameters=None, stdin=None,
                 stdout_f = subprocess.PIPE
             else:
                 stdout_f = open(stdout, 'w')
-                commandline += ' > ' + stdout
+                command_str += ' > ' + stdout
 
         if stderr:
             if stderr == stdout:
@@ -115,12 +117,11 @@ def cmdline(command, parameters=None, stdin=None,
                 stderr_f = subprocess.PIPE
             else:
                 stderr_f = open(stderr, 'w')
-                commandline += ' 2> ' + stderr
+                command_str += ' 2> ' + stderr
 
-        log.info('   ' + commandline)
+        log.info('   ' + command_str)
         try:
-            p = subprocess.Popen(
-                [command] + map(str, parameters), env=env,
+            p = subprocess.Popen(command_list, env=env,
                 stdin=stdin_f, stdout=stdout_f, stderr=stderr_f)
 
             if stdout_f == subprocess.PIPE:
@@ -178,7 +179,7 @@ def cmdline(command, parameters=None, stdin=None,
 
         except OSError, e:
             log.error('')
-            log.error('   OS Error when executing "%s":' % commandline)
+            log.error('   OS Error when executing: ' + command_str)
             log.error('   ' + e.strerror)
             if e.filename:
                 log.error('   For ' + e.filename)

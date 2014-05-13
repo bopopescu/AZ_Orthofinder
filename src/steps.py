@@ -104,6 +104,21 @@ def filter_proteomes(min_length=10, max_percent_stop=20):
         req_files=[config.proteomes_dir],
         prod_files=[config.good_proteins, config.poor_proteins])
 
+def filter_proteomes_split(min_length=10, max_percent_stop=20, jobs=30):
+    def proc():
+        # 1. iterate each fasta, count total number of good proteins
+        # 2. devide by N number of jobs, get K
+        # 3. iterate each fasta, save N good_protein files with K proteins
+        # 4. return multiple good_proteins
+        pass
+
+    return Step(
+        'Filtering proteomes: min length = ' + str(min_length) +
+        ', max percent of stop codons = ' + str(max_percent_stop),
+        run=proc,
+        req_files=[config.proteomes_dir],
+        prod_files=[config.good_proteins, config.poor_proteins])
+
 def make_blast_db():
     return Step(
         'Making blast database',

@@ -50,41 +50,38 @@ from src import config
 
 def add_common_arguments(op):
     op.add_argument('--start-from', dest='start_from', default=0)
-
-    op.add_argument('--ask', '--ask-each-step',
-                    dest='ask_each_step', action='store_true', default=False,
-                    help='Wait for user to press ke every time before proceed to next step.')
-
+    op.add_argument('--ask', '--ask-each-step', dest='ask_each_step', action='store_true', default=False, help='Wait for user to press ke every time before proceed to next step.')
     op.add_argument('-t', '--threads', dest='threads', default=30)
-
+    op.add_argument('-j', '--jobs', dest='jobs', default=30)
     op.add_argument('-w', '--overwrite', dest='overwrite', action='store_true', default=False)
-
     op.add_argument('--min-length', dest='min_length', default=10)
-
     op.add_argument('--max-percent-stop', dest='max_percent_stop', default=20)
-
     op.add_argument('--evalue', dest='evalue', default=1e-5)
-
     op.add_argument('-d', '--debug', dest='debug', action='store_true', default=False)
-
-    op.add_argument('--proxy', dest='proxy', default=None,
-                    help='Proxy for FTP, for example: --proxy 198.260.1.1:3333')
+    op.add_argument('--proxy', dest='proxy', default=None, help='Proxy for FTP, for example: --proxy 198.260.1.1:3333')
 
     op.usage += '''
-    --start-from           Start from the specified step.
-                           Either name or number (see log.txt) or "uselog".
-                           If "uselog", the last "Done" record in log.txt will be searched.
+    -j  Number of jobs to submit on cluster. Default is 30. Options used to submit:
+        qsub -pe pe_smp 1 -S /bin/bash -cwd -j y -o intermediate/run_X.log -q batch.q
 
-    --overwrite            Force to overwrite previous results and intermediate files in working directory.
+    -t  Use threads for BLAST instead of sumbitting jobs to cluster. Default is 30.
 
-    -t  --threads          Number of threads to run Blast. Default 30.
+    --start-from
+        Start from the specified step.
+        Either name or number (see log.txt) or "uselog".
+        If "uselog", the last "Done" record in log.txt will be searched.
+
+    -w  Force to overwrite previous results and intermediate files in working directory.
 
 Fine tuning:
-    --min-length           Minimum allowed length of proteins (default: 10)
+    --min-length
+        Minimum allowed length of proteins (default: 10)
 
-    --max-percent_stop     Maximum percent stop codons (default: 20)
+    --max-percent_stop
+        Maximum percent stop codons (default: 20)
 
-    --evalue               Blast e-value cut-off (default: 1e-5)
+    --evalue
+        Blast e-value cut-off (default: 1e-5)
     '''
 
 def check_common_args(params):

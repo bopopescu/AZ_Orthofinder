@@ -95,7 +95,7 @@ def filter_proteomes(min_length=10, max_percent_stop=20):
         'Filtering proteomes: min length = ' + str(min_length) +
         ', max percent of stop codons = ' + str(max_percent_stop),
         run=cmdline(
-            'perl' + join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
+            'perl ' + join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
             parameters=[
                 realpath(config.proteomes_dir),
                 min_length, max_percent_stop,
@@ -104,7 +104,7 @@ def filter_proteomes(min_length=10, max_percent_stop=20):
         req_files=[config.proteomes_dir],
         prod_files=[config.good_proteins, config.poor_proteins])
 
-def filter_proteomes_split(min_length=10, max_percent_stop=20, jobs=30):
+def filter_proteomes_split(jobs, min_length=10, max_percent_stop=20):
     def proc():
         # 1. iterate each fasta, count total number of good proteins
         # 2. devide by N number of jobs, get K
@@ -134,7 +134,7 @@ def make_blast_db():
         req_files=[config.good_proteins],
         prod_files=[config.blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']])
 
-def blast(threads, new_good_proteomes=None, evalue=1e-5):
+def blast(jobs, new_good_proteomes=None, evalue=1e-5):
     if new_good_proteomes:
         parameters = [
             '-query', realpath(new_good_proteomes),
@@ -161,7 +161,7 @@ def blast(threads, new_good_proteomes=None, evalue=1e-5):
             return 1
 
         res = cmdline(
-            'blastp', parameters + ['-num_threads', threads],
+            'blastp', parameters + ['-num_threads', jobs],
             ignore_lines_by_pattern=r'.* at position .* replaced by .*')()
         if res == -6:
             log.warn('')

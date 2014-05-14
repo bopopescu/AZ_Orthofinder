@@ -217,7 +217,7 @@ def step_prepare_proteomes_and_annotations(p):
                 if not isdir(config.proteomes_dir):
                     mkdir(config.proteomes_dir)
 
-                if p.fetch:
+                if p.download_anno:
                     if not test_entrez_conn():
                         #log.error('   Error: no internet connection, cannot fetch annotations. '
                         #          'You can start without a --no-fetch option, in this case '
@@ -284,7 +284,6 @@ def main(args):
 
         workflow.extend([
             step_prepare_proteomes_and_annotations(p),
-
             steps.filter_proteomes(
                 min_length=int(p.min_length),
                 max_percent_stop=int(p.max_percent_stop)),

@@ -245,8 +245,12 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                         if len(i_recs) > num_seqs_for_one_job:
                             blast_job = BlastJob(i)
                             blast_jobs.append(blast_job)
-                            SeqIO.write(rec, blast_job.prot_fpath, 'fasta')
+                            SeqIO.write(i_recs, blast_job.prot_fpath, 'fasta')
                             i, i_recs = i + 1, []
+                    if i_recs:
+                        blast_job = BlastJob(i)
+                        blast_jobs.append(blast_job)
+                        SeqIO.write(i_recs, blast_job.prot_fpath, 'fasta')
 
                     for bj in blast_jobs:
                         res = bj.submit()

@@ -68,10 +68,10 @@ def verify_file(fpath, description=''):
         return False
     fpath = expanduser(fpath)
     if not exists(fpath):
-        log.err(((description + ': ' if description else '') + fpath + ' does not exist.\n')
+        log.err((description + ': ' if description else '') + fpath + ' does not exist.\n')
         return False
     if not isfile(fpath):
-        log.err(((description + ': ' if description else '') + fpath + ' is not a file.\n')
+        log.err((description + ': ' if description else '') + fpath + ' is not a file.\n')
         return False
     if getsize(fpath) <= 0:
         log.err((description + ': ' if description else '') + fpath + ' is empty.\n')

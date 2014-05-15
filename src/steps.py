@@ -218,13 +218,14 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                                    ' -out ' + realpath(self.out_fpath))
                             with open(self.runner_fpath, 'w') as f:
                                 f.write('#!/bin/bash\n')
-                                f.write('module load blast')
-                                f.write(cmd)
-                                f.write('date')
+                                f.write('. /etc/profile.d/modules.sh')
+                                f.write('module load blast\n')
+                                f.write(cmd + '\n')
+                                f.write('date\n')
 
                         def submit(self):
-                            cmdl = '-pe pe_smp 1 -S /bin/bash -cwd -j y -q batch.q -o {0} ' \
-                                   '{1}'.format(realpath(self.log_fpath), realpath(self.runner_fpath))
+                            cmdl = '-pe pe_smp 1 -S /bin/bash -cwd -j y -q batch.q -N {0} -o {1} ' \
+                                   '{2}'.format(self.job_name, realpath(self.log_fpath), realpath(self.runner_fpath))
                             # cmdl = '-pe pe_smp 1 -S /bin/bash -cwd -j y -o {0} -q batch.q ' \
                             #        '{1}'.format(self.log_fpath, self.runner_fpath)
                             log.debug('submitting job ' + str(self.i))

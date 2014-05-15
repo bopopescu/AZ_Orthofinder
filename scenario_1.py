@@ -291,7 +291,7 @@ def main(args):
             steps.make_blast_db(),
             steps.blast(
                 workflow.id,
-                p.threads or p.jobs or 30,
+                int(p.threads) or int(p.jobs) or 30,
                 on_cluster=njobs and not p.threads,
                 evalue=float(p.evalue)),
             steps.parse_blast_results(),

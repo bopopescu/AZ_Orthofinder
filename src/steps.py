@@ -218,7 +218,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                                    ' -out ' + realpath(self.out_fpath))
                             with open(self.runner_fpath, 'w') as f:
                                 f.write('#!/bin/bash\n')
-                                f.write('. /etc/profile.d/modules.sh')
+                                f.write('. /etc/profile.d/modules.sh\n')
                                 f.write('module load blast\n')
                                 f.write(cmd + '\n')
                                 f.write('date\n')

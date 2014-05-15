@@ -263,26 +263,24 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                     if res != 0:
                         return res
 
-                    print '1'
-
                     cat_params = ''
                     ok = True
                     for bj in blast_jobs:
                         if not verify_file(bj.prot_fpath):
                             ok = False
                         cat_params += ' ' + bj.prot_fpath
-                    print '2'
                     if not ok:
                         return 3
 
-                    print '3'
                     res = cmdline('cat',
                                   parameters=cat_params,
                                   stdout=blast_out)
-                    print '4'
+                    if not verify_file(blast_out):
+                        log.debug(blast_out + ' not exist, reutrin 4')
+                        return 4
+                    print res
                     if res != 0:
                         return res
-                    print '5'
 
         if new_good_proteomes:
             log.info('   Appending ' + config.blast_out + '_2 to ' + config.blast_out)

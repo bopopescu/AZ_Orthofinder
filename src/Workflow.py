@@ -167,8 +167,9 @@ def cmdline(command, parameters=None, stdin=None,
                         log.debug('   ' + line.strip())
 
             ret_code = p.wait()
-            log.debug('      Ret ' + str(ret_code))
             if ret_code != 0:
+                log.error('')
+                log.error('Command returned ' + str(ret_code))
                 for line in stderr_output:
                     log.error('   ' + line.strip())
                     log.error('')

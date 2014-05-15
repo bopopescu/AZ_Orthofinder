@@ -231,6 +231,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                             res = cmdline('qsub', cmdl.split())()
                             log.debug('submitted, res = ' + str(res))
                             log.info('')
+                            return res
 
                     blast_jobs = []
                     i, i_recs = 1, []
@@ -256,7 +257,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                                 ' >' + blast_out)
 
                     cmdl = '-hold_jid {0} -cwd -j y -o {1} {2}'.format(
-                        ','.join(j.name for j in blast_jobs), 
+                        ','.join(j.name for j in blast_jobs),
                         realpath(collect_log), realpath(results_script_fpath))
                     log.debug('wating for jobs...')
                     res = cmdline('qsub', cmdl.split())()

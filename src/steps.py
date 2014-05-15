@@ -192,9 +192,10 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                 res = _blast(fasta_to_blast, blast_out, threads=max_jobs)
             else:
                 total_seqs = sum(1 for _ in SeqIO.parse(fasta_to_blast, 'fasta'))
+                # num_seqs_for_one_job = max(500, total_seqs/max_jobs) # TODO EDIT
+                # num_jobs = total_seqs/num_seqs_for_one_job or 1      # TODO EDIT
                 num_seqs_for_one_job = total_seqs/max_jobs
-                # num_seqs_for_one_job = max(500, total_seqs/max_jobs)
-                num_jobs = total_seqs/num_seqs_for_one_job or 1
+                num_jobs = total_seqs/num_seqs_for_one_job
 
                 if num_jobs == 1:
                     # one single threaded run

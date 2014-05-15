@@ -211,7 +211,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                     class BlastJob:
                         def __init__(self, i):
                             self.i = i
-                            self.job_name = workflow_id + '_' + str(i) + '_' + timestamp
+                            self.job_name = workflow_id + '_' + timestamp + '_' + str(i)
                             self.prot_fpath = join(config.intermediate_dir, 'proteins_' + str(i) + '.fasta')
                             self.out_fpath = join(config.intermediate_dir, 'blasted_part_' + str(i) + '.tsv')
                             self.log_fpath = join(config.intermediate_dir, 'run_blast_' + str(i) + '.log')

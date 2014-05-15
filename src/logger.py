@@ -7,12 +7,6 @@ from config import log_fname
 
 
 def set_up_logging(debug, working_dir, mode='a'):
-    print ''
-    print '!!!!!'
-    print 'debug = ' + str(debug)
-    print '!!!!!'
-    print ''
-
     logger = logging.getLogger(log_fname)
     logger.setLevel(logging.DEBUG if debug else logging.INFO)
 
@@ -34,7 +28,7 @@ def set_up_logging(debug, working_dir, mode='a'):
 
     std = logging.StreamHandler(sys.stdout)
     std.setLevel(logging.DEBUG if debug else logging.INFO)
-    std.addFilter(InfoFilter())
+    # std.addFilter(InfoFilter())
     std.setFormatter(console_formatter)
     logger.addHandler(std)
 

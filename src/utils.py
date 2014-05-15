@@ -64,17 +64,17 @@ def check_and_install_tools(debug, is_sqlite, log_path):
 
 def verify_file(fpath, description=''):
     if not fpath:
-        log.err((description + ': f' if description else 'F') + 'ile name is empty.\n')
+        log.error((description + ': f' if description else 'F') + 'ile name is empty.\n')
         return False
     fpath = expanduser(fpath)
     if not exists(fpath):
-        log.err((description + ': ' if description else '') + fpath + ' does not exist.\n')
+        log.error((description + ': ' if description else '') + fpath + ' does not exist.\n')
         return False
     if not isfile(fpath):
-        log.err((description + ': ' if description else '') + fpath + ' is not a file.\n')
+        log.error((description + ': ' if description else '') + fpath + ' is not a file.\n')
         return False
     if getsize(fpath) <= 0:
-        log.err((description + ': ' if description else '') + fpath + ' is empty.\n')
+        log.error((description + ': ' if description else '') + fpath + ' is empty.\n')
         return False
     return True
 

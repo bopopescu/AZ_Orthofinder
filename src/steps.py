@@ -223,7 +223,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                                 f.write('date')
 
                         def submit(self):
-                            cmdl = '-S /bin/bash -cwd -j y -o {0} -q batch.q ' \
+                            cmdl = '-pe pe_smp 1 -S /bin/bash -cwd -j y -q batch.q -o {0} ' \
                                    '{1}'.format(realpath(self.log_fpath), realpath(self.runner_fpath))
                             # cmdl = '-pe pe_smp 1 -S /bin/bash -cwd -j y -o {0} -q batch.q ' \
                             #        '{1}'.format(self.log_fpath, self.runner_fpath)
@@ -256,7 +256,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                         f.write('cat ' + ' '.join(bj.out_fpath for bj in blast_jobs) +
                                 ' >' + blast_out)
 
-                    cmdl = '-hold_jid {0} -cwd -j y -o {1} {2}'.format(
+                    cmdl = '-hold_jid {0} -cwd -j y -q batch.q -o {1} {2}'.format(
                         ','.join(j.name for j in blast_jobs),
                         realpath(collect_log), realpath(results_script_fpath))
                     log.debug('wating for jobs...')

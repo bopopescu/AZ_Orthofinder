@@ -271,21 +271,26 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                     if res != 0:
                         return res
 
-                    cat_params = ''
+                    # cat_params = ''
                     ok = True
                     for bj in blast_jobs:
-                        while not verify_file(bj.prot_fpath):
-                            log.info('wating for ' + bj.prot_fpath)
-                            log.debug('wating for ' + bj.prot_fpath)
+                        while not verify_file(bj.out_fpath):
+                            log.info('wating for ' + bj.out_fpath)
+                            log.debug('wating for ' + bj.out_fpath)
                             sleep(1)
                             # ok = False
-                        cat_params += ' ' + bj.prot_fpath
+                        # cat_params += ' ' + bj.prot_fpath
                     if not ok:
                         return 3
 
-                    res = cmdline('cat',
-                                  parameters=cat_params,
-                                  stdout=blast_out)
+                    # res = cmdline('cat',
+                    #               parameters=cat_params,
+                    #               stdout=blast_out)
+                    with open(blast_out, 'w') as out:
+                        for bj in blast_jobs:
+                            with open(bj.out_fpath) as bjout:
+                                out.write(bjout.read())
+
                     if not verify_file(blast_out):
                         log.debug(blast_out + ' not exist, return 4')
                         return 4

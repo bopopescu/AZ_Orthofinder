@@ -257,7 +257,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                                 ' >' + blast_out)
 
                     cmdl = '-hold_jid {0} -cwd -j y -q batch.q -o {1} {2}'.format(
-                        ','.join(j.name for j in blast_jobs),
+                        ','.join(j.job_name for j in blast_jobs),
                         realpath(collect_log), realpath(results_script_fpath))
                     log.debug('wating for jobs...')
                     res = cmdline('qsub', cmdl.split())()

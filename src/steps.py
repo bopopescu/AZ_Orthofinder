@@ -212,7 +212,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                             self.out_fpath = join(config.intermediate_dir, 'blasted_' + str(i) + '.tsv')
                             self.log_fpath = join(config.intermediate_dir, 'run_blast_' + str(i) + '.log')
                             self.runner_fpath = join(config.intermediate_dir, 'run_blast_' + str(i) + '.sh')
-                            cmd = ('blast ' +
+                            cmd = ('blastp ' +
                                    ' '.join(map(str, _blast_basic_params)) +
                                    ' -query ' + realpath(self.prot_fpath) +
                                    ' -out ' + realpath(self.out_fpath))

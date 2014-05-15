@@ -209,7 +209,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                             self.i = i
                             self.job_name = workflow_id + '_' + str(i) + '_' + timestamp
                             self.prot_fpath = join(config.intermediate_dir, 'proteins_' + str(i) + '.fasta')
-                            self.out_fpath = join(config.intermediate_dir, 'blasted_' + str(i) + '.tsv')
+                            self.out_fpath = join(config.intermediate_dir, 'blasted_part_' + str(i) + '.tsv')
                             self.log_fpath = join(config.intermediate_dir, 'run_blast_' + str(i) + '.log')
                             self.runner_fpath = join(config.intermediate_dir, 'run_blast_' + str(i) + '.sh')
                             cmd = ('blastp ' +
@@ -255,7 +255,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                     with open(results_script_fpath, 'w') as f:
                         f.write('#!/bin/bash\n')
 
-                    cmdl = '-hold_jid {0} -cwd -j y -q batch.q -o {1} {2}'.format(
+                    cmdl = '-hold_jid {0} -S /bin/bash -cwd -j y -q batch.q -o {1} {2}'.format(
                         ','.join(j.job_name for j in blast_jobs),
                         realpath(collect_log), realpath(results_script_fpath))
                     log.debug('wating for jobs...')
@@ -276,7 +276,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                                   parameters=cat_params,
                                   stdout=blast_out)
                     if not verify_file(blast_out):
-                        log.debug(blast_out + ' not exist, reutrin 4')
+                        log.debug(blast_out + ' not exist, return 4')
                         return 4
                     print res
                     if res != 0:

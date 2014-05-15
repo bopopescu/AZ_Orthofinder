@@ -3,6 +3,7 @@ from genericpath import isfile
 from os import remove, listdir
 from os.path import basename, join, relpath, exists, isdir, realpath
 from shutil import rmtree
+from time import sleep
 from Bio import SeqIO, Entrez
 from Bio.Seq import Seq
 from datetime import datetime
@@ -194,8 +195,8 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                 total_seqs = sum(1 for _ in SeqIO.parse(fasta_to_blast, 'fasta'))
                 # num_seqs_for_one_job = max(500, total_seqs/max_jobs) # TODO EDIT
                 # num_jobs = total_seqs/num_seqs_for_one_job or 1      # TODO EDIT
-                num_seqs_for_one_job = total_seqs/max_jobs
-                num_jobs = total_seqs/num_seqs_for_one_job
+                num_seqs_for_one_job = total_seqs/2
+                num_jobs = 2
 
                 if num_jobs == 1:
                     # one single threaded run
@@ -204,6 +205,8 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                 else:
                     # jobs
                     timestamp = str(datetime.now()).replace('-', '_').replace(':', '_').replace(' ', '_')
+
+                    log.info('Splitting data for ' + str(num_jobs) + ' cluster jobs.')
 
                     class BlastJob:
                         def __init__(self, i):
@@ -267,8 +270,11 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                     cat_params = ''
                     ok = True
                     for bj in blast_jobs:
-                        if not verify_file(bj.prot_fpath):
-                            ok = False
+                        while not verify_file(bj.prot_fpath):
+                            log.info('wating for ' + bj.prot_fpath)
+                            log.debug('wating for ' + bj.prot_fpath)
+                            sleep(1)
+                            # ok = False
                         cat_params += ' ' + bj.prot_fpath
                     if not ok:
                         return 3

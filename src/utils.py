@@ -1,7 +1,8 @@
 from dircache import listdir
+from genericpath import getsize
 from os import environ, access, X_OK, remove, getcwd, chdir, mkdir
 import os
-from os.path import basename, isdir, split, join, pathsep, isfile, dirname, exists, devnull, realpath
+from os.path import basename, isdir, split, join, pathsep, isfile, dirname, exists, devnull, realpath, expanduser
 from random import randint
 from shutil import copy
 from subprocess import call, Popen, PIPE
@@ -59,6 +60,23 @@ def check_and_install_tools(debug, is_sqlite, log_path):
 
     # os.environ['PERL5LIB'] = join(src_dir, 'perl_modules') + ':'\
     #                          + os.environ['PERL5LIB']
+
+
+def verify_file(fpath, description=''):
+    if not fpath:
+        sys.stderr.write((description + ': f' if description else 'F') + 'ile name is empty.\n')
+        return False
+    fpath = expanduser(fpath)
+    if not exists(fpath):
+        sys.stderr.write((description + ': ' if description else '') + fpath + ' does not exist.\n')
+        return False
+    if not isfile(fpath):
+        sys.stderr.write((description + ': ' if description else '') + fpath + ' is not a file.\n')
+        return False
+    if getsize(fpath) <= 0:
+        sys.stderr.write((description + ': ' if description else '') + fpath + ' is empty.\n')
+        return False
+    return True
 
 
 def which(program):

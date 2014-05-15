@@ -9,7 +9,7 @@ from datetime import datetime
 
 from Workflow import Step, cmdline
 from src.db_connection import DbCursor
-from utils import check_install_mcl, check_installed_tools, which
+from utils import check_install_mcl, check_installed_tools, which, verify_file
 from process_assembly import filter_assembly
 from save_orthogroups import save_orthogroups
 from make_proteomes import make_proteomes, adjust_proteomes
@@ -218,7 +218,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                                    ' -out ' + realpath(self.out_fpath))
                             with open(self.runner_fpath, 'w') as f:
                                 f.write('#!/bin/bash\n')
-                                f.write('load module blast')
+                                f.write('module load blast')
                                 f.write(cmd)
                                 f.write('date')
 
@@ -228,7 +228,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                             # cmdl = '-pe pe_smp 1 -S /bin/bash -cwd -j y -o {0} -q batch.q ' \
                             #        '{1}'.format(self.log_fpath, self.runner_fpath)
                             log.debug('submitting job ' + str(self.i))
-                            res = cmdline('qsub', cmdl.split())()
+                            res = cmdline('qsub', parameters=cmdl.split())()
                             log.debug('submitted, res = ' + str(res))
                             log.info('')
                             return res
@@ -253,14 +253,27 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                     collect_log = join(config.intermediate_dir, 'collect_blasted.log')
                     with open(results_script_fpath, 'w') as f:
                         f.write('#!/bin/bash\n')
-                        f.write('cat ' + ' '.join(bj.out_fpath for bj in blast_jobs) +
-                                ' >' + blast_out)
 
                     cmdl = '-hold_jid {0} -cwd -j y -q batch.q -o {1} {2}'.format(
                         ','.join(j.job_name for j in blast_jobs),
                         realpath(collect_log), realpath(results_script_fpath))
                     log.debug('wating for jobs...')
-                    res = cmdline('qsub', cmdl.split())()
+                    res = cmdline('qsub', parameters=cmdl.split())()
+
+                    cat_params = ''
+                    ok = True
+                    for bj in blast_jobs:
+                        if not verify_file(bj):
+                            ok = False
+                        cat_params += ' ' + bj
+                    if not ok:
+                        return 3
+
+                    res = cmdline('cat',
+                                  parameters=cat_params,
+                                  stdout=blast_out)
+                    if res != 0:
+                        return res
 
         if new_good_proteomes:
             log.info('   Appending ' + config.blast_out + '_2 to ' + config.blast_out)

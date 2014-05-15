@@ -10,9 +10,9 @@ def set_up_logging(debug, working_dir, mode='a'):
     logger = logging.getLogger(log_fname)
     logger.setLevel(logging.DEBUG if debug else logging.INFO)
 
-    class InfoFilter(logging.Filter):
+    class InfoDebugFilter(logging.Filter):
         def filter(self, rec):
-            return rec.levelno in [logging.INFO]
+            return rec.levelno in [logging.INFO, logging.DEBUG]
 
     console_formatter = logging.Formatter(
         '%(asctime)-15s  ' + ('%(levelname)s   ' if debug else '') + '%(message)s',
@@ -28,7 +28,7 @@ def set_up_logging(debug, working_dir, mode='a'):
 
     std = logging.StreamHandler(sys.stdout)
     std.setLevel(logging.DEBUG if debug else logging.INFO)
-    # std.addFilter(InfoFilter())
+    std.addFilter(InfoDebugFilter())
     std.setFormatter(console_formatter)
     logger.addHandler(std)
 

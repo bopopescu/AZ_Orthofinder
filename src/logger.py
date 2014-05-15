@@ -7,6 +7,12 @@ from config import log_fname
 
 
 def set_up_logging(debug, working_dir, mode='a'):
+    print ''
+    print '!!!!!'
+    print 'debug = ' + str(debug)
+    print '!!!!!'
+    print ''
+
     logger = logging.getLogger(log_fname)
     logger.setLevel(logging.DEBUG if debug else logging.INFO)
 

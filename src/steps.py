@@ -259,13 +259,15 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                         realpath(collect_log), realpath(results_script_fpath))
                     log.debug('wating for jobs...')
                     res = cmdline('qsub', parameters=cmdl.split())()
+                    if res != 0:
+                        return res
 
                     cat_params = ''
                     ok = True
                     for bj in blast_jobs:
-                        if not verify_file(bj):
+                        if not verify_file(bj.prot_fpath):
                             ok = False
-                        cat_params += ' ' + bj
+                        cat_params += ' ' + bj.prot_fpath
                     if not ok:
                         return 3
 

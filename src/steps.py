@@ -223,11 +223,14 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                                 f.write('date')
 
                         def submit(self):
-                            cmdl = '-pe pe_smp 1 -S /bin/bash -cwd -j y -o {0} -q batch.q ' \
+                            cmdl = '-S /bin/bash -cwd -j y -o {0} -q batch.q ' \
                                    '{1}'.format(self.log_fpath, self.runner_fpath)
+                            # cmdl = '-pe pe_smp 1 -S /bin/bash -cwd -j y -o {0} -q batch.q ' \
+                            #        '{1}'.format(self.log_fpath, self.runner_fpath)
                             log.debug('submitting job ' + str(self.i))
                             res = cmdline('qsub', cmdl.split())()
                             log.debug('submitted, res = ' + str(res))
+                            log.info('')
 
                     blast_jobs = []
                     i, i_recs = 1, []

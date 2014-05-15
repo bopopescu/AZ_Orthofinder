@@ -243,7 +243,10 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                             i, i_recs = i + 1, []
 
                     for bj in blast_jobs:
-                        bj.submit()
+                        res = bj.submit()
+                        if res != 0:
+                            log.info('qsub returned exit code ' + str(res))
+                            return res
 
                     results_script_fpath = join(config.intermediate_dir, 'collect_blasted' + '.sh')
                     collect_log = join(config.intermediate_dir, 'collect_blasted.log')

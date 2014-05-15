@@ -20,6 +20,7 @@ my $rejectRates = [];
 open(GOOD, ">$goodProteinsFile");
 open(BAD, ">$poorProteinsFile");
 foreach my $file (@files) {
+  next if $file =~ /^\./;
   if (!($file =~ /(\S+)\.fasta$/ or $file =~ /(\S+)\.faa$/ or $file =~ /(\S+)\.fa$/)) {
     print STDERR "skipping file '$file' that is not in .faa or .fa or .fasta format\n";
     next;
@@ -39,14 +40,14 @@ foreach my $file (@files) {
     # handle prev seq
     if (/\>/) {
       (/\>([^|]+)|/ && $1 eq $abbrev) ||
-	die "The ID on def line '$_' is missing the prefix '$abbrev|' '$1'\n" unless $1 eq $abbrev;
+	    die "The ID on def line '$_' is missing the prefix '$abbrev|' '$1'\n" unless $1 eq $abbrev;
       if ($currentSeq) {
-	die "Error: zero length sequence in file $file.  Look near line '$_'\n" if $currentLen == 0;
-	$seqCount++;
-	$rejectSeqCount += &handleSeq($currentSeq, $currentLen, $currentStopCnt);
-	$currentSeq = "";
-	$currentLen = 0;
-	$currentStopCnt = 0;
+        die "Error: zero length sequence in file $file.  Look near line '$_'\n" if $currentLen == 0;
+        $seqCount++;
+        $rejectSeqCount += &handleSeq($currentSeq, $currentLen, $currentStopCnt);
+        $currentSeq = "";
+        $currentLen = 0;
+        $currentStopCnt = 0;
       }
     } else {
       $currentLen += length($_);

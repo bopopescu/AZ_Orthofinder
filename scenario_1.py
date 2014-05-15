@@ -282,13 +282,18 @@ def main(args):
 
         suffix = '' if conf.get('db_vendor', 'sqlite') == 'sqlite' else '_' + workflow.id
 
+        njobs = p.threads or p.jobs or 30
         workflow.extend([
             step_prepare_proteomes_and_annotations(p),
             steps.filter_proteomes(
                 min_length=int(p.min_length),
                 max_percent_stop=int(p.max_percent_stop)),
             steps.make_blast_db(),
-            steps.blast(p.threads, evalue=float(p.evalue)),
+            steps.blast(
+                workflow.id,
+                p.threads or p.jobs or 30,
+                on_cluster=njobs and not p.threads,
+                evalue=float(p.evalue)),
             steps.parse_blast_results(),
             steps.clean_database(suffix),
             steps.install_schema(suffix),

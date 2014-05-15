@@ -15,16 +15,16 @@ import logging
 log = logging.getLogger(config.log_fname)
 
 
-def adjust_proteomes(proteomes, proteomes_dir, prot_id_field):
+def adjust_proteomes(prot_fpaths, proteomes_dir, prot_id_field):
     if not isdir(proteomes_dir):
         mkdir(proteomes_dir)
 
-    for proteome in proteomes:
+    for proteome_fpath in prot_fpaths:
         prot_ids = set()
         records = []
-        taxon_id, ext = splitext(basename(proteome))
+        taxon_id, ext = splitext(basename(proteome_fpath))
         ext = '.fasta'
-        for seq in SeqIO.parse(proteome, 'fasta'):
+        for seq in SeqIO.parse(proteome_fpath, 'fasta'):
             fields = seq.id.replace('|', ' ').split()
             if len(fields) > prot_id_field:
                 prot_id = fields[prot_id_field]
@@ -32,21 +32,21 @@ def adjust_proteomes(proteomes, proteomes_dir, prot_id_field):
                 prot_id = fields[-1]
             else:
                 log.error('Incorrect fasta id: ' + str(seq.id))
-                exit(1)
+                return 1
 
             if len(prot_id) > 30:
                 prot_id = prot_id[:17] + '...' + prot_id[-10:]
             if prot_id in prot_ids:
-                log.error('Fasta %s contains duplicate id: %s' % (proteome, prot_id))
+                log.error('Fasta {proteome_fpath} contains duplicate id: '
+                          '{prot_id}'.format(**locals()))
                 return 1
             prot_ids.add(prot_id)
             seq.id = taxon_id + '|' + prot_id
             records.append(seq)
-        out = join(proteomes_dir, taxon_id + ext)
-        if isfile(out):
-            remove(out)
-        SeqIO.write(records, out, 'fasta')
-
+        out_fpath = join(proteomes_dir, taxon_id + ext)
+        if isfile(out_fpath):
+            remove(out_fpath)
+        SeqIO.write(records, out_fpath, 'fasta')
     return 0
 
 
@@ -73,7 +73,7 @@ def make_proteomes(annotations, proteomes_dir):
     for gb_fpath in gb_files:
         try:
             rec = SeqIO.read(gb_fpath, 'genbank')
-        except:
+        except ValueError:
             log.warning('   Can not read proteins from ' + gb_fpath)
             continue
 
@@ -119,7 +119,7 @@ def make_proteomes(annotations, proteomes_dir):
                                              retmode='text', rettype='fasta')
                 try:
                     rec = SeqIO.read(fetch_handle, 'fasta')
-                except:
+                except ValueError:
                     log.warning('   No results for protein_id ' + protein_id + ', skipping.')
                     continue
                 else:

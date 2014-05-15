@@ -83,7 +83,7 @@ class Workflow:
 
 def cmdline(command, parameters=None, stdin=None,
             stdout='pipe', stderr='pipe', env=None,
-            ignore_lines_by_pattern=None,
+            ignore_output_lines_by_pattern=None,
             start_ignoring_from=None):
     parameters = parameters or []
 
@@ -133,9 +133,9 @@ def cmdline(command, parameters=None, stdin=None,
                         if a.match(line.strip()):
                             break
 
-                    if ignore_lines_by_pattern:
+                    if ignore_output_lines_by_pattern:
                         import re
-                        a = re.compile(ignore_lines_by_pattern)
+                        a = re.compile(ignore_output_lines_by_pattern)
                         if a.match(line.strip()):
                             continue
 
@@ -153,9 +153,9 @@ def cmdline(command, parameters=None, stdin=None,
                         if a.match(line.strip()):
                             break
 
-                    if ignore_lines_by_pattern:
+                    if ignore_output_lines_by_pattern:
                         import re
-                        a = re.compile(ignore_lines_by_pattern)
+                        a = re.compile(ignore_output_lines_by_pattern)
                         if a.match(line.strip()):
                             continue
 

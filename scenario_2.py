@@ -421,7 +421,12 @@ def main(args):
                 min_length=int(p.min_length),
                 max_percent_stop=int(p.max_percent_stop)),
             steps.make_blast_db(),
-            steps.blast(p.threads, new_good_proteomes, evalue=float(p.evalue)),
+            steps.blast(
+                workflow.id,
+                p.threads or p.jobs or 30,
+                on_cluster=p.threads > 0,
+                new_good_proteomes=new_good_proteomes,
+                evalue=float(p.evalue)),
             steps.parse_blast_results(),
             steps.clean_database(suffix),
             steps.install_schema(suffix),

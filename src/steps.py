@@ -1,11 +1,15 @@
+from collections import namedtuple
 from genericpath import isfile
 from os import remove, listdir
 from os.path import basename, join, relpath, exists, isdir, realpath
 from shutil import rmtree
+from Bio import SeqIO, Entrez
+from Bio.Seq import Seq
+from datetime import datetime
 
 from Workflow import Step, cmdline
 from src.db_connection import DbCursor
-from utils import check_install_mcl, check_installed_tools
+from utils import check_install_mcl, check_installed_tools, which
 from process_assembly import filter_assembly
 from save_orthogroups import save_orthogroups
 from make_proteomes import make_proteomes, adjust_proteomes
@@ -91,33 +95,41 @@ best_hit_taxon_score_table = 'BestQueryTaxonScore'
 #         prod_files=[proteomes_dir])
 
 def filter_proteomes(min_length=10, max_percent_stop=20):
-    return Step(
-        'Filtering proteomes: min length = ' + str(min_length) +
-        ', max percent of stop codons = ' + str(max_percent_stop),
-        run=cmdline(
+    def run():
+        res = cmdline(
             'perl ' + join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
             parameters=[
                 realpath(config.proteomes_dir),
                 min_length, max_percent_stop,
                 realpath(config.good_proteins),
-                realpath(config.poor_proteins)]),
-        req_files=[config.proteomes_dir],
-        prod_files=[config.good_proteins, config.poor_proteins])
+                realpath(config.poor_proteins)])()
+        if res != 0:
+            return res
 
-def filter_proteomes_split(jobs, min_length=10, max_percent_stop=20):
-    def proc():
-        # 1. iterate each fasta, count total number of good proteins
-        # 2. devide by N number of jobs, get K
-        # 3. iterate each fasta, save N good_protein files with K proteins
-        # 4. return multiple good_proteins
-        pass
+        total_seqs = sum(1 for _ in SeqIO.parse(config.good_proteins, 'fasta'))
+        if total_seqs == 0:
+            log.error('No good protein sequences found.')
+            return 1
+
+        return 0
 
     return Step(
         'Filtering proteomes: min length = ' + str(min_length) +
         ', max percent of stop codons = ' + str(max_percent_stop),
-        run=proc,
+        run=run,
         req_files=[config.proteomes_dir],
         prod_files=[config.good_proteins, config.poor_proteins])
+
+# def filter_and_split_proteomes(max_jobs, min_length=10, max_percent_stop=20):
+#     def proc():
+#         pass
+#
+#     return Step(
+#         'Filtering proteomes: min length = ' + str(min_length) +
+#         ', max percent of stop codons = ' + str(max_percent_stop),
+#         run=proc,
+#         req_files=[config.proteomes_dir],
+#         prod_files=[config.good_proteins, config.poor_proteins])
 
 def make_blast_db():
     return Step(
@@ -134,40 +146,113 @@ def make_blast_db():
         req_files=[config.good_proteins],
         prod_files=[config.blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']])
 
-def blast(jobs, new_good_proteomes=None, evalue=1e-5):
-    if new_good_proteomes:
-        parameters = [
-            '-query', realpath(new_good_proteomes),
-            '-db', realpath(config.blast_db),
-            '-out', realpath(config.blast_out + '_2'),
-            '-outfmt', 6,  # tabular
-            '-seg', 'yes',
-            '-soft_masking', 'true',
-            '-evalue', evalue,
-            '-dbsize', BLAST_DBSIZE]
-    else:
-        parameters = [
-            '-query', realpath(config.good_proteins),
-            '-db', realpath(config.blast_db),
-            '-out', realpath(config.blast_out),
-            '-outfmt', 6,  # tabular
-            '-seg', 'yes',
-            '-soft_masking', 'true',
-            '-evalue', evalue,
-            '-dbsize', BLAST_DBSIZE]
+def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, evalue=1e-5):
+    if not check_installed_tools(['blastp'], only_warn=False):
+        return 1
 
-    def run():
-        if not check_installed_tools(['blastp'], only_warn=False):
-            return 1
+    _blast_basic_params = [
+        '-db', realpath(config.blast_db),
+        '-outfmt', 6,  # tabular
+        '-seg', 'yes',
+        '-soft_masking', 'true',
+        '-evalue', evalue,
+        '-dbsize', BLAST_DBSIZE]
 
-        res = cmdline(
-            'blastp', parameters + ['-num_threads', jobs],
-            ignore_lines_by_pattern=r'.* at position .* replaced by .*')()
-        if res == -6:
-            log.warn('')
-            log.warn('   WARNING: blast refused to run multithreaded, '
-                     'running single-threaded instead.')
-            res = cmdline('blastp', parameters)()
+    def _blast(in_fpath, out_fpath, threads=1):
+        params = _blast_basic_params + [
+            '-query', realpath(in_fpath),
+            '-out', realpath(out_fpath)]
+
+        _callback = lambda ps: cmdline('blastp', ps, ignore_output_lines_by_pattern=r'.* at position .* replaced by .*')
+
+        if threads > 1:
+            res = _callback(params + ['-num_threads', threads])()
+            if res == -6:
+                log.warn('')
+                log.warn('   WARNING: blast refused to run multithreaded, '
+                         'running single-threaded instead.')
+                return _callback(params)()
+            return res
+        else:
+            return _callback(params)()
+
+    def _run():
+        fasta_to_blast = new_good_proteomes or config.good_proteins
+        blast_out = config.blast_out if new_good_proteomes else config.blast_out + '_2'
+
+        res = 10
+        if not on_cluster:
+            # threads
+            res = _blast(fasta_to_blast, blast_out, threads=max_jobs)
+
+        else:
+            qsub = which('qsub')
+            if not qsub:
+                log.warn('No qsub in system: running multuthreaded')
+                res = _blast(fasta_to_blast, blast_out, threads=max_jobs)
+            else:
+                total_seqs = sum(1 for _ in SeqIO.parse(fasta_to_blast, 'fasta'))
+                num_seqs_for_one_job = total_seqs/max_jobs
+                # num_seqs_for_one_job = max(500, total_seqs/max_jobs)
+                num_jobs = total_seqs/num_seqs_for_one_job or 1
+
+                if num_jobs == 1:
+                    # one single threaded run
+                    res = _blast(fasta_to_blast, blast_out, threads=1)
+
+                else:
+                    # jobs
+                    timestamp = str(datetime.now()).replace('-', '_').replace(':', '_').replace(' ', '_')
+
+                    class BlastJob:
+                        def __init__(self, i):
+                            self.i = i
+                            self.job_name = workflow_id + '_' + str(i) + '_' + timestamp
+                            self.prot_fpath = join(config.intermediate_dir, 'proteins_' + str(i) + '.fasta')
+                            self.out_fpath = join(config.intermediate_dir, 'blasted_' + str(i) + '.tsv')
+                            self.log_fpath = join(config.intermediate_dir, 'run_blast_' + str(i) + '.log')
+                            self.runner_fpath = join(config.intermediate_dir, 'run_blast_' + str(i) + '.sh')
+                            cmd = ('blast ' +
+                                   ' '.join(map(str, _blast_basic_params)) +
+                                   ' -query ' + realpath(self.prot_fpath) +
+                                   ' -out ' + realpath(self.out_fpath))
+                            with open(self.runner_fpath, 'w') as f:
+                                f.write('#!/bin/bash\n')
+                                f.write('load module blast')
+                                f.write(cmd)
+                                f.write('date')
+
+                        def submit(self):
+                            cmdl = '-pe pe_smp 1 -S /bin/bash -cwd -j y -o {0} -q batch.q ' \
+                                   '{1}'.format(self.log_fpath, self.runner_fpath)
+                            log.debug('submitting job ' + str(self.i))
+                            res = cmdline('qsub', cmdl.split())()
+                            log.debug('submitted, res = ' + str(res))
+
+                    blast_jobs = []
+                    i, i_recs = 1, []
+                    for rec in SeqIO.parse(fasta_to_blast, 'fasta'):
+                        i_recs.append(rec)
+                        if len(i_recs) > num_seqs_for_one_job:
+                            blast_job = BlastJob(i)
+                            blast_jobs.append(blast_job)
+                            SeqIO.write(rec, blast_job.prot_fpath, 'fasta')
+                            i, i_recs = i + 1, []
+
+                    for bj in blast_jobs:
+                        bj.submit()
+
+                    results_script_fpath = join(config.intermediate_dir, 'collect_blasted' + '.sh')
+                    collect_log = join(config.intermediate_dir, 'collect_blasted.log')
+                    with open(results_script_fpath, 'w') as f:
+                        f.write('#!/bin/bash\n')
+                        f.write('cat ' + ' '.join(bj.out_fpath for bj in blast_jobs) +
+                                ' >' + blast_out)
+
+                    cmdl = '-hold_jid {0} -cwd -j y -o {1} {2}'.format(
+                        ','.join(j.name for j in blast_jobs), collect_log, results_script_fpath)
+                    log.debug('wating for jobs...')
+                    res = cmdline('qsub', cmdl.split())()
 
         if new_good_proteomes:
             log.info('   Appending ' + config.blast_out + '_2 to ' + config.blast_out)
@@ -179,7 +264,7 @@ def blast(jobs, new_good_proteomes=None, evalue=1e-5):
 
     return Step(
         'Blasting',
-        run=run,
+        run=_run,
         req_files=[config.good_proteins])
 
 def parse_blast_results():

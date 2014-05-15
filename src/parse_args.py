@@ -51,8 +51,8 @@ from src import config
 def add_common_arguments(op):
     op.add_argument('--start-from', dest='start_from', default=0)
     op.add_argument('--ask', '--ask-each-step', dest='ask_each_step', action='store_true', default=False, help='Wait for user to press ke every time before proceed to next step.')
-    op.add_argument('-t', '--threads', dest='threads', default=30)
-    op.add_argument('-j', '--jobs', dest='jobs', default=30)
+    op.add_argument('-t', '--threads', dest='threads', default=0)
+    op.add_argument('-j', '--jobs', dest='jobs', default=0)
     op.add_argument('-w', '--overwrite', dest='overwrite', action='store_true', default=False)
     op.add_argument('--min-length', dest='min_length', default=10)
     op.add_argument('--max-percent-stop', dest='max_percent_stop', default=20)

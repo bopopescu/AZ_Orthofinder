@@ -189,7 +189,7 @@ all_considered_warning = '   Notice: all proteomes are already considered in thi
 
 def step_prepare_input(p):
     if p.assemblies:
-        def run():
+        def run(start_from_here=False):
             assemblies = [
                 join(p.assemblies, f)
                 for f in listdir(p.assemblies)
@@ -256,7 +256,7 @@ def step_prepare_input(p):
             run=run)
 
     elif p.proteomes:
-        def run():
+        def run(start_from_here=False):
             input_proteomes = [
                 join(p.proteomes, prot)
                 for prot in listdir(p.proteomes)
@@ -291,7 +291,7 @@ def step_prepare_input(p):
             run=run)
 
     elif p.ids_list:
-        def run():
+        def run(start_from_here=False):
             if not test_entrez_conn():
                 log.error('No internet connection: cannot fetch annotations.')
                 return 4
@@ -323,15 +323,18 @@ new_bad_proteomes = join(config.intermediate_dir, 'new_bad_proteins.fasta')
 
 
 def filter_new_proteomes(new_proteomes_dir, min_length=10, max_percent_stop=20):
-    return Step(
-       'Filtering new proteomes',
-        run=cmdline(
+    def run(start_from_here=False):
+        return cmdline(
             join(steps.orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
             parameters=[
                 new_proteomes_dir,
                 min_length, max_percent_stop,
                 new_good_proteomes,
-                new_bad_proteomes]),
+                new_bad_proteomes])
+
+    return Step(
+       'Filtering new proteomes',
+        run=run,
         req_files=[new_proteomes_dir],
         prod_files=[
             new_good_proteomes,

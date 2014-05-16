@@ -96,7 +96,7 @@ best_hit_taxon_score_table = 'BestQueryTaxonScore'
 #         prod_files=[proteomes_dir])
 
 def filter_proteomes(min_length=10, max_percent_stop=20):
-    def run():
+    def run(starting_from_here=False):
         res = cmdline(
             'perl ' + join(orthomcl_bin_dir, 'orthomclFilterFasta.pl'),
             parameters=[
@@ -133,9 +133,8 @@ def filter_proteomes(min_length=10, max_percent_stop=20):
 #         prod_files=[config.good_proteins, config.poor_proteins])
 
 def make_blast_db():
-    return Step(
-        'Making blast database',
-        run=cmdline(
+    def _run(starting_from_here=False):
+        return cmdline(
             'makeblastdb',
              parameters=[
                '-in', realpath(config.good_proteins),
@@ -143,7 +142,11 @@ def make_blast_db():
                '-out', realpath(config.blast_db),
                '-dbtype', 'prot'],
              stdout='log',
-             stderr='log'),
+             stderr='log')()
+
+    return Step(
+        'Making blast database',
+        run=_run,
         req_files=[config.good_proteins],
         prod_files=[config.blast_db + '.' + ext for ext in ['phr', 'pin', 'psq']])
 
@@ -164,7 +167,9 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
             '-query', realpath(in_fpath),
             '-out', realpath(out_fpath)]
 
-        _callback = lambda ps: cmdline('blastp', ps, ignore_output_lines_by_pattern=r'.* at position .* replaced by .*')
+        def _callback(ps):
+            return cmdline('blastp', ps, ignore_output_lines_by_pattern=
+                r'.* at position .* replaced by .*')
 
         if threads > 1:
             res = _callback(params + ['-num_threads', threads])()
@@ -177,7 +182,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
         else:
             return _callback(params)()
 
-    def _run():
+    def _run(starting_from_here=False):
         fasta_to_blast = new_good_proteomes or config.good_proteins
         blast_out = config.blast_out + '_2' if new_good_proteomes else config.blast_out
 
@@ -312,31 +317,41 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
         req_files=[config.good_proteins])
 
 def parse_blast_results():
-    return Step(
-        'Parsing blast results',
-        run=cmdline(
+    def _run(starting_from_here=False):
+        return cmdline(
             join(orthomcl_bin_dir, 'orthomclBlastParser.pl'),
             parameters=[realpath(config.blast_out), realpath(config.proteomes_dir)],
-            stdout=realpath(config.similar_sequences)),
+            stdout=realpath(config.similar_sequences))()
+
+    return Step(
+        'Parsing blast results',
+        run=_run,
         req_files=[config.proteomes_dir, config.blast_out],
         prod_files=[config.similar_sequences])
 
 def clean_database(suffix):
+    def _run(starting_from_here=False):
+        return clean_db(suffix)
+
     return Step(
         'Cleaning database',
-        run=lambda: clean_db(suffix))
+        run=_run)
 
 def install_schema(suffix):
-    return Step(
-        'Installing schema',
-        run=cmdline(
+    def run(starting_from_here=False):
+        return cmdline(
             join(orthomcl_bin_dir, 'orthomclInstallSchema.pl'),
             parameters=[
                 realpath(orthomcl_config_final_path),
                 realpath(config.sql_log),
                 suffix],
-            stderr='log'),
+            stderr='log')()
+
+    return Step(
+        'Installing schema',
+        run=run,
         req_files=[orthomcl_config_final_path],
+        # prod_files=[config.sqlite_file],
         prod_tables=[
             ortholog_table + suffix,
             in_paralog_table + suffix,
@@ -345,7 +360,7 @@ def install_schema(suffix):
             inter_taxon_match_view + suffix])
 
 def load_blast_results(suffix):
-    def run():
+    def run(starting_from_here=False):
         with DbCursor() as cursor:
             for tbl in [
                 similar_sequeces_table + suffix,
@@ -375,7 +390,7 @@ def load_blast_results(suffix):
                 realpath(orthomcl_config_final_path),
                 realpath(config.similar_sequences),
                 suffix,
-                ])()
+            ])()
 
     return Step(
         'Loading blast results into the database',
@@ -385,7 +400,7 @@ def load_blast_results(suffix):
         prod_files=[])  # loads blast results into the db)
 
 def find_pairs(suffix):
-    def run():
+    def run(starting_from_here=False):
         with DbCursor() as cursor:
             for tbl in [
                 in_paralog_table + suffix,
@@ -421,13 +436,19 @@ def find_pairs(suffix):
         #        'suffix=' + (suffix if suffix else '*')])()
         #log.info('   Cleaning: ' + str(res))
 
+        print 'starting_from_here: ' + str(starting_from_here)
+
+        params = [
+            realpath(orthomcl_config_final_path),
+            realpath(config.pairs_log),
+            'cleanup=no',
+            'suffix=' + (suffix if suffix else '*')]
+        if starting_from_here:
+            params += ['startAfter=useLog']
+
         return cmdline(
             join(orthomcl_bin_dir, 'orthomclPairs.pl'),
-            parameters=[
-                realpath(orthomcl_config_final_path),
-                realpath(config.pairs_log),
-                'cleanup=no',
-                'suffix=' + (suffix if suffix else '*')])()
+            parameters=params)()
 
     return Step(
         'Finding pairs',
@@ -462,10 +483,10 @@ def find_pairs(suffix):
             'OrthologUniqueId',
             'UniqSimSeqsQueryId',
         ]],
-        prod_files=[])  # populates InParalog, Ortholog, CoOrtholog)
+        prod_files=[])  # populates InParalog, Ortholog, CoOrtholog
 
 def dump_pairs_to_files(suffix):
-    def run():
+    def run(starting_from_here=False):
         res = cmdline(
             join(orthomcl_bin_dir, 'orthomclDumpPairsFiles.pl'),
              parameters=[realpath(orthomcl_config_final_path),
@@ -507,7 +528,7 @@ def dump_pairs_to_files(suffix):
                     config.pairs_coorthologs])
 
 def mcl(debug, inflation=1.5):
-    def run():
+    def run(starting_from_here=False):
         mcl_bin_path, res = check_install_mcl(debug, only_warn=False)
         if mcl_bin_path is None:
             return res
@@ -531,7 +552,7 @@ def mcl(debug, inflation=1.5):
 
 def step_save_orthogroups(added_proteomes_dir=None,
                           annotations=None, internet_on=True):
-    def run():
+    def run(starting_from_here=False):
         if added_proteomes_dir:
             added_proteomes_files = [
                 join(added_proteomes_dir, prot)
@@ -559,13 +580,16 @@ def step_save_orthogroups(added_proteomes_dir=None,
        prod_files=prod_files)
 
 def groups_to_files(prefix, start_id=0):
-    return Step(
-        'MCL groups to files',
-        run=cmdline(
+    def run(starting_from_here=False):
+        return cmdline(
             join(orthomcl_bin_dir, 'orthomclMclToGroups.pl'),
             parameters=[prefix + '_', start_id],
             stdin=config.mcl_output,
-            stdout=config.groups_file),
+            stdout=config.groups_file)
+
+    return Step(
+        'MCL groups to files',
+        run=run,
         req_files=[config.mcl_output],
         prod_files=[config.groups_file])
 

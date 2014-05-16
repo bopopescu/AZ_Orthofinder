@@ -60,7 +60,8 @@ class Workflow:
                     continue
 
             log.info(str(i) + '. ' + step.name)
-            res = step._run(overwrite, ask_before)
+            starting_from_here = i == start_after + 1 if start_after else i == start_from if start_from else None
+            res = step._run(i, overwrite, ask_before, starting_from_here)
             if res != 0:
                 if '--start-from' in self.cmdline_args:
                     inx = self.cmdline_args.index('--start-from')
@@ -334,7 +335,7 @@ class Step:
         return True, 0
 
 
-    def _run(self, overwrite=False, step_by_step=False):
+    def _run(self, step_number, overwrite=False, step_by_step=False, starting_from_here=False):
         if step_by_step:
             raw_input('   Proceed?')
 
@@ -348,4 +349,4 @@ class Step:
         if not ok:
             return code
 
-        return self.run()
+        return self.run(starting_from_here=starting_from_here)

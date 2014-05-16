@@ -161,7 +161,7 @@ def collect_proteomes_and_annotaitons(input_dir):
 
 
 def step_prepare_proteomes_and_annotations(p):
-    def run():
+    def run(starting_from_here=False):
         if p.species_list:
             if not test_entrez_conn():
                 log.error('   No internet connection: cannot fetch annotations.')
@@ -283,6 +283,7 @@ def main(args):
         suffix = '' if conf.get('db_vendor', 'sqlite') == 'sqlite' else '_' + workflow.id
 
         njobs = p.threads or p.jobs or 30
+
         workflow.extend([
             step_prepare_proteomes_and_annotations(p),
             steps.filter_proteomes(

@@ -179,7 +179,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
 
     def _run():
         fasta_to_blast = new_good_proteomes or config.good_proteins
-        blast_out = config.blast_out if new_good_proteomes else config.blast_out + '_2'
+        blast_out = config.blast_out + '_2' if new_good_proteomes else config.blast_out
 
         res = 10
         if not on_cluster:
@@ -275,9 +275,9 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                     ok = True
                     for bj in blast_jobs:
                         while not verify_file(bj.out_fpath):
-                            log.info('wating for ' + bj.out_fpath)
                             log.debug('wating for ' + bj.out_fpath)
                             sleep(1)
+                        log.debug(bj.out_fpath + ' exists, ok')
                             # ok = False
                         # cat_params += ' ' + bj.prot_fpath
                     if not ok:

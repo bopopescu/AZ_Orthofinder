@@ -277,7 +277,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                         return res
 
                     log.info('Waiting for blast jobs to finish...')
-                    while not verify_file(collect_log):
+                    while not verify_file(collect_log, silent=True):
                         sleep(3)
                     log.info('All blast finished, proceeding.')
 

@@ -1,6 +1,7 @@
 from collections import namedtuple
 from genericpath import isfile
 from os import remove, listdir
+import os
 from os.path import basename, join, relpath, exists, isdir, realpath
 from shutil import rmtree
 from time import sleep
@@ -264,20 +265,22 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                             return res
 
                     results_script_fpath = join(config.intermediate_dir, 'collect_blasted' + '.sh')
-                    collect_log = join(config.intermediate_dir, 'collect_blasted.log')
+                    collect_log_fpath = join(config.intermediate_dir, 'collect_blasted.log')
+                    if isfile(collect_log_fpath):
+                        os.remove(collect_log_fpath)
                     with open(results_script_fpath, 'w') as f:
                         f.write('#!/bin/bash\n')
+                        f.write('touch ' + collect_log_fpath + '\n')
 
-                    cmdl = '-hold_jid {0} -S /bin/bash -cwd -j y -q batch.q -o {1} {2}'.format(
-                        ','.join(j.job_name for j in blast_jobs),
-                        realpath(collect_log), realpath(results_script_fpath))
+                    cmdl = '-hold_jid {0} -S /bin/bash -cwd -j y -q batch.q {2}'.format(
+                        ','.join(j.job_name for j in blast_jobs), realpath(results_script_fpath))
                     log.debug('wating for jobs...')
                     res = cmdline('qsub', parameters=cmdl.split())()
                     if res != 0:
                         return res
 
                     log.info('Waiting for blast jobs to finish...')
-                    while not verify_file(collect_log, silent=True):
+                    while not verify_file(collect_log_fpath, silent=True):
                         sleep(3)
                     log.info('All blast finished, proceeding.')
 

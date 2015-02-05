@@ -232,8 +232,10 @@ def step_prepare_proteomes_and_annotations(p):
                         gb_ids = [splitext(basename(prot_file))[0] for prot_file in proteomes]
                         log.debug('ids_list: ' + str(gb_ids))
                         res = fetch_annotations_for_ids(config.annotations_dir, gb_ids, p.proxy)
-                        if res != 0:
+                        if res > 0:
                             return res
+                        if res == -1:
+                            p.download_anno = False
 
                 return adjust_proteomes(proteomes, config.proteomes_dir, p.prot_id_field)
 

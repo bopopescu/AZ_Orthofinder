@@ -62,19 +62,23 @@ def check_and_install_tools(debug, is_sqlite, log_path):
     #                          + os.environ['PERL5LIB']
 
 
-def verify_file(fpath, description=''):
+def verify_file(fpath, description='', silent=False):
     if not fpath:
-        log.error((description + ': f' if description else 'F') + 'ile name is empty.')
+        if not silent:
+            log.error((description + ': f' if description else 'F') + 'ile name is empty.')
         return False
     fpath = expanduser(fpath)
     if not exists(fpath):
-        log.error((description + ': ' if description else '') + fpath + ' does not exist.')
+        if not silent:
+            log.error((description + ': ' if description else '') + fpath + ' does not exist.')
         return False
     if not isfile(fpath):
-        log.error((description + ': ' if description else '') + fpath + ' is not a file.')
+        if not silent:
+            log.error((description + ': ' if description else '') + fpath + ' is not a file.')
         return False
     if getsize(fpath) <= 0:
-        log.error((description + ': ' if description else '') + fpath + ' is empty.')
+        if not silent:
+            log.error((description + ': ' if description else '') + fpath + ' is empty.')
         return False
     return True
 

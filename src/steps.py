@@ -1,8 +1,7 @@
 from collections import namedtuple
-from genericpath import isfile
 from os import remove, listdir
 import os
-from os.path import basename, join, relpath, exists, isdir, realpath
+from os.path import basename, join, relpath, exists, isdir, realpath, isfile
 from shutil import rmtree
 from time import sleep
 from Bio import SeqIO, Entrez
@@ -272,7 +271,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                         f.write('#!/bin/bash\n')
                         f.write('touch ' + collect_log_fpath + '\n')
 
-                    cmdl = '-hold_jid {0} -S /bin/bash -cwd -j y -q batch.q {2}'.format(
+                    cmdl = '-hold_jid {0} -S /bin/bash -cwd -j y -q batch.q {1}'.format(
                         ','.join(j.job_name for j in blast_jobs), realpath(results_script_fpath))
                     log.debug('wating for jobs...')
                     res = cmdline('qsub', parameters=cmdl.split())()
@@ -280,7 +279,7 @@ def blast(workflow_id, max_jobs=30, on_cluster=True, new_good_proteomes=None, ev
                         return res
 
                     log.info('Waiting for blast jobs to finish...')
-                    while not verify_file(collect_log_fpath, silent=True):
+                    while not isfile(collect_log_fpath):
                         sleep(3)
                     log.info('All blast finished, proceeding.')
 
